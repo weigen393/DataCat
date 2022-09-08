@@ -1,12 +1,14 @@
+require('dotenv').config();
+const { mongoConnect } = require('./util/mongodb');
+const { PORT, API_VERSION } = process.env;
 const express = require('express');
 const app = express();
-require('dotenv').config();
-const urlRoutes = require('./server/routes/url');
 
 app.use(express.static('public'));
 app.use(express.json());
 
-app.use(`/api/${process.env.API_VERSION}/`, urlRoutes);
+//API routes
+app.use('/api/' + API_VERSION, [require('./server/routes/dashboard_route')]);
 
 // Handle 404
 app.use(function (req, res, next) {
@@ -20,6 +22,7 @@ app.use(function (err, req, res, next) {
     return res.status(500).render('error', { msg: 'error: 500' });
 });
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is listening on port ${process.env.PORT}....`);
+app.listen(PORT, () => {
+    mongoConnect();
+    console.log(`Server is listening on port ${PORT}....`);
 });
