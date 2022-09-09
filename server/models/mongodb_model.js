@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    userId: Number,
+    userId: String,
     name: String,
     email: String,
     password: String,
@@ -14,7 +14,7 @@ const roleSchema = new mongoose.Schema({
 });
 
 const dashboardSchema = new mongoose.Schema({
-    userId: Number,
+    userId: String,
     dashboards: [
         {
             dashboardId: String,
@@ -36,9 +36,11 @@ const dashboardSchema = new mongoose.Schema({
         },
     ],
 });
-
+// const users = mongoose.model('users', userSchema);
+// const roles = mongoose.model('roles', roleSchema);
+// const dashboards = ;
 module.exports = {
-    user: mongoose.model('users', userSchema),
-    role: mongoose.model('roles', roleSchema),
-    dashboard: mongoose.model('dashboards', dashboardSchema),
+    users: mongoose.model('users', userSchema),
+    roles: mongoose.model('roles', roleSchema),
+    dashboards: mongoose.model('dashboards', dashboardSchema),
 };
