@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DataCat | Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+</head>
+<body >
+  <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+          
+      <!-- Main Sidebar Container -->
+      <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="#" class="brand-link">
+          <img src="../img/cat.png"  class="brand-image img-circle elevation-3" style="opacity: .8">
+          <span class="brand-text font-weight-light">DataCat</span>
+        </a>
+    
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <!-- Sidebar user panel (optional) -->
+          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+              <img src="../img/user.png" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+              <a href="#" class="d-block">Peter</a>
+            </div>
+          </div>  
+    
+          <!-- Sidebar Menu -->
+          <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+              
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Dashboard                    
+                  </p>
+                </a>                
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    Logs                    
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-copy"></i>
+                  <p>
+                    Alert                    
+                  </p>
+                </a>
+                
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-chart-pie"></i>
+                  <p>
+                    Profile                    
+                  </p>
+                </a>
+                
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-tree"></i>
+                  <p>
+                    Settings
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                
+              </li>
+              
+            </ul>
+          </nav>
+          <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+      </aside>
+    
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1>Dashboard</h1>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <!-- <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active">Flot</li> -->
+                </ol>
+              </div>
+            </div>
+          </div><!-- /.container-fluid -->
+        </section>
+    
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-info">
+                <div class="inner">
+                  <h3 id="system-uptime"></h3>
+    
+                  <p>Days</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a class="small-box-footer">System Uptime</a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3 id="total-memory"></h3>
+    
+                  <p>GB</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <a class="small-box-footer">Total Memory</a>
+              </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <!-- <div class="small-box bg-warning">
+                <div class="inner">
+                  <h3>44</h3>
+    
+                  <p>User Registrations</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-person-add"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div> -->
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+              <!-- small box -->
+              <!-- <div class="small-box bg-danger">
+                <div class="inner">
+                  <h3>65</h3>
+    
+                  <p>Unique Visitors</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              </div> -->
+            </div>
+            <!-- ./col -->
+          </div>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <!-- interactive chart -->
+                <!-- <div class="card card-primary card-outline"> -->
+                  <!-- <div class="card-header"> -->
+                    <!-- <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Interactive Area Chart
+                    </h3> -->
+    
+                    <!-- <div class="card-tools">
+                      Real time
+                      <div class="btn-group" id="realtime" data-toggle="btn-toggle">
+                        <button type="button" class="btn btn-default btn-sm active" data-toggle="on">On</button>
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="off">Off</button>
+                      </div>
+                    </div> -->
+                  <!-- </div> -->
+                  <!-- <div class="card-body">
+                    <div id="interactive" style="height: 300px;"></div>
+                  </div> -->
+                  <!-- /.card-body-->
+                <!-- </div> -->
+                <!-- /.card -->
+    
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+    
+            <div class="row">
+              <div class="col-md-6">
+                <!-- Line chart -->
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      CPU Usage
+                    </h3>
+    
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="line-chart" style="height: 300px;"></div>
+                  </div>
+                  <!-- /.card-body-->
+                </div>
+                <div>
+                  <h3>Container name</h3>
+                  <ul id="container-name"></ul>
+                </div>
+                <!-- /.card -->
+    
+                
+    
+                <!-- Area chart -->
+                <!-- <div class="card card-primary card-outline"> -->
+                  <!-- <div class="card-header"> -->
+                    <!-- <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Area Chart
+                    </h3> -->
+    
+                    <!-- <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div> -->
+                  <!-- </div> -->
+                  <!-- <div class="card-body">
+                    <div id="area-chart" style="height: 338px;" class="full-width-chart"></div>
+                  </div> -->
+                  <!-- /.card-body-->
+                <!-- </div> -->
+                <!-- /.card -->
+    
+              </div>
+              <!-- /.col -->
+    
+              <div class="col-md-6">
+    
+                <!-- Mem chart -->
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Memory Usage
+                    </h3>
+    
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="mem-chart" style="height: 300px;"></div>
+                  </div>
+                  <!-- /.card-body-->
+                </div>            
+                <!-- /.card -->
+                <!-- Mem chart -->
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Container CPU Usage
+                    </h3>
+    
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div id="container-cpu" style="height: 300px;"></div>
+                  </div>
+                  <!-- /.card-body-->
+                </div>            
+                <!-- /.card -->
+                <!-- Bar chart -->
+                <!-- <div class="card card-primary card-outline"> -->
+                  <!-- <div class="card-header"> -->
+                    <!-- <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Bar Chart
+                    </h3> -->
+    
+                    <!-- <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div> -->
+                  <!-- </div> -->
+                  <!-- <div class="card-body">
+                    <div id="bar-chart" style="height: 300px;"></div>
+                  </div> -->
+                  <!-- /.card-body-->
+                <!-- </div> -->
+                <!-- /.card -->
+    
+                <!-- Donut chart -->
+                <!-- <div class="card card-primary card-outline"> -->
+                  <!-- <div class="card-header"> -->
+                    <!-- <h3 class="card-title">
+                      <i class="far fa-chart-bar"></i>
+                      Donut Chart
+                    </h3> -->
+    
+                    <!-- <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div> -->
+                  <!-- </div> -->
+                  <!-- <div class="card-body">
+                    <div id="donut-chart" style="height: 300px;"></div>
+                  </div> -->
+                  <!-- /.card-body-->
+                <!-- </div> -->
+                <!-- /.card -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+    
+      
+    
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+      </aside>
+      <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+</body>
+</html>

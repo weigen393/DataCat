@@ -4,11 +4,12 @@ const { PORT, API_VERSION } = process.env;
 const express = require('express');
 const app = express();
 
-app.use(express.static('public'));
 app.use(express.json());
-
+app.set('view engine', 'pug');
+app.use('/public', express.static('./public'));
+app.use('/images', express.static('./images'));
 //API routes
-app.use('/api/' + API_VERSION, [require('./server/routes/dashboard_route')]);
+app.use('/api/' + API_VERSION, [require('./server/routes/dashboard_route'), require('./server/routes/main_route')]);
 
 // Handle 404
 app.use(function (req, res, next) {

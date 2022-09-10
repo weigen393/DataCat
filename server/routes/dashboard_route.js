@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const { list } = require('../controllers/dashboard_controller');
+const { list, addDashboard, delDashboard } = require('../controllers/dashboard_controller');
 
-router.route('/dashboard-list/').get(list);
-
+router.post('/dashboard-list/add', addDashboard);
+router.post('/dashboard-list/delete', delDashboard);
 module.exports = router;

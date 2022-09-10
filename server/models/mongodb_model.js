@@ -36,9 +36,7 @@ const dashboardSchema = new mongoose.Schema({
         },
     ],
 });
-// const users = mongoose.model('users', userSchema);
-// const roles = mongoose.model('roles', roleSchema);
-// const dashboards = ;
+
 module.exports = {
     users: mongoose.model('users', userSchema),
     roles: mongoose.model('roles', roleSchema),
