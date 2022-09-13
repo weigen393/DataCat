@@ -9,6 +9,7 @@ const delDashboard = async (req, res) => {
     const del = await dashboard.delDashboard(req.body);
     res.status(200).send(req.body);
 };
+
 module.exports = {
     addDashboard,
     delDashboard,

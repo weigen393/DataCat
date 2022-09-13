@@ -10,16 +10,14 @@ block content
     .content
       a.create-dashboard(href="#") Create Dashboard
       
-    .dashboard-list
-      each item in list
-        li.dashboard
-          -var id = item.dashboardId
-          p.title #{item.title}
-          p.description #{item.description}
-          a.enter(href=`./dashboards/${item.dashboardId}`) Enter
-          br
-          a.delete(href='#', value=`${item.dashboardId}`) Delete
-
+      .dashboard-list
+        each item in list
+          li.dashboard          
+            p.title #{item.title}
+            p.description #{item.description}
+            a.enter(href=`./dashboards/${item.dashboardId}`) Enter
+            br
+            a.delete(href='#', value=`${item.dashboardId}`) Delete
 
 block js
   script(src="/public/list.js") 

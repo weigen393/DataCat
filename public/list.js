@@ -1,10 +1,8 @@
 $('.create-dashboard').on('click', () => {
-    // console.log(Date.now().toString());
     const dashboardId = Date.now().toString().substring(3);
     console.log(dashboardId);
     console.log($('.d-block').text());
     console.log('create');
-    //打api存mongo
     const data = {
         userId: $('.d-block').text(),
         dashboardId: dashboardId,
@@ -26,8 +24,7 @@ $('.create-dashboard').on('click', () => {
             if (result.status === 200) {
                 console.log('success');
             }
-            //redirect到dashboards
-            window.location.href = `/dashboards/${dashboardId}`;
+            window.location.href = `/api/1.0/dashboards/${dashboardId}`;
         },
     });
 });
@@ -53,7 +50,6 @@ $(document).ready(function () {
                 if (result.status === 200) {
                     console.log('success');
                 }
-                //redirect到dashboards
                 window.location.href = `/api/1.0/dashboard-list`;
             },
         });

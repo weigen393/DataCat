@@ -3,16 +3,16 @@ const { dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
 
 const getBoardList = async (id) => {
-    //find dashboard list with userId
     try {
         const query = await dashboards.find({ userId: id }, 'dashboards');
-        // console.log(query[0].dashboards);
         const list = query[0].dashboards;
         return list;
     } catch (e) {
         console.log(e.message);
+        return e;
     }
 };
+
 const addDashboard = async (data) => {
     try {
         const query = await dashboards.updateOne(
@@ -23,12 +23,13 @@ const addDashboard = async (data) => {
                 },
             }
         );
-        // console.log(query);
         return console.log('add success');
     } catch (e) {
         console.log(e.message);
+        return e;
     }
 };
+
 const delDashboard = async (data) => {
     try {
         const query = await dashboards.updateOne(
@@ -37,15 +38,30 @@ const delDashboard = async (data) => {
             },
             { $pull: { dashboards: { dashboardId: data.dashboardId } } }
         );
-        // console.log(query);
         return console.log('delete success');
     } catch (e) {
         console.log(e.message);
+        return e;
     }
 };
 
+const getDashboardPage = async (userId, dashboardId) => {
+    try {
+        console.log(dashboardId);
+        const query = await dashboards.find(
+            { 'dashboards.dashboardId': dashboardId },
+            { dashboards: { $elemMatch: { dashboardId: dashboardId } } }
+        );
+        const list = query[0].dashboards;
+        return list;
+    } catch (e) {
+        console.log(e.message);
+        return e;
+    }
+};
 module.exports = {
     getBoardList,
     addDashboard,
     delDashboard,
+    getDashboardPage,
 };

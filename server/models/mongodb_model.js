@@ -12,7 +12,17 @@ const roleSchema = new mongoose.Schema({
     roleId: Number,
     permission: Array,
 });
-
+const chartSchema = new mongoose.Schema({
+    chartId: String,
+    title: String,
+    layer: String,
+    type: String,
+    host: Array,
+    measurement: Array,
+    field: Array,
+    timeRange: String,
+    interval: String,
+});
 const dashboardSchema = new mongoose.Schema({
     userId: String,
     dashboards: [
@@ -20,19 +30,7 @@ const dashboardSchema = new mongoose.Schema({
             dashboardId: String,
             title: String,
             description: String,
-            charts: [
-                {
-                    chartId: String,
-                    title: String,
-                    layer: String,
-                    type: String,
-                    host: String,
-                    measurement: String,
-                    field: String,
-                    timeRange: String,
-                    interval: Number,
-                },
-            ],
+            charts: [chartSchema],
         },
     ],
 });
