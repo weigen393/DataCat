@@ -12,12 +12,12 @@ block content
       
       .dashboard-list
         each item in list
-          li.dashboard          
+          li.dashboard         
             p.title #{item.title}
             p.description #{item.description}
-            a.enter(href=`./dashboards/${item.dashboardId}`) Enter
+            a.enter(href=`./dashboards/${item._id.valueOf()}`) Enter
             br
-            a.delete(href='#', value=`${item.dashboardId}`) Delete
+            a.delete(href='#', value=`${item._id.valueOf()}`) Delete
 
 block js
   script(src="/public/list.js") 

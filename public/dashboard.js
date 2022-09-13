@@ -1,14 +1,15 @@
-const show = data;
+const dashboardData = data;
+// console.log('dd', dashboardData);
 function showAll() {
-    for (let i = 0; i < show.charts.length; i++) {
+    for (let i = 0; i < dashboardData.charts.length; i++) {
         var value = {
-            layer: show.charts[i].layer,
-            type: show.charts[i].type,
-            host: show.charts[i].host,
-            measurement: show.charts[i].measurement,
-            field: show.charts[i].field,
-            timeRange: show.charts[i].timeRange,
-            timeInterval: show.charts[i].interval,
+            layer: dashboardData.charts[i].layer,
+            type: dashboardData.charts[i].type,
+            host: dashboardData.charts[i].host,
+            measurement: dashboardData.charts[i].measurement,
+            field: dashboardData.charts[i].field,
+            timeRange: dashboardData.charts[i].timeRange,
+            timeInterval: dashboardData.charts[i].interval,
         };
         console.log(value);
         $.ajax({
@@ -99,8 +100,5 @@ function showChart(data, num) {
     });
 }
 $('.create-chart').on('click', () => {
-    const chartId = Date.now().toString().substring(3);
-    console.log(chartId);
-    console.log($('.dashboardId').text());
-    window.location.href = `/api/1.0/dashboards/${$('.dashboardId').text()}/charts/new`;
+    window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;
 });

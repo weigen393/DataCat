@@ -6,10 +6,9 @@ block content
       .container-fluid
         .row.mb-2
           .col-sm-6
-            h1.dashboardId #{dashboards.dashboardId}
+            h1.dashboardTitle #{dashboards.title} 
             h1.chartTitle Chart title
             
-            //- h1 #{dashboards.description}
     .content
       select.form-select.form-select-sm(aria-label="Default select example", id='layer')
           option(selected) Select Layer
@@ -23,34 +22,16 @@ block content
       .btn-group.button-host
         button.btn.btn-primary.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false") Host           
         ul.dropdown-menu.host
-          li
+          
       .btn-group.button-container               
       .btn-group
         button.btn.btn-secondary.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false", id='measurement') Measurement           
         ul.dropdown-menu.measurement
-          li
-            a(href="#",data-value="number")
-              input(type="checkbox")
-              label Single Number
-          //- li
-          //-   a(href="#",data-value="container")
-          //-     input(type="checkbox")
-          //-     label Chart
+                    
       .btn-group
         button.btn.btn-success.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false", id='field') Field           
         ul.dropdown-menu.field
-          li
-            a(href="#",data-value="system")
-              input(type="checkbox")
-              label System
-          li
-            a(href="#",data-value="container")
-              input(type="checkbox")
-              label Container
-          li
-            a(href="#",data-value="application")
-              input(type="checkbox")
-              label Application
+          
       select.form-select.form-select-sm(aria-label="Default select example", id='range')
         option(selected) Select Time Range
         option(value='-1m') Past 1m
@@ -69,14 +50,13 @@ block content
         option(value='5m') 5m
         
     block chart   
-        include chart
-          
-              
-      
+        include chart         
 
     a.preview-chart(href="#",id='preview') PREVIEW
     br
     a.create-chart(href="#",id='save') SAVE
 
 block js
+  script(type='text/javascript').
+    let data = !{JSON.stringify(dashboards)} 
   script(src="/public/chart.js") 

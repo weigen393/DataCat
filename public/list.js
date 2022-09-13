@@ -1,11 +1,7 @@
 $('.create-dashboard').on('click', () => {
-    const dashboardId = Date.now().toString().substring(3);
-    console.log(dashboardId);
-    console.log($('.d-block').text());
     console.log('create');
     const data = {
         userId: $('.d-block').text(),
-        dashboardId: dashboardId,
         title: 'title',
         description: 'description',
         charts: [],
@@ -22,9 +18,9 @@ $('.create-dashboard').on('click', () => {
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                console.log('create dashboard success');
             }
-            window.location.href = `/api/1.0/dashboards/${dashboardId}`;
+            window.location.href = `/api/1.0/dashboards/${result}`;
         },
     });
 });
@@ -48,7 +44,7 @@ $(document).ready(function () {
             },
             success: (result) => {
                 if (result.status === 200) {
-                    console.log('success');
+                    console.log('delete dashboard success');
                 }
                 window.location.href = `/api/1.0/dashboard-list`;
             },

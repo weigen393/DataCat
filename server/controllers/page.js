@@ -10,13 +10,16 @@ const getListPage = async (req, res) => {
 const getDashboardPage = async (req, res) => {
     req.body.userId = '2'; // for test
     const page = await dashboard.getDashboardPage(req.body.userId, req.params.dashboardId);
-    return res.render('dashboard', { userId: req.body.userId, dashboards: page[0] });
+    return res.render('dashboard', { userId: req.body.userId, dashboards: page });
 };
 
 const getChartPage = async (req, res) => {
     req.body.userId = '2'; // for test
-    console.log(req.params);
-    return res.render('chartPage', { userId: req.body.userId, dashboards: { dashboardId: req.params.dashboardId } });
+    const title = await dashboard.getDashboardTitle(req.body.userId, req.params.dashboardId);
+    return res.render('chartPage', {
+        userId: req.body.userId,
+        dashboards: { dashboardId: req.params.dashboardId, title: title },
+    });
 };
 
 module.exports = {

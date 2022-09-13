@@ -5,8 +5,7 @@ block content
     .content-header
       .container-fluid
         .row.mb-2
-          .col-sm-6
-            h1.dashboardId #{dashboards.dashboardId}
+          .col-sm-6            
             h1 #{dashboards.title}
             h1 #{dashboards.description}
     .content
@@ -22,19 +21,16 @@ block content
                 i.far.fa-chart-bar title                   
 
               .card-tools
-                button.btn.btn-tool(type="button",data-card-widget="collapse")
+                button.btn.btn-tool(type="button", data-card-widget="collapse")
                   i.fas.fa-minus
                       
-                button.btn.btn-tool(type="button",data-card-widget="remove")
+                button.btn.btn-tool(type="button", data-card-widget="remove")
                   i.fas.fa-times
             
-            .card-body(id=`line-chart-${num}`,style="height: 300px")
-        -num= num+1
-        
+            .card-body(id=`line-chart-${num}`, style="height: 300px")
+        -num= num+1        
 
-
-block js
-  
+block js  
   script(type='text/javascript').
-    let data = !{JSON.stringify(dashboards)};    
+    let data = !{JSON.stringify(dashboards)}        
   script(src="/public/dashboard.js")

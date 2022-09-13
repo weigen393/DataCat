@@ -1,3 +1,4 @@
+const dashboardData = data;
 const systemMap = {
     number: {
         system: ['uptime', 'n_cpus'],
@@ -317,8 +318,7 @@ function showChart(data) {
 }
 $('#save').on('click', () => {
     const data = {
-        dashboardId: $('.dashboardId').text(),
-        chartId: Date.now().toString().substring(3),
+        dashboardId: dashboardData.dashboardId,
         title: $('.chartTitle').text(),
         layer: $('#layer').val(),
         type: $('#type').val(),
@@ -344,7 +344,7 @@ $('#save').on('click', () => {
                 console.log('success');
             }
             console.log('result', result);
-            window.location.href = `/api/1.0/dashboards/${$('.dashboardId').text()}`;
+            window.location.href = `/api/1.0/dashboards/${dashboardData.dashboardId}`;
         },
     });
 });

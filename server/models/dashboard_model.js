@@ -5,8 +5,7 @@ const { queryApi } = require('../../util/influxdb');
 const getBoardList = async (id) => {
     try {
         const query = await dashboards.find({ userId: id }, 'dashboards');
-        const list = query[0].dashboards;
-        return list;
+        return query[0].dashboards;
     } catch (e) {
         console.log(e.message);
         return e;
@@ -15,15 +14,19 @@ const getBoardList = async (id) => {
 
 const addDashboard = async (data) => {
     try {
-        const query = await dashboards.updateOne(
+        const query = await dashboards.findOneAndUpdate(
             { userId: data.userId },
             {
                 $push: {
-                    dashboards: { dashboardId: data.dashboardId, title: data.title, description: data.description },
+                    dashboards: { title: data.title, description: data.description },
                 },
+            },
+            {
+                returnDocument: 'after',
             }
         );
-        return console.log('add success');
+        const id = query.dashboards.pop()._id.valueOf();
+        return id;
     } catch (e) {
         console.log(e.message);
         return e;
@@ -36,7 +39,7 @@ const delDashboard = async (data) => {
             {
                 userId: data.userId,
             },
-            { $pull: { dashboards: { dashboardId: data.dashboardId } } }
+            { $pull: { dashboards: { _id: data.dashboardId } } }
         );
         return console.log('delete success');
     } catch (e) {
@@ -47,13 +50,31 @@ const delDashboard = async (data) => {
 
 const getDashboardPage = async (userId, dashboardId) => {
     try {
-        console.log(dashboardId);
         const query = await dashboards.find(
-            { 'dashboards.dashboardId': dashboardId },
-            { dashboards: { $elemMatch: { dashboardId: dashboardId } } }
+            {
+                'dashboards._id': dashboardId,
+            },
+            {
+                dashboards: { $elemMatch: { _id: dashboardId } },
+            }
         );
-        const list = query[0].dashboards;
-        return list;
+        return query[0].dashboards[0];
+    } catch (e) {
+        console.log(e.message);
+        return e;
+    }
+};
+const getDashboardTitle = async (userId, dashboardId) => {
+    try {
+        const query = await dashboards.find(
+            {
+                'dashboards._id': dashboardId,
+            },
+            {
+                dashboards: { $elemMatch: { _id: dashboardId } },
+            }
+        );
+        return query[0].dashboards[0].title;
     } catch (e) {
         console.log(e.message);
         return e;
@@ -64,4 +85,5 @@ module.exports = {
     addDashboard,
     delDashboard,
     getDashboardPage,
+    getDashboardTitle,
 };

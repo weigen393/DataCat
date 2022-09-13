@@ -119,11 +119,10 @@ const getChart = async (data) => {
 const saveChart = async (data) => {
     try {
         const query = await dashboards.findOneAndUpdate(
-            { 'dashboards.dashboardId': data.dashboardId },
+            { 'dashboards._id': data.dashboardId },
             {
                 $push: {
                     'dashboards.$.charts': {
-                        chartId: data.chartId,
                         title: data.title,
                         layer: data.layer,
                         type: data.type,
@@ -136,7 +135,6 @@ const saveChart = async (data) => {
                 },
             }
         );
-        console.log(query);
         return 'save success';
     } catch (e) {
         console.log(e.message);
