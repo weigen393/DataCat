@@ -102,3 +102,33 @@ function showChart(data, num) {
 $('.create-chart').on('click', () => {
     window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;
 });
+$('h1').blur(() => {
+    console.log('change');
+    const text = {
+        title: $('.dashboard-title').text(),
+        description: $('.dashboard-description').text(),
+    };
+
+    $.ajax({
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: `/api/1.0/dashboards/${dashboardData._id}/text`,
+        data: JSON.stringify(text),
+        error: (err) => {
+            console.log(err);
+        },
+        success: (result) => {
+            if (result.status === 200) {
+                console.log('success');
+            }
+        },
+    });
+});
+// $('.edit-title').on('click', () => {
+//     $('.dashboard-title').attr('contenteditable', 'true');
+// });
+// $('.edit-description').on('click', () => {
+//     $('.dashboard-description').attr('contenteditable', 'true');
+// });

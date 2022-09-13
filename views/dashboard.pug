@@ -5,9 +5,10 @@ block content
     .content-header
       .container-fluid
         .row.mb-2
-          .col-sm-6            
-            h1 #{dashboards.title}
-            h1 #{dashboards.description}
+          .col-sm-6   
+            h1.dashboard-title(contenteditable='true') #{dashboards.title}            
+            br
+            h1.dashboard-description(contenteditable='true') #{dashboards.description}            
     .content
       a.create-chart(href="#") Add Chart
     
@@ -18,7 +19,7 @@ block content
           .card.card-primary.card-outline
             .card-header
               h3.card-title
-                i.far.fa-chart-bar title                   
+                i.far.fa-chart-bar #{item.title}                   
 
               .card-tools
                 button.btn.btn-tool(type="button", data-card-widget="collapse")

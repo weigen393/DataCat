@@ -58,6 +58,7 @@ const getDashboardPage = async (userId, dashboardId) => {
                 dashboards: { $elemMatch: { _id: dashboardId } },
             }
         );
+        console.log(query[0].dashboards[0]);
         return query[0].dashboards[0];
     } catch (e) {
         console.log(e.message);
@@ -80,10 +81,28 @@ const getDashboardTitle = async (userId, dashboardId) => {
         return e;
     }
 };
+const updateDashboardText = async (dashboardId, text) => {
+    try {
+        const query = await dashboards.findOneAndUpdate(
+            {
+                'dashboards._id': dashboardId,
+            },
+            {
+                'dashboards.$.title': text.title,
+                'dashboards.$.description': text.description,
+            }
+        );
+        return query;
+    } catch (e) {
+        console.log(e.message);
+        return e;
+    }
+};
 module.exports = {
     getBoardList,
     addDashboard,
     delDashboard,
     getDashboardPage,
     getDashboardTitle,
+    updateDashboardText,
 };
