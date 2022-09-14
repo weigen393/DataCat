@@ -22,11 +22,11 @@ block content
                 i.far.fa-chart-bar #{item.title}                   
 
               .card-tools
-                button.btn.btn-tool(type="button", data-card-widget="collapse")
-                  i.fas.fa-minus
-                      
-                button.btn.btn-tool(type="button", data-card-widget="remove")
-                  i.fas.fa-times
+                button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='edit')
+                  span.material-icons settings
+                
+                button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='delete')
+                  span.material-icons delete
             
             .card-body(id=`line-chart-${num}`, style="height: 300px")
         -num= num+1        

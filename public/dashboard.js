@@ -1,5 +1,5 @@
 const dashboardData = data;
-// console.log('dd', dashboardData);
+
 showAll();
 function showAll() {
     for (let i = 0; i < dashboardData.charts.length; i++) {
@@ -128,9 +128,41 @@ $('h1').blur(() => {
         },
     });
 });
-// $('.edit-title').on('click', () => {
-//     $('.dashboard-title').attr('contenteditable', 'true');
-// });
-// $('.edit-description').on('click', () => {
-//     $('.dashboard-description').attr('contenteditable', 'true');
-// });
+
+$(document).ready(function () {
+    $('.btn').on('click', function () {
+        console.log($(this).attr('value'));
+        console.log($(this).attr('name'));
+        const method = $(this).attr('name');
+        const chartId = $(this).attr('value');
+        if (method === 'edit') {
+            // window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;
+        } else if (method === 'delete') {
+            delChart(chartId);
+        }
+    });
+});
+function delChart(chartId) {
+    const sendData = {
+        dashboardId: dashboardData._id,
+        chartId: chartId,
+    };
+    $.ajax({
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: '/api/1.0/chart/delete',
+        data: JSON.stringify(sendData),
+        error: (err) => {
+            console.log(err);
+        },
+        success: (result) => {
+            if (result.status === 200) {
+                console.log('success');
+            }
+            console.log('result', result);
+            window.location.href = `/api/1.0/dashboards/${dashboardData._id}`;
+        },
+    });
+}

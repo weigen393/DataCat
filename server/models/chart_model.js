@@ -147,9 +147,28 @@ const saveChart = async (data) => {
         return e;
     }
 };
+const delChart = async (data) => {
+    try {
+        const query = await dashboards.findOneAndUpdate(
+            { 'dashboards._id': data.dashboardId },
+            {
+                $pull: {
+                    'dashboards.$.charts': {
+                        _id: data.chartId,
+                    },
+                },
+            }
+        );
+        return 'delete success';
+    } catch (e) {
+        console.log(e.message);
+        return e;
+    }
+};
 module.exports = {
     getHost,
     getContainer,
     getChart,
     saveChart,
+    delChart,
 };

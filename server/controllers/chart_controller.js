@@ -23,9 +23,15 @@ const saveChart = async (req, res) => {
     const data = await chart.saveChart(req.body);
     res.status(200).send(data);
 };
+const delChart = async (req, res) => {
+    console.log('delChart');
+    const data = await chart.delChart(req.body);
+    res.status(200).send(data);
+};
 module.exports = {
     getHost,
     getContainer,
     getChart,
     saveChart,
+    delChart,
 };
