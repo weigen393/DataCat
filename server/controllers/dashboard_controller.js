@@ -9,12 +9,12 @@ const addDashboard = async (req, res) => {
 const delDashboard = async (req, res) => {
     const del = await dashboard.delDashboard(req.body);
     console.log('delete dashboard');
-    res.status(200);
+    res.status(200).send('delete');
 };
 const updateDashboardText = async (req, res) => {
     const text = await dashboard.updateDashboardText(req.params.dashboardId, req.body);
     console.log('update dashboard text');
-    res.status(200);
+    res.status(200).send('update');
 };
 
 module.exports = {

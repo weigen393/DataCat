@@ -1,132 +1,49 @@
 const dashboardData = data;
 const systemMap = {
-    number: {
-        system: ['uptime', 'n_cpus'],
-        mem: 'total',
-    },
-    chart: {
-        mem: 'used_percent',
-        disk: 'used_percent',
-        net: ['bytes_sent', 'bytes_recv'],
-        cpu: 'cpu_total',
-    },
+    cpu: ['usage_system'],
+    disk: ['used', 'used_percent'],
+    mem: ['used', 'used_percent', 'available', 'available_percent', 'total'],
+    net: ['bytes_recv', 'bytes_sent', 'err_in', 'err_out'],
+    processes: ['running', 'sleeping', 'stopped', 'idle', 'total'],
+    system: ['n_cpus', 'uptime'],
+};
+const containerMap = {
+    docker_container_cpu: ['usage_percent'],
+    docker_container_mem: ['usage_percent'],
+    docker_container_status: ['uptime_ns'],
+    docker: ['n_containers', 'n_containers_paused', 'n_containers_running', 'n_containers_stopped'],
 };
 let measurementNum = 0;
 let hostValue = [];
 let containerValue = [];
 let measurementValue = [];
 let fieldValue = [];
+
 $('#layer').change(() => {
-    if ($('#layer').val() === 'container') {
-        const layer = $('#layer').val();
-        const type = $('#type').val();
-        const data = {
-            layer: layer,
-            type: type,
-        };
-        let container = [];
-        $.ajax({
-            method: 'get',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            url: '/api/1.0/chart/container',
-            data: JSON.stringify(data),
-            error: (err) => {
-                console.log(err);
-            },
-            success: (result) => {
-                if (result.status === 200) {
-                    console.log('success');
-                }
-                container = result;
-                console.log('result', result);
-                containerValue = container;
-                $('.button-container').html(``);
-                $('.button-container')
-                    .html(`<button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Container Name
-                          </button>       
-                          <ul class="dropdown-menu container">`);
-                for (let i = 0; i < container.length; i++) {
-                    $('.container').append(
-                        `<li>
-                          <a href="#" class="dropdown-item" id="container-list">
-                            <div class="form-check">
-                              <input class="form-check-input container${i}" data-value="${container[i]}" name="${container[i]}" type="checkbox" onclick="container('container')" id="flexCheckDefault">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                  ${container[i]}
-                                </label>
-                            </div>
-                          </a>
-                        </li>`
-                    );
-                }
-            },
-        });
+    const layer = $('#layer').val();
+    resetHost(layer);
+    if (layer === 'system') {
+        $('.button-container').html(``);
+        resetMeasurement(Object.keys(systemMap), layer);
+    } else if (layer === 'container') {
+        resetContainer();
     } else {
         $('.button-container').html(``);
     }
 });
-function container() {
-    console.log('container');
-}
-$('#type').change(() => {
-    const layer = $('#layer').val();
-    const type = $('#type').val();
-    const data = {
-        layer: layer,
-        type: type,
-    };
-    $('.host').html(``);
-    $('.measurement').html(``);
-    $('.field').html(``);
-    if (layer === 'system') {
-        if (type === 'number') {
-            const measurement = Object.keys(systemMap.number);
-            console.log(measurement);
-            for (let i = 0; i < measurement.length; i++) {
-                $('.measurement').append(
-                    `<li>
-                      <a href="#" data-value="${measurement[i]}" class="dropdown-item">
-                        <input type="radio" name="measurement">
-                          <label>
-                            ${measurement[i]}
-                          </label>
-                      </a>
-                    </li>`
-                );
-            }
-        } else if (type === 'chart') {
-            const measurement = Object.keys(systemMap.chart);
-            console.log(measurement);
-            measurementNum = measurement.length;
-            for (let i = 0; i < measurement.length; i++) {
-                $('.measurement').append(
-                    `<li>
-                      <a href="#" class="dropdown-item" id="measurement-list">
-                        <div class="form-check">
-                          <input class="form-check-input measurement${i}" data-value="${measurement[i]}" name="${measurement[i]}" type="checkbox" onclick="measurement('system','chart')" id="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                              ${measurement[i]}
-                            </label>
-                        </div>
-                      </a>
-                    </li>`
-                );
-            }
-        }
-    } else if (layer === 'container') {
-    }
 
+function resetHost(layer) {
+    hostValue = [];
     let host = [];
+    console.log('reset host');
+
     $.ajax({
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
         },
         url: '/api/1.0/chart/host',
-        data: JSON.stringify(data),
+        data: layer,
         error: (err) => {
             console.log(err);
         },
@@ -135,17 +52,17 @@ $('#type').change(() => {
                 console.log('success');
             }
             host = result;
+            const num = host.length;
             console.log('result', result);
-            hostValue = host;
             $('.host').html(``);
-            for (let i = 0; i < host.length; i++) {
+            for (let i = 0; i < num; i++) {
                 $('.host').append(
                     `<li>
-                      <a href="#" data-value="system" class="dropdown-item">
+                      <a href="#" class="dropdown-item">
                         <div class="form-check">
-                          <input class="form-check-input host${i}" type="checkbox" onclick="host(${host.length})">
+                          <input class="form-check-input host${i}" data-value="${host[i]}" type="checkbox" onclick="hostCheck(${num})">
                             <label class="form-check-label" for="flexCheckDefault">
-                              ${host[0]}
+                              ${host[i]}
                             </label>
                         </div>
                       </a>
@@ -154,41 +71,95 @@ $('#type').change(() => {
             }
         },
     });
-});
-function measurement(layer, type) {
-    const measurementList = [];
-    for (let i = 0; i < measurementNum; i++) {
-        if ($(`.form-check-input.measurement${i}`).is(':checked')) {
-            measurementList.push($(`.form-check-input.measurement${i}`).data('value'));
-        }
-    }
+}
 
-    console.log(measurementList);
-    measurementValue = measurementList;
-    console.log(layer, type);
-    const field = [];
-    if (layer === 'system') {
-        if (type === 'chart') {
-            for (let i = 0; i < measurementList.length; i++) {
-                const fieldList = systemMap[type][measurementList[i]];
-                console.log(typeof fieldList);
-                if (typeof fieldList === 'object') {
-                    field.push(...fieldList);
-                } else {
-                    if (!field.includes(fieldList)) {
-                        field.push(fieldList);
-                    }
-                }
+function resetContainer() {
+    containerValue = [];
+    let container = [];
+    console.log('reset container');
+    $.ajax({
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: '/api/1.0/chart/container',
+        error: (err) => {
+            console.log(err);
+        },
+        success: (result) => {
+            if (result.status === 200) {
+                console.log('success');
             }
-        }
+            container = result;
+            console.log('result', result);
+            containerValue = container;
+            $('.button-container').html(``);
+            $('.button-container')
+                .html(`<button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Container Name
+                </button>       
+                <ul class="dropdown-menu container">`);
+            for (let i = 0; i < container.length; i++) {
+                $('.container').append(
+                    `<li>
+                <a href="#" class="dropdown-item" id="container-list">
+                  <div class="form-check">
+                    <input class="form-check-input container${i}" data-value="${container[i]}" name="${container[i]}" type="checkbox" onclick="container('container')" id="flexCheckDefault">
+                      <label class="form-check-label" for="flexCheckDefault">
+                        ${container[i]}
+                      </label>
+                  </div>
+                </a>
+              </li>`
+                );
+            }
+        },
+    });
+}
+
+function resetMeasurement(measurement, layer) {
+    console.log('reset measurement');
+    $('.measurement').html(``);
+    const num = measurement.length;
+    for (let i = 0; i < num; i++) {
+        $('.measurement').append(
+            `<li>
+              <a href="#" class="dropdown-item" id="measurement-list">
+                <div class="form-check">
+                  <input class="form-check-input measurement${i}" data-value="${measurement[i]}" name="${measurement[i]}" type="checkbox" onclick="measurementCheck(${num},'${layer}')" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                      ${measurement[i]}
+                    </label>
+                </div>
+              </a>
+            </li>`
+        );
+    }
+}
+
+function resetField(measurement, layer) {
+    console.log('reset field');
+    console.log(measurement, layer);
+    if (measurement.length === 0) {
+        $('.field').html(``);
+        return;
+    }
+    let field;
+    if (layer === 'system') {
+        field = systemMap[measurement[0]];
+    } else if (layer === 'container') {
+        field = containerMap[measurement[0]];
+    } else {
+        return;
     }
     console.log(field);
     $('.field').html(``);
+    const num = field.length;
     for (let i = 0; i < field.length; i++) {
         $('.field').append(
             `<li>
               <a href="#" class="dropdown-item" id="measurement-list">
-                <div class="form-check"><input class="form-check-input field${i}" data-value="${field[i]}" name="${field[i]}" type="checkbox" onclick="field(${field.length})" id="flexCheckDefault">
+                <div class="form-check"><input class="form-check-input field${i}" data-value="${field[i]}" name="${field[i]}" type="checkbox" onclick="fieldCheck(${num})" id="flexCheckDefault">
                   <label class="form-check-label" for="flexCheckDefault">
                     ${field[i]}
                   </label>
@@ -198,7 +169,31 @@ function measurement(layer, type) {
         );
     }
 }
-function field(num) {
+
+function hostCheck(num) {
+    const hostList = [];
+    for (let i = 0; i < num; i++) {
+        if ($(`.form-check-input.host${i}`).is(':checked')) {
+            hostList.push($(`.form-check-input.host${i}`).data('value'));
+        }
+    }
+    console.log(hostList);
+    hostValue = hostList;
+}
+
+function measurementCheck(num, layer) {
+    const measurementList = [];
+    for (let i = 0; i < num; i++) {
+        if ($(`.form-check-input.measurement${i}`).is(':checked')) {
+            measurementList.push($(`.form-check-input.measurement${i}`).data('value'));
+        }
+    }
+    console.log(measurementList);
+    measurementValue = measurementList;
+    resetField(measurementList, layer);
+}
+
+function fieldCheck(num) {
     const fieldList = [];
     for (let i = 0; i < num; i++) {
         if ($(`.form-check-input.field${i}`).is(':checked')) {
@@ -208,20 +203,12 @@ function field(num) {
     fieldValue = fieldList;
     console.log(fieldList);
 }
-function host(num) {
-    const hostList = [];
-    for (let i = 0; i < num; i++) {
-        if ($(`.form-check-input.host${i}`).is(':checked')) {
-            hostList.push(hostValue[i]);
-        }
-    }
-    console.log(hostList);
-}
+
 $('#preview').on('click', () => {
     console.log('preview');
     console.log(hostValue, measurementValue, fieldValue);
     //get data
-    const data = {
+    const setData = {
         layer: $('#layer').val(),
         type: $('#type').val(),
         host: hostValue,
@@ -229,15 +216,16 @@ $('#preview').on('click', () => {
         field: fieldValue,
         timeRange: $('#range').val(),
         timeInterval: $('#interval').val(),
+        aggregate: $('#aggregate').val(),
     };
-    console.log(data);
+    console.log(setData);
     $.ajax({
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
         },
         url: '/api/1.0/chart/show',
-        data: data,
+        data: setData,
         error: (err) => {
             console.log(err);
         },
@@ -327,6 +315,7 @@ $('#save').on('click', () => {
         field: fieldValue,
         timeRange: $('#range').val(),
         interval: $('#interval').val(),
+        aggregate: $('#aggregate').val(),
     };
     console.log(data);
     $.ajax({

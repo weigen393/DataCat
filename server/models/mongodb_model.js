@@ -13,7 +13,6 @@ const roleSchema = new mongoose.Schema({
     permission: Array,
 });
 const chartSchema = new mongoose.Schema({
-    chartId: String,
     title: String,
     layer: String,
     type: String,
@@ -22,12 +21,12 @@ const chartSchema = new mongoose.Schema({
     field: Array,
     timeRange: String,
     interval: String,
+    aggregate: String,
 });
 const dashboardSchema = new mongoose.Schema({
     userId: String,
     dashboards: [
         {
-            dashboardId: String,
             title: String,
             description: String,
             charts: [chartSchema],

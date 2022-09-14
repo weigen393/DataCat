@@ -2,15 +2,14 @@ require('dotenv').config();
 const chart = require('../models/chart_model');
 const getHost = async (req, res) => {
     console.log('getHost');
-    const query = JSON.parse(Object.keys(req.query)[0]);
-    const host = await chart.getHost(query.layer, query.type);
+    const host = await chart.getHost(Object.keys(req.query)[0]);
     console.log('host', host);
     res.status(200).send(host);
 };
 const getContainer = async (req, res) => {
     console.log('getContainer');
-    const query = JSON.parse(Object.keys(req.query)[0]);
-    const container = await chart.getContainer(query.layer, query.type);
+    // const query = JSON.parse(Object.keys(req.query)[0]);
+    const container = await chart.getContainer();
     console.log('container', container);
     res.status(200).send(container);
 };

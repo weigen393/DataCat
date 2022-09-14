@@ -1,5 +1,6 @@
 const dashboardData = data;
 // console.log('dd', dashboardData);
+showAll();
 function showAll() {
     for (let i = 0; i < dashboardData.charts.length; i++) {
         var value = {
@@ -10,6 +11,7 @@ function showAll() {
             field: dashboardData.charts[i].field,
             timeRange: dashboardData.charts[i].timeRange,
             timeInterval: dashboardData.charts[i].interval,
+            aggregate: dashboardData.charts[i].aggregate,
         };
         console.log(value);
         $.ajax({
@@ -32,7 +34,7 @@ function showAll() {
         });
     }
 }
-showAll();
+
 function showChart(data, num) {
     const value = [];
     const time = [];

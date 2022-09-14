@@ -1,21 +1,29 @@
 require('dotenv').config();
 const { dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
-const bucket = process.env.INFLUX_BUCKET;
-
-const getHost = async (layer, type) => {
+const systemBucket = process.env.INFLUX_BUCKET_SYSTEM;
+const containerBucket = process.env.INFLUX_BUCKET_CONTAINER;
+const getHost = async (layer) => {
+    //get host name from last 10 minutes
     return new Promise((resolve) => {
+        let bucket;
+        if (layer === 'system') {
+            bucket = systemBucket;
+        } else if (layer === 'container') {
+            bucket = containerBucket;
+        }
         try {
-            console.log(layer, type);
             let data = [];
             const query = `from(bucket: "${bucket}")
-                          |> range(start: -30s)
+                          |> range(start: -10m)
                           |> keyValues(keyColumns: ["host"])
                           |> group()`;
             queryApi.queryRows(query, {
                 next(row, tableMeta) {
                     const o = tableMeta.toObject(row);
-                    data.push(o);
+                    if (!data.includes(o._value)) {
+                        data.push(o._value);
+                    }
                 },
                 error(error) {
                     console.error(error);
@@ -23,9 +31,8 @@ const getHost = async (layer, type) => {
                     reject(error);
                 },
                 complete() {
-                    console.log(data[0]._value);
                     console.log('Finished SUCCESS');
-                    resolve([data[0]._value]);
+                    resolve(data);
                 },
             });
         } catch (e) {
@@ -34,7 +41,7 @@ const getHost = async (layer, type) => {
         }
     });
 };
-const getContainer = async (layer, type) => {
+const getContainer = async () => {
     return new Promise((resolve) => {
         try {
             const query = `import "influxdata/influxdb/v1"
@@ -68,32 +75,30 @@ const getContainer = async (layer, type) => {
 const getChart = async (data) => {
     return new Promise((resolve) => {
         try {
+            console.log('data', data);
+            let bucket;
+            if (data.layer === 'system') {
+                bucket = systemBucket;
+            } else if (data.layer === 'container') {
+                bucket = containerBucket;
+            }
+            let cpuFilter = '';
+            if (data.measurement[0] === 'cpu') {
+                cpuFilter = `|> filter(fn: (r) => r["cpu"] == "cpu-total")`;
+            }
             const chartData = [];
             let query;
-            if (data.measurement[0] === 'cpu') {
-                query = `from(bucket: "${bucket}")
-                        |> range(start: ${data.timeRange})
-                        |> window(every: ${data.timeInterval})
-                        |> mean()
-                        |> duplicate(column: "_stop", as: "_time")
-                        |> window(every: inf)
-                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")
-                        |> filter(fn: (r) => r["_measurement"] == "${data.measurement[0]}")
-                        |> filter(fn: (r) => r["_field"] == "usage_system")
-                        |> filter(fn: (r) => r["cpu"] == "cpu-total")  
-                        |> yield(name: "mean")`;
-            } else {
-                query = `from(bucket: "${bucket}")
-                        |> range(start: ${data.timeRange})
-                        |> window(every: ${data.timeInterval})
-                        |> mean()
-                        |> duplicate(column: "_stop", as: "_time")
-                        |> window(every: inf)
-                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")
-                        |> filter(fn: (r) => r["_measurement"] == "${data.measurement[0]}")
-                        |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
-                        |> yield(name: "mean")`;
-            }
+            query = `from(bucket: "${bucket}")
+                      |> range(start: ${data.timeRange})
+                      |> window(every: ${data.timeInterval})
+                      |> ${data.aggregate}()
+                      |> duplicate(column: "_stop", as: "_time")
+                      |> window(every: inf)
+                      |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                      |> filter(fn: (r) => r["_measurement"] == "${data.measurement[0]}")
+                      |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
+                      ${cpuFilter}                          
+                      |> yield(name: "mean")`;
 
             queryApi.queryRows(query, {
                 next(row, tableMeta) {
@@ -131,6 +136,7 @@ const saveChart = async (data) => {
                         field: data.field,
                         timeRange: data.timeRange,
                         interval: data.interval,
+                        aggregate: data.aggregate,
                     },
                 },
             }
