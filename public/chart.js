@@ -93,18 +93,19 @@ function resetContainer() {
             container = result;
             console.log('result', result);
             containerValue = container;
+            const num = container.length;
             $('.button-container').html(``);
             $('.button-container')
                 .html(`<button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Container Name
                 </button>       
                 <ul class="dropdown-menu container">`);
-            for (let i = 0; i < container.length; i++) {
+            for (let i = 0; i < num; i++) {
                 $('.container').append(
                     `<li>
                 <a href="#" class="dropdown-item" id="container-list">
                   <div class="form-check">
-                    <input class="form-check-input container${i}" data-value="${container[i]}" name="${container[i]}" type="checkbox" onclick="container('container')" id="flexCheckDefault">
+                    <input class="form-check-input container${i}" data-value="${container[i]}" name="${container[i]}" type="checkbox" onclick="containerCheck(${num})" id="flexCheckDefault">
                       <label class="form-check-label" for="flexCheckDefault">
                         ${container[i]}
                       </label>
@@ -179,6 +180,17 @@ function hostCheck(num) {
     }
     console.log(hostList);
     hostValue = hostList;
+}
+
+function containerCheck(num) {
+    const containerList = [];
+    for (let i = 0; i < num; i++) {
+        if ($(`.form-check-input.container${i}`).is(':checked')) {
+            containerList.push($(`.form-check-input.container${i}`).data('value'));
+        }
+    }
+    console.log(containerList);
+    containerValue = containerList;
 }
 
 function measurementCheck(num, layer) {
