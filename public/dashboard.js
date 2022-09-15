@@ -1,5 +1,6 @@
 const dashboardData = data;
-
+const chartId = [];
+const interval = [];
 showAll();
 function showAll() {
     for (let i = 0; i < dashboardData.charts.length; i++) {
@@ -15,6 +16,9 @@ function showAll() {
             aggregate: dashboardData.charts[i].aggregate,
         };
         console.log(value);
+        chartId.push(i);
+        // chartId.push(dashboardData.charts[i]._id);
+        interval.push(dashboardData.charts[i].interval);
         $.ajax({
             method: 'get',
             headers: {
@@ -31,11 +35,54 @@ function showAll() {
                 }
                 console.log('result', result);
                 showChart(result, i);
+
+                realTime(i, dashboardData.charts[i].interval);
             },
         });
     }
 }
 
+async function realTime(i, interval) {
+    var value = {
+        layer: dashboardData.charts[i].layer,
+        type: dashboardData.charts[i].type,
+        host: dashboardData.charts[i].host,
+        container: dashboardData.charts[i].container,
+        measurement: dashboardData.charts[i].measurement,
+        field: dashboardData.charts[i].field,
+        timeRange: dashboardData.charts[i].timeRange,
+        timeInterval: dashboardData.charts[i].interval,
+        aggregate: dashboardData.charts[i].aggregate,
+    };
+    await $.ajax({
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: '/api/1.0/chart/show',
+        data: value,
+        error: (err) => {
+            console.log(err);
+        },
+        success: (result) => {
+            if (result.status === 200) {
+                console.log('success');
+            }
+            console.log('result', result);
+            showChart(result, i);
+        },
+    });
+    let time = interval.slice(0, -1);
+    if (interval.slice(-1) === 's') {
+        time = +interval.slice(0, -1);
+    } else if (interval.slice(-1) === 'm') {
+        time = +interval.slice(0, -1) * 60;
+    }
+    console.log(time);
+    setTimeout(() => {
+        realTime(i, interval);
+    }, 1000 * time);
+}
 function showChart(data, num) {
     const value = [];
     const time = [];
