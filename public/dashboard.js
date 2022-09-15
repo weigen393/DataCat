@@ -104,7 +104,7 @@ function showChart(data, num) {
 $('.create-chart').on('click', () => {
     window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;
 });
-$('h1').blur(() => {
+$('h1').on('blur', () => {
     console.log('change');
     const text = {
         title: $('.dashboard-title').text(),
@@ -129,7 +129,7 @@ $('h1').blur(() => {
     });
 });
 
-$(document).ready(function () {
+jQuery(function ($) {
     $('.btn').on('click', function () {
         console.log($(this).attr('value'));
         console.log($(this).attr('name'));

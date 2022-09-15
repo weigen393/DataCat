@@ -25,7 +25,7 @@ $('.create-dashboard').on('click', () => {
     });
 });
 
-$(document).ready(function () {
+jQuery(function ($) {
     $('.delete').on('click', function () {
         console.log($(this).attr('value'));
         const data = {

@@ -70,7 +70,8 @@ function setChart(dashboardId, chartId) {
                 $(`input[data-value="${result[0].host[0]}"]`).attr('checked', true);
                 $(`input[data-value="${result[0].measurement[0]}"]`).attr('checked', true);
                 $(`input[data-value="${result[0].field[0]}"]`).attr('checked', true);
-            }, 2000);
+                showPreview();
+            }, 3000);
         },
     });
 }
@@ -82,6 +83,7 @@ $('#layer').change(() => {
         resetMeasurement(Object.keys(systemMap), layer);
     } else if (layer === 'container') {
         resetContainer();
+        resetMeasurement(Object.keys(containerMap), layer);
     } else {
         $('.button-container').html(``);
     }
@@ -273,8 +275,11 @@ function fieldCheck(num) {
 
 $('#preview').on('click', () => {
     console.log('preview');
-    console.log(hostValue, measurementValue, fieldValue);
+    // console.log(hostValue, measurementValue, fieldValue);
+    showPreview();
     //get data
+});
+function showPreview() {
     const setData = {
         layer: $('#layer').val(),
         type: $('#type').val(),
@@ -304,7 +309,7 @@ $('#preview').on('click', () => {
             showChart(result);
         },
     });
-});
+}
 function showChart(data) {
     const value = [];
     const time = [];

@@ -90,17 +90,14 @@ const getChart = async (data) => {
             const chartData = [];
             let query;
             query = `from(bucket: "${bucket}")
-                      |> range(start: ${data.timeRange})
-                      |> window(every: ${data.timeInterval})
-                      |> ${data.aggregate}()
-                      |> duplicate(column: "_stop", as: "_time")
-                      |> window(every: inf)
+                      |> range(start: ${data.timeRange})                      
                       |> filter(fn: (r) => r["host"] == "${data.host[0]}")
                       |> filter(fn: (r) => r["_measurement"] == "${data.measurement[0]}")
                       |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
-                      ${cpuFilter}                          
-                      |> yield(name: "mean")`;
-
+                      ${cpuFilter}
+                      |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: false)
+                      |> yield(name: "${data.aggregate}")`;
+            console.log(query);
             queryApi.queryRows(query, {
                 next(row, tableMeta) {
                     const o = tableMeta.toObject(row);
@@ -153,6 +150,7 @@ const saveChart = async (data) => {
                 part.type = data.type;
                 part.host = data.host;
                 part.measurement = data.measurement;
+                part.field = data.field;
                 part.timeRange = data.timeRange;
                 part.interval = data.interval;
                 part.aggregate = data.aggregate;
