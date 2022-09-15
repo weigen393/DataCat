@@ -2,17 +2,17 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const { dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
-const systemBucket = process.env.INFLUX_BUCKET_SYSTEM;
-const containerBucket = process.env.INFLUX_BUCKET_CONTAINER;
+const bucket = process.env.INFLUX_BUCKET;
+// const containerBucket = process.env.INFLUX_BUCKET_CONTAINER;
 const getHost = async (layer) => {
     //get host name from last 10 minutes
     return new Promise((resolve) => {
-        let bucket;
-        if (layer === 'system') {
-            bucket = systemBucket;
-        } else if (layer === 'container') {
-            bucket = containerBucket;
-        }
+        // let bucket;
+        // if (layer === 'system') {
+        //     bucket = systemBucket;
+        // } else if (layer === 'container') {
+        //     bucket = containerBucket;
+        // }
         try {
             let data = [];
             const query = `from(bucket: "${bucket}")
@@ -47,7 +47,7 @@ const getContainer = async () => {
         try {
             const query = `import "influxdata/influxdb/v1"
                           v1.tagValues(
-                            bucket: "dataCat_Container",  
+                            bucket: "${bucket}",  
                             tag: "container_name"
                           )`;
             let data = [];
@@ -77,12 +77,12 @@ const getChart = async (data) => {
     return new Promise((resolve) => {
         try {
             console.log('data', data);
-            let bucket;
-            if (data.layer === 'system') {
-                bucket = systemBucket;
-            } else if (data.layer === 'container') {
-                bucket = containerBucket;
-            }
+            // let bucket;
+            // if (data.layer === 'system') {
+            //     bucket = systemBucket;
+            // } else if (data.layer === 'container') {
+            //     bucket = containerBucket;
+            // }
             let cpuFilter = '';
             if (data.measurement[0] === 'cpu') {
                 cpuFilter = `|> filter(fn: (r) => r["cpu"] == "cpu-total")`;
