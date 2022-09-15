@@ -15,11 +15,20 @@ const getDashboardPage = async (req, res) => {
 
 const getChartPage = async (req, res) => {
     req.body.userId = '2'; // for test
+    console.log(req.params.dashboardId);
     const title = await dashboard.getDashboardTitle(req.body.userId, req.params.dashboardId);
-    return res.render('chartPage', {
-        userId: req.body.userId,
-        dashboards: { dashboardId: req.params.dashboardId, title: title },
-    });
+
+    if (req.params.chartId === 'new') {
+        return res.render('chartPage', {
+            userId: req.body.userId,
+            dashboards: { dashboardId: req.params.dashboardId, title: title },
+        });
+    } else {
+        return res.render('chartPage', {
+            userId: req.body.userId,
+            dashboards: { dashboardId: req.params.dashboardId, chartId: req.params.chartId, title: title },
+        });
+    }
 };
 
 module.exports = {

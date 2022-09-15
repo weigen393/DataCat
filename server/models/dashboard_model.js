@@ -75,6 +75,7 @@ const getDashboardTitle = async (userId, dashboardId) => {
                 dashboards: { $elemMatch: { _id: dashboardId } },
             }
         );
+        console.log(query);
         return query[0].dashboards[0].title;
     } catch (e) {
         console.log(e.message);

@@ -19,6 +19,61 @@ let containerValue = [];
 let measurementValue = [];
 let fieldValue = [];
 
+if (dashboardData.chartId !== undefined) {
+    console.log('it is not new');
+    setChart(dashboardData.dashboardId, dashboardData.chartId);
+}
+function setChart(dashboardId, chartId) {
+    const sendData = {
+        chartId: chartId,
+    };
+    console.log(sendData);
+    $.ajax({
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: '/api/1.0/chart/edit',
+        data: sendData,
+        error: (err) => {
+            console.log(err);
+        },
+        success: (result) => {
+            if (result.status === 200) {
+                console.log('success');
+            }
+            console.log('result', result);
+            const layer = result[0].layer;
+            const measurement = result[0].measurement;
+            resetHost(layer);
+            if (layer === 'system') {
+                $('.button-container').html(``);
+                resetMeasurement(Object.keys(systemMap), layer);
+            } else if (layer === 'container') {
+                resetContainer();
+            } else {
+                $('.button-container').html(``);
+            }
+            resetField(measurement, layer);
+            $('.chartTitle').text(result[0].title);
+            $(`select option[value=${layer}]`).attr('selected', true);
+            $(`select option[value=${result[0].type}]`).attr('selected', true);
+            $(`select option[value=${result[0].timeRange}]`).attr('selected', true);
+            $(`select option[value=${result[0].interval}]`).attr('selected', true);
+            $(`select option[value=${result[0].aggregate}]`).attr('selected', true);
+            //TODO: change method
+            setTimeout(() => {
+                hostValue = result[0].host;
+                // containerValue = [];
+                measurementValue = result[0].measurement;
+                fieldValue = result[0].field;
+                $(`input[data-value="${result[0].host[0]}"]`).attr('checked', true);
+                $(`input[data-value="${result[0].measurement[0]}"]`).attr('checked', true);
+                $(`input[data-value="${result[0].field[0]}"]`).attr('checked', true);
+            }, 2000);
+        },
+    });
+}
 $('#layer').change(() => {
     const layer = $('#layer').val();
     resetHost(layer);
@@ -319,6 +374,7 @@ function showChart(data) {
 $('#save').on('click', () => {
     const data = {
         dashboardId: dashboardData.dashboardId,
+        chartId: dashboardData.chartId,
         title: $('.chartTitle').text(),
         layer: $('#layer').val(),
         type: $('#type').val(),

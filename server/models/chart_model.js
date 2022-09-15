@@ -1,4 +1,5 @@
 require('dotenv').config();
+const mongoose = require('mongoose');
 const { dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
 const systemBucket = process.env.INFLUX_BUCKET_SYSTEM;
@@ -123,29 +124,43 @@ const getChart = async (data) => {
 };
 const saveChart = async (data) => {
     try {
-        const query = await dashboards.findOneAndUpdate(
-            { 'dashboards._id': data.dashboardId },
-            {
-                $push: {
-                    'dashboards.$.charts': {
-                        title: data.title,
-                        layer: data.layer,
-                        type: data.type,
-                        host: data.host,
-                        measurement: data.measurement,
-                        field: data.field,
-                        timeRange: data.timeRange,
-                        interval: data.interval,
-                        aggregate: data.aggregate,
+        let query;
+        if (data.chartId === undefined) {
+            query = await dashboards.findOneAndUpdate(
+                { 'dashboards._id': data.dashboardId },
+                {
+                    $push: {
+                        'dashboards.$.charts': {
+                            title: data.title,
+                            layer: data.layer,
+                            type: data.type,
+                            host: data.host,
+                            measurement: data.measurement,
+                            field: data.field,
+                            timeRange: data.timeRange,
+                            interval: data.interval,
+                            aggregate: data.aggregate,
+                        },
                     },
-                },
-            }
-        );
+                }
+            );
+        } else {
+            query = await dashboards.findById('631ac29e8fcde150bcb8415d', function (e, dataset) {
+                if (e) console.log(e);
+                let part = dataset.dashboards.id(data.dashboardId).charts.id(data.chartId);
+                part.title = data.title;
+                part.layer = data.layer;
+                part.type = data.type;
+                part.host = data.host;
+                part.measurement = data.measurement;
+                part.timeRange = data.timeRange;
+                part.interval = data.interval;
+                part.aggregate = data.aggregate;
+                dataset.save();
+            });
+        }
         return 'save success';
-    } catch (e) {
-        console.log(e.message);
-        return e;
-    }
+    } catch (e) {}
 };
 const delChart = async (data) => {
     try {
@@ -165,10 +180,54 @@ const delChart = async (data) => {
         return e;
     }
 };
+const getChartSettings = async (data) => {
+    try {
+        console.log(data);
+        const chartId = mongoose.Types.ObjectId(data.chartId);
+        const query = await dashboards.aggregate([
+            {
+                $match: { 'dashboards.charts._id': chartId },
+            },
+            {
+                $project: {
+                    dashboards: {
+                        $filter: {
+                            input: {
+                                $map: {
+                                    input: '$dashboards',
+                                    as: 'dashboard',
+                                    in: {
+                                        charts: {
+                                            $filter: {
+                                                input: '$$dashboard.charts',
+                                                as: 'chart',
+                                                cond: {
+                                                    $setIsSubset: [[chartId], ['$$chart._id']],
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                            as: 'dashboard',
+                            cond: { $ne: ['$$dashboard.charts', []] },
+                        },
+                    },
+                },
+            },
+        ]);
+        console.log(query);
+        return query[0].dashboards[0].charts;
+    } catch (e) {
+        console.log(e.message);
+        return e;
+    }
+};
 module.exports = {
     getHost,
     getContainer,
     getChart,
     saveChart,
     delChart,
+    getChartSettings,
 };

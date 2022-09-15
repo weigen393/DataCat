@@ -20,6 +20,7 @@ const getChart = async (req, res) => {
 };
 const saveChart = async (req, res) => {
     console.log('saveChart');
+    console.log(req.body);
     const data = await chart.saveChart(req.body);
     res.status(200).send(data);
 };
@@ -28,10 +29,17 @@ const delChart = async (req, res) => {
     const data = await chart.delChart(req.body);
     res.status(200).send(data);
 };
+const editChart = async (req, res) => {
+    console.log('editChart');
+    console.log(req.query);
+    const data = await chart.getChartSettings(req.query);
+    res.status(200).send(data);
+};
 module.exports = {
     getHost,
     getContainer,
     getChart,
     saveChart,
     delChart,
+    editChart,
 };

@@ -136,7 +136,7 @@ $(document).ready(function () {
         const method = $(this).attr('name');
         const chartId = $(this).attr('value');
         if (method === 'edit') {
-            // window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;
+            window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/${chartId}`;
         } else if (method === 'delete') {
             delChart(chartId);
         }
