@@ -13,7 +13,7 @@ const containerMap = {
     docker_container_status: ['uptime_ns'],
     docker: ['n_containers', 'n_containers_paused', 'n_containers_running', 'n_containers_stopped'],
 };
-let measurementNum = 0;
+let layerValue;
 let hostValue = [];
 let containerValue = [];
 let measurementValue = [];
@@ -50,7 +50,9 @@ function setChart(dashboardId, chartId) {
                 $('.button-container').html(``);
                 resetMeasurement(Object.keys(systemMap), layer);
             } else if (layer === 'container') {
-                resetContainer();
+                $('.field').html(``);
+                resetContainer(result[0].host);
+                resetMeasurement(Object.keys(containerMap), layer);
             } else {
                 $('.button-container').html(``);
             }
@@ -63,29 +65,35 @@ function setChart(dashboardId, chartId) {
             $(`select option[value=${result[0].aggregate}]`).attr('selected', true);
             //TODO: change method
             setTimeout(() => {
+                if (result[0].container !== undefined) {
+                    containerValue = result[0].container;
+                    $(`input[data-value="${result[0].container[0]}"]`).attr('checked', true);
+                }
                 hostValue = result[0].host;
-                // containerValue = [];
                 measurementValue = result[0].measurement;
                 fieldValue = result[0].field;
                 $(`input[data-value="${result[0].host[0]}"]`).attr('checked', true);
                 $(`input[data-value="${result[0].measurement[0]}"]`).attr('checked', true);
                 $(`input[data-value="${result[0].field[0]}"]`).attr('checked', true);
                 showPreview();
-            }, 3000);
+            }, 1000);
         },
     });
 }
-$('#layer').change(() => {
+$('#layer').on('change', () => {
     const layer = $('#layer').val();
+    layerValue = layer;
     resetHost(layer);
     if (layer === 'system') {
         $('.button-container').html(``);
+        $('.field').html(``);
         resetMeasurement(Object.keys(systemMap), layer);
     } else if (layer === 'container') {
-        resetContainer();
+        $('.field').html(``);
         resetMeasurement(Object.keys(containerMap), layer);
     } else {
         $('.button-container').html(``);
+        $('.field').html(``);
     }
 });
 
@@ -130,7 +138,7 @@ function resetHost(layer) {
     });
 }
 
-function resetContainer() {
+function resetContainer(host) {
     containerValue = [];
     let container = [];
     console.log('reset container');
@@ -140,6 +148,7 @@ function resetContainer() {
             'Content-Type': 'application/json',
         },
         url: '/api/1.0/chart/container',
+        data: { host: host[0] },
         error: (err) => {
             console.log(err);
         },
@@ -237,6 +246,9 @@ function hostCheck(num) {
     }
     console.log(hostList);
     hostValue = hostList;
+    if (layerValue === 'container') {
+        resetContainer(hostList);
+    }
 }
 
 function containerCheck(num) {
@@ -284,6 +296,7 @@ function showPreview() {
         layer: $('#layer').val(),
         type: $('#type').val(),
         host: hostValue,
+        container: containerValue,
         measurement: measurementValue,
         field: fieldValue,
         timeRange: $('#range').val(),
@@ -384,6 +397,7 @@ $('#save').on('click', () => {
         layer: $('#layer').val(),
         type: $('#type').val(),
         host: hostValue,
+        container: containerValue,
         measurement: measurementValue,
         field: fieldValue,
         timeRange: $('#range').val(),

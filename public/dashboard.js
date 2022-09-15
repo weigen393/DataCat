@@ -7,6 +7,7 @@ function showAll() {
             layer: dashboardData.charts[i].layer,
             type: dashboardData.charts[i].type,
             host: dashboardData.charts[i].host,
+            container: dashboardData.charts[i].container,
             measurement: dashboardData.charts[i].measurement,
             field: dashboardData.charts[i].field,
             timeRange: dashboardData.charts[i].timeRange,

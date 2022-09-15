@@ -8,8 +8,7 @@ const getHost = async (req, res) => {
 };
 const getContainer = async (req, res) => {
     console.log('getContainer');
-    // const query = JSON.parse(Object.keys(req.query)[0]);
-    const container = await chart.getContainer();
+    const container = await chart.getContainer(req.query);
     console.log('container', container);
     res.status(200).send(container);
 };

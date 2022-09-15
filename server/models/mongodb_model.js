@@ -17,6 +17,7 @@ const chartSchema = new mongoose.Schema({
     layer: String,
     type: String,
     host: Array,
+    container: Array,
     measurement: Array,
     field: Array,
     timeRange: String,
