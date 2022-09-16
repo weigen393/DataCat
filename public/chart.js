@@ -13,22 +13,31 @@ const containerMap = {
     docker_container_status: ['uptime_ns'],
     docker: ['n_containers', 'n_containers_paused', 'n_containers_running', 'n_containers_stopped'],
 };
+const applicationMap = {
+    method: [],
+    url: [],
+    statusCode: [],
+    requestCount: ['total'],
+    customize: [],
+};
 let layerValue;
 let hostValue = [];
 let containerValue = [];
 let measurementValue = [];
 let fieldValue = [];
+let infoValue = [];
 
 if (dashboardData.chartId !== undefined) {
     console.log('it is not new');
     setChart(dashboardData.dashboardId, dashboardData.chartId);
 }
-function setChart(dashboardId, chartId) {
+async function setChart(dashboardId, chartId) {
     const sendData = {
         chartId: chartId,
     };
     console.log(sendData);
-    $.ajax({
+    let setData;
+    await $.ajax({
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
@@ -38,47 +47,53 @@ function setChart(dashboardId, chartId) {
         error: (err) => {
             console.log(err);
         },
-        success: (result) => {
+        success: async (result) => {
             if (result.status === 200) {
                 console.log('success');
             }
             console.log('result', result);
-            const layer = result[0].layer;
-            const measurement = result[0].measurement;
+            setData = result;
+            console.log(result[0].host);
+            const layer = setData[0].layer;
+            const measurement = setData[0].measurement;
             resetHost(layer);
             if (layer === 'system') {
                 $('.button-container').html(``);
                 resetMeasurement(Object.keys(systemMap), layer);
             } else if (layer === 'container') {
                 $('.field').html(``);
-                resetContainer(result[0].host);
+                resetContainer(setData[0].host);
                 resetMeasurement(Object.keys(containerMap), layer);
-            } else {
+            } else if (layer === 'application') {
                 $('.button-container').html(``);
+                resetMeasurement(Object.keys(applicationMap), layer);
+                resetInfo();
             }
             resetField(measurement, layer);
-            $('.chartTitle').text(result[0].title);
+            $('.chartTitle').text(setData[0].title);
             $(`select option[value=${layer}]`).attr('selected', true);
-            $(`select option[value=${result[0].type}]`).attr('selected', true);
-            $(`select option[value=${result[0].timeRange}]`).attr('selected', true);
-            $(`select option[value=${result[0].interval}]`).attr('selected', true);
-            $(`select option[value=${result[0].aggregate}]`).attr('selected', true);
-            //TODO: change method
-            setTimeout(() => {
-                if (result[0].container !== undefined) {
-                    containerValue = result[0].container;
-                    $(`input[data-value="${result[0].container[0]}"]`).attr('checked', true);
-                }
-                hostValue = result[0].host;
-                measurementValue = result[0].measurement;
-                fieldValue = result[0].field;
-                $(`input[data-value="${result[0].host[0]}"]`).attr('checked', true);
-                $(`input[data-value="${result[0].measurement[0]}"]`).attr('checked', true);
-                $(`input[data-value="${result[0].field[0]}"]`).attr('checked', true);
-                showPreview();
-            }, 1000);
+            $(`select option[value=${setData[0].type}]`).attr('selected', true);
+            $(`select option[value=${setData[0].timeRange}]`).attr('selected', true);
+            $(`select option[value=${setData[0].interval}]`).attr('selected', true);
+            $(`select option[value=${setData[0].aggregate}]`).attr('selected', true);
         },
     });
+    if (setData[0].container !== undefined) {
+        containerValue = setData[0].container;
+        $(`input[data-value="${setData[0].container[0]}"]`).attr('checked', true);
+    }
+    hostValue = setData[0].host;
+    measurementValue = setData[0].measurement;
+    fieldValue = setData[0].field;
+    infoValue = setData[0].info;
+    console.log(setData[0].host[0]);
+    showPreview();
+    setTimeout(() => {
+        $(`input[data-value="${setData[0].host[0]}"]`).attr('checked', true);
+        $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
+        $(`input[data-value="${setData[0].measurement[0]}"]`).attr('checked', true);
+        $(`input[data-value="${setData[0].info[0]}"]`).attr('checked', true);
+    }, 1000);
 }
 $('#layer').on('change', () => {
     const layer = $('#layer').val();
@@ -87,21 +102,61 @@ $('#layer').on('change', () => {
     if (layer === 'system') {
         $('.button-container').html(``);
         $('.field').html(``);
+        $('.button-info').html('');
         resetMeasurement(Object.keys(systemMap), layer);
     } else if (layer === 'container') {
         $('.field').html(``);
+        $('.button-info').html('');
         resetMeasurement(Object.keys(containerMap), layer);
-    } else {
+    } else if (layer === 'application') {
         $('.button-container').html(``);
         $('.field').html(``);
+        resetMeasurement(Object.keys(applicationMap), layer);
+        resetInfo();
     }
 });
-
+function resetInfo() {
+    let info;
+    if (measurementValue[0] === 'requestCount') {
+        info = ['countSum'];
+    } else {
+        info = ['duration', 'count', 'countSum'];
+    }
+    const num = info.length;
+    $('.button-info').html('');
+    $('.button-info')
+        .html(`<button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Info
+                </button>       
+                <ul class="dropdown-menu info">`);
+    for (let i = 0; i < num; i++) {
+        $('.dropdown-menu.info').append(
+            `<li>
+                <a href="#" class="dropdown-item" id="info-list">
+                <div class="form-check">
+                    <input class="form-check-input info${i}" data-value="${info[i]}" name="${info[i]}" type="checkbox" onclick="infoCheck(${num})" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        ${info[i]}
+                    </label>
+                </div>
+                </a>
+            </li>`
+        );
+    }
+}
+function infoCheck(num) {
+    const infoList = [];
+    for (let i = 0; i < num; i++) {
+        if ($(`.form-check-input.info${i}`).is(':checked')) {
+            infoList.push($(`.form-check-input.info${i}`).data('value'));
+        }
+    }
+    infoValue = infoList;
+    console.log(infoList);
+}
 function resetHost(layer) {
     hostValue = [];
     let host = [];
-    console.log('reset host');
-
     $.ajax({
         method: 'get',
         headers: {
@@ -118,7 +173,6 @@ function resetHost(layer) {
             }
             host = result;
             const num = host.length;
-            console.log('result', result);
             $('.host').html(``);
             for (let i = 0; i < num; i++) {
                 $('.host').append(
@@ -134,6 +188,7 @@ function resetHost(layer) {
                     </li>`
                 );
             }
+            console.log('reset host');
         },
     });
 }
@@ -163,9 +218,9 @@ function resetContainer(host) {
             $('.button-container').html(``);
             $('.button-container')
                 .html(`<button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Container Name
-                </button>       
-                <ul class="dropdown-menu container">`);
+                    Container Name
+                    </button>       
+                    <ul class="dropdown-menu container">`);
             for (let i = 0; i < num; i++) {
                 $('.container').append(
                     `<li>
@@ -185,8 +240,8 @@ function resetContainer(host) {
 }
 
 function resetMeasurement(measurement, layer) {
-    console.log('reset measurement');
     $('.measurement').html(``);
+    console.log(measurement);
     const num = measurement.length;
     for (let i = 0; i < num; i++) {
         $('.measurement').append(
@@ -202,22 +257,49 @@ function resetMeasurement(measurement, layer) {
             </li>`
         );
     }
+    console.log('reset measurement');
 }
 
-function resetField(measurement, layer) {
-    console.log('reset field');
+async function resetField(measurement, layer) {
     console.log(measurement, layer);
     if (measurement.length === 0) {
         $('.field').html(``);
         return;
     }
     let field;
+    let setData = measurement[0];
     if (layer === 'system') {
         field = systemMap[measurement[0]];
     } else if (layer === 'container') {
         field = containerMap[measurement[0]];
-    } else {
-        return;
+    } else if (layer === 'application') {
+        if (measurement[0] === 'requestCount') {
+            field = ['total'];
+        } else {
+            await $.ajax({
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                url: '/api/1.0/chart/appField',
+                data: setData,
+                error: (err) => {
+                    console.log(err);
+                },
+                success: (result) => {
+                    if (result.status === 200) {
+                        console.log('success');
+                    }
+                    console.log('result', result);
+                    field = result;
+                    // if ($('#type').val() === 'line') {
+                    //     showLineChart(result);
+                    // } else if ($('#type').val() === 'number') {
+                    //     showNumber(result);
+                    // }
+                },
+            });
+        }
     }
     console.log(field);
     $('.field').html(``);
@@ -235,6 +317,7 @@ function resetField(measurement, layer) {
             </li>`
         );
     }
+    console.log('reset field');
 }
 
 function hostCheck(num) {
@@ -272,6 +355,9 @@ function measurementCheck(num, layer) {
     console.log(measurementList);
     measurementValue = measurementList;
     resetField(measurementList, layer);
+    if (measurementList[0] === 'requestCount' && layer === 'application') {
+        resetInfo();
+    }
 }
 
 function fieldCheck(num) {
@@ -287,9 +373,7 @@ function fieldCheck(num) {
 
 $('#preview').on('click', () => {
     console.log('preview');
-    // console.log(hostValue, measurementValue, fieldValue);
     showPreview();
-    //get data
 });
 function showPreview() {
     const setData = {
@@ -299,6 +383,7 @@ function showPreview() {
         container: containerValue,
         measurement: measurementValue,
         field: fieldValue,
+        info: infoValue,
         timeRange: $('#range').val(),
         timeInterval: $('#interval').val(),
         aggregate: $('#aggregate').val(),
@@ -319,11 +404,15 @@ function showPreview() {
                 console.log('success');
             }
             console.log('result', result);
-            showChart(result);
+            if ($('#type').val() === 'line') {
+                showLineChart(result);
+            } else if ($('#type').val() === 'number') {
+                showNumber(result);
+            }
         },
     });
 }
-function showChart(data) {
+function showLineChart(data) {
     const value = [];
     const time = [];
     for (let i = 0; i < data.length; i++) {
@@ -389,6 +478,11 @@ function showChart(data) {
         }
     });
 }
+function showNumber(data) {
+    const lastNum = data.pop();
+    console.log(lastNum._value);
+    $('.card-body').text(lastNum._value);
+}
 $('#save').on('click', () => {
     const data = {
         dashboardId: dashboardData.dashboardId,
@@ -400,6 +494,7 @@ $('#save').on('click', () => {
         container: containerValue,
         measurement: measurementValue,
         field: fieldValue,
+        info: infoValue,
         timeRange: $('#range').val(),
         interval: $('#interval').val(),
         aggregate: $('#aggregate').val(),

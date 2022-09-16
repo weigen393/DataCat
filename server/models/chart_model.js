@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
 const bucket = process.env.INFLUX_BUCKET;
-const getTime = '-1h'; //get host and container name from last 1 hr
+const getTime = '-12h'; //get host and container name from last 1 hr
 
 const getHost = async (layer) => {
     return new Promise((resolve) => {
@@ -83,7 +83,47 @@ const getChart = async (data) => {
             }
             const chartData = [];
             let query;
-            query = `from(bucket: "${bucket}")
+            if (data.layer === 'application') {
+                if (data.measurement[0] === 'requestCount') {
+                    query = `from(bucket: "${bucket}")
+                        |> range(start: ${data.timeRange})
+                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")                        
+                        |> filter(fn: (r) => r["_field"] == "duration")
+                        |> group(columns: ["_field"])
+                        |> count()
+                        `;
+                } else {
+                    if (data.info[0] === 'duration') {
+                        query = `from(bucket: "${bucket}")
+                          |> range(start: ${data.timeRange})                      
+                          |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                          |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
+                          |> filter(fn: (r) => r["_field"] == "${data.info[0]}") 
+                          |> group(columns: ["_field"])                     
+                          |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: true)
+                          |> yield(name: "${data.aggregate}")`;
+                    } else if (data.info[0] === 'count') {
+                        query = `from(bucket: "${bucket}")
+                        |> range(start: ${data.timeRange})
+                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                        |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
+                        |> filter(fn: (r) => r["_field"] == "duration")
+                        |> group(columns: ["_field"])
+                        |> aggregateWindow(every: ${data.timeInterval}, fn: count, createEmpty: true)
+                        `;
+                    } else if (data.info[0] === 'countSum') {
+                        query = `from(bucket: "${bucket}")
+                        |> range(start: ${data.timeRange})
+                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                        |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
+                        |> filter(fn: (r) => r["_field"] == "duration")
+                        |> group(columns: ["_field"])
+                        |> count()
+                        `;
+                    }
+                }
+            } else {
+                query = `from(bucket: "${bucket}")
                       |> range(start: ${data.timeRange})                      
                       |> filter(fn: (r) => r["host"] == "${data.host[0]}")
                       ${containerFilter}
@@ -92,10 +132,15 @@ const getChart = async (data) => {
                       ${cpuFilter}
                       |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: false)
                       |> yield(name: "${data.aggregate}")`;
+            }
+
             console.log(query);
             queryApi.queryRows(query, {
                 next(row, tableMeta) {
                     const o = tableMeta.toObject(row);
+                    if (o._value === null) {
+                        o._value = 0;
+                    }
                     chartData.push(o);
                 },
                 error(error) {
@@ -130,6 +175,7 @@ const saveChart = async (data) => {
                             container: data.container,
                             measurement: data.measurement,
                             field: data.field,
+                            info: data.info,
                             timeRange: data.timeRange,
                             interval: data.interval,
                             aggregate: data.aggregate,
@@ -148,6 +194,7 @@ const saveChart = async (data) => {
                 part.container = data.container;
                 part.measurement = data.measurement;
                 part.field = data.field;
+                part.info = data.info;
                 part.timeRange = data.timeRange;
                 part.interval = data.interval;
                 part.aggregate = data.aggregate;
@@ -218,6 +265,36 @@ const getChartSettings = async (data) => {
         return e;
     }
 };
+const getField = async (field) => {
+    return new Promise((resolve) => {
+        try {
+            const query = `from(bucket: "${bucket}")
+                            |> range(start: ${getTime})                            
+                            |> keyValues(keyColumns: ["${field}"])  
+                            |> group()
+                            |> distinct(column: "${field}")`;
+            let data = [];
+            queryApi.queryRows(query, {
+                next(row, tableMeta) {
+                    const o = tableMeta.toObject(row);
+                    data.push(o._value);
+                },
+                error(error) {
+                    console.error(error);
+                    console.log('Finished ERROR');
+                    reject(error);
+                },
+                complete() {
+                    console.log('Finished SUCCESS');
+                    resolve(data);
+                },
+            });
+        } catch (e) {
+            console.log(e.message);
+            reject(e);
+        }
+    });
+};
 module.exports = {
     getHost,
     getContainer,
@@ -225,4 +302,5 @@ module.exports = {
     saveChart,
     delChart,
     getChartSettings,
+    getField,
 };

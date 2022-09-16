@@ -14,21 +14,39 @@ block content
     
     if dashboards.charts.size!==0
       -var num =0;
-      each item in dashboards.charts                    
-        .content-chart    
-          .card.card-primary.card-outline
-            .card-header
-              h3.card-title
-                i.far.fa-chart-bar #{item.title}                   
+      each item in dashboards.charts
+        if item.type==='number'
+          .small-box.bg-info
+            .inner
+              h3(id=`number-${num}`)
+              p %            
+            button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='edit')
+                    span.material-icons settings
+                  
+            button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='delete')
+              span.material-icons delete
+            .icon
+              i.ion.ion-bag
+            a.small-box-footer #{item.title}
+              
+        -num= num+1
+      -var num =0;
+      each item in dashboards.charts
+        if item.type==='line'                  
+          .content-chart
+            .card.card-primary.card-outline
+              .card-header
+                h3.card-title
+                  i.far.fa-chart-bar #{item.title}                   
 
-              .card-tools
-                button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='edit')
-                  span.material-icons settings
-                
-                button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='delete')
-                  span.material-icons delete
-            
-            .card-body(id=`line-chart-${num}`, style="height: 300px")
+                .card-tools
+                  button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='edit')
+                    span.material-icons settings
+                  
+                  button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='delete')
+                    span.material-icons delete
+              
+              .card-body(id=`line-chart-${num}`, style="height: 300px")
         -num= num+1        
 
 block js  

@@ -11,6 +11,7 @@ function showAll() {
             container: dashboardData.charts[i].container,
             measurement: dashboardData.charts[i].measurement,
             field: dashboardData.charts[i].field,
+            info: dashboardData.charts[i].info,
             timeRange: dashboardData.charts[i].timeRange,
             timeInterval: dashboardData.charts[i].interval,
             aggregate: dashboardData.charts[i].aggregate,
@@ -34,7 +35,11 @@ function showAll() {
                     console.log('success');
                 }
                 console.log('result', result);
-                showChart(result, i);
+                if (dashboardData.charts[i].type === 'line') {
+                    showLineChart(result, i);
+                } else if (dashboardData.charts[i].type === 'number') {
+                    showNumber(result, i);
+                }
 
                 realTime(i, dashboardData.charts[i].interval);
             },
@@ -50,6 +55,7 @@ async function realTime(i, interval) {
         container: dashboardData.charts[i].container,
         measurement: dashboardData.charts[i].measurement,
         field: dashboardData.charts[i].field,
+        info: dashboardData.charts[i].info,
         timeRange: dashboardData.charts[i].timeRange,
         timeInterval: dashboardData.charts[i].interval,
         aggregate: dashboardData.charts[i].aggregate,
@@ -69,7 +75,11 @@ async function realTime(i, interval) {
                 console.log('success');
             }
             console.log('result', result);
-            showChart(result, i);
+            if (dashboardData.charts[i].type === 'line') {
+                showLineChart(result, i);
+            } else if (dashboardData.charts[i].type === 'number') {
+                showNumber(result, i);
+            }
         },
     });
     let time = interval.slice(0, -1);
@@ -83,7 +93,7 @@ async function realTime(i, interval) {
         realTime(i, interval);
     }, 1000 * time);
 }
-function showChart(data, num) {
+function showLineChart(data, num) {
     const value = [];
     const time = [];
     for (let i = 0; i < data.length; i++) {
@@ -148,6 +158,11 @@ function showChart(data, num) {
             $('#line-chart-tooltip').hide();
         }
     });
+}
+function showNumber(data, num) {
+    const lastNum = data.pop();
+    console.log(lastNum._value);
+    $(`#number-${num}`).text(lastNum._value);
 }
 $('.create-chart').on('click', () => {
     window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;

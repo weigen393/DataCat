@@ -20,6 +20,7 @@ const chartSchema = new mongoose.Schema({
     container: Array,
     measurement: Array,
     field: Array,
+    info: Array,
     timeRange: String,
     interval: String,
     aggregate: String,

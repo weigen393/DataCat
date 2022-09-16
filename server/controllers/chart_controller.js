@@ -34,6 +34,14 @@ const editChart = async (req, res) => {
     const data = await chart.getChartSettings(req.query);
     res.status(200).send(data);
 };
+
+const getAppField = async (req, res) => {
+    console.log('getAppField');
+    console.log(Object.keys(req.query)[0]);
+    const field = await chart.getField(Object.keys(req.query)[0]);
+    console.log('field', field);
+    res.status(200).send(field);
+};
 module.exports = {
     getHost,
     getContainer,
@@ -41,4 +49,5 @@ module.exports = {
     saveChart,
     delChart,
     editChart,
+    getAppField,
 };

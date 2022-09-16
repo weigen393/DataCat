@@ -25,9 +25,12 @@ block content
         button.btn.btn-secondary.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false", id='measurement') Measurement           
         ul.dropdown-menu.measurement
                     
-      .btn-group
+      .btn-group.button-field
         button.btn.btn-success.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false", id='field') Field           
         ul.dropdown-menu.field
+
+      .btn-group.button-info
+        
     br
     .content.chart-parameter
       select.form-select.form-select-sm(aria-label="Default select example", id='type', style={width:'20%'})
@@ -61,7 +64,7 @@ block content
         option(value='sum') sum
     br    
     block chart   
-        include chart         
+        include chart    
 
     a.preview-chart(href="#",id='preview') PREVIEW
     br
