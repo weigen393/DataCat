@@ -37,8 +37,8 @@ const editChart = async (req, res) => {
 
 const getAppField = async (req, res) => {
     console.log('getAppField');
-    console.log(Object.keys(req.query)[0]);
-    const field = await chart.getField(Object.keys(req.query)[0]);
+    // console.log(req);
+    const field = await chart.getField(req.query);
     console.log('field', field);
     res.status(200).send(field);
 };

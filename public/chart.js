@@ -57,6 +57,10 @@ async function setChart(dashboardId, chartId) {
             const layer = setData[0].layer;
             const measurement = setData[0].measurement;
             resetHost(layer);
+            measurementValue = setData[0].measurement;
+            fieldValue = setData[0].field;
+            infoValue = setData[0].info;
+            hostValue = setData[0].host;
             if (layer === 'system') {
                 $('.button-container').html(``);
                 resetMeasurement(Object.keys(systemMap), layer);
@@ -69,6 +73,7 @@ async function setChart(dashboardId, chartId) {
                 resetMeasurement(Object.keys(applicationMap), layer);
                 resetInfo();
             }
+
             resetField(measurement, layer);
             $('.chartTitle').text(setData[0].title);
             $(`select option[value=${layer}]`).attr('selected', true);
@@ -82,10 +87,7 @@ async function setChart(dashboardId, chartId) {
         containerValue = setData[0].container;
         $(`input[data-value="${setData[0].container[0]}"]`).attr('checked', true);
     }
-    hostValue = setData[0].host;
-    measurementValue = setData[0].measurement;
-    fieldValue = setData[0].field;
-    infoValue = setData[0].info;
+
     console.log(setData[0].host[0]);
     showPreview();
     setTimeout(() => {
@@ -111,49 +113,10 @@ $('#layer').on('change', () => {
     } else if (layer === 'application') {
         $('.button-container').html(``);
         $('.field').html(``);
-        resetMeasurement(Object.keys(applicationMap), layer);
-        resetInfo();
+        // resetMeasurement(Object.keys(applicationMap), layer);
+        // resetInfo();
     }
 });
-function resetInfo() {
-    let info;
-    if (measurementValue[0] === 'requestCount') {
-        info = ['countSum'];
-    } else {
-        info = ['duration', 'count', 'countSum'];
-    }
-    const num = info.length;
-    $('.button-info').html('');
-    $('.button-info')
-        .html(`<button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Info
-                </button>       
-                <ul class="dropdown-menu info">`);
-    for (let i = 0; i < num; i++) {
-        $('.dropdown-menu.info').append(
-            `<li>
-                <a href="#" class="dropdown-item" id="info-list">
-                <div class="form-check">
-                    <input class="form-check-input info${i}" data-value="${info[i]}" name="${info[i]}" type="checkbox" onclick="infoCheck(${num})" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        ${info[i]}
-                    </label>
-                </div>
-                </a>
-            </li>`
-        );
-    }
-}
-function infoCheck(num) {
-    const infoList = [];
-    for (let i = 0; i < num; i++) {
-        if ($(`.form-check-input.info${i}`).is(':checked')) {
-            infoList.push($(`.form-check-input.info${i}`).data('value'));
-        }
-    }
-    infoValue = infoList;
-    console.log(infoList);
-}
 function resetHost(layer) {
     hostValue = [];
     let host = [];
@@ -192,7 +155,22 @@ function resetHost(layer) {
         },
     });
 }
-
+function hostCheck(num) {
+    const hostList = [];
+    for (let i = 0; i < num; i++) {
+        if ($(`.form-check-input.host${i}`).is(':checked')) {
+            hostList.push($(`.form-check-input.host${i}`).data('value'));
+        }
+    }
+    console.log(hostList);
+    hostValue = hostList;
+    if (layerValue === 'container') {
+        resetContainer(hostList);
+    } else if (layerValue === 'application') {
+        $('.field').html(``);
+        resetMeasurement(Object.keys(applicationMap), layerValue);
+    }
+}
 function resetContainer(host) {
     containerValue = [];
     let container = [];
@@ -238,6 +216,16 @@ function resetContainer(host) {
         },
     });
 }
+function containerCheck(num) {
+    const containerList = [];
+    for (let i = 0; i < num; i++) {
+        if ($(`.form-check-input.container${i}`).is(':checked')) {
+            containerList.push($(`.form-check-input.container${i}`).data('value'));
+        }
+    }
+    console.log(containerList);
+    containerValue = containerList;
+}
 
 function resetMeasurement(measurement, layer) {
     $('.measurement').html(``);
@@ -259,15 +247,28 @@ function resetMeasurement(measurement, layer) {
     }
     console.log('reset measurement');
 }
-
-async function resetField(measurement, layer) {
-    console.log(measurement, layer);
-    if (measurement.length === 0) {
-        $('.field').html(``);
-        return;
+function measurementCheck(num, layer) {
+    const measurementList = [];
+    for (let i = 0; i < num; i++) {
+        if ($(`.form-check-input.measurement${i}`).is(':checked')) {
+            measurementList.push($(`.form-check-input.measurement${i}`).data('value'));
+        }
     }
+    console.log(measurementList);
+    measurementValue = measurementList;
+    resetField(measurementList, layer);
+    // if (measurementList[0] === 'requestCount' || measurementList[0] === 'customize') {
+    resetInfo();
+    // }
+}
+async function resetField(measurement, layer) {
+    console.log('hi', measurement, layer);
+    // if (measurement.length === 0) {
+    // $('.field').html(``);
+    //     return;
+    // }
     let field;
-    let setData = measurement[0];
+    let setData = { measurement: measurement[0], host: hostValue[0] };
     if (layer === 'system') {
         field = systemMap[measurement[0]];
     } else if (layer === 'container') {
@@ -319,45 +320,50 @@ async function resetField(measurement, layer) {
     }
     console.log('reset field');
 }
-
-function hostCheck(num) {
-    const hostList = [];
-    for (let i = 0; i < num; i++) {
-        if ($(`.form-check-input.host${i}`).is(':checked')) {
-            hostList.push($(`.form-check-input.host${i}`).data('value'));
-        }
+function resetInfo() {
+    let info;
+    if (measurementValue[0] === 'requestCount') {
+        info = ['countSum'];
+    } else if (measurementValue[0] === 'customize') {
+        info = ['value'];
+    } else {
+        info = ['duration', 'count', 'countSum'];
     }
-    console.log(hostList);
-    hostValue = hostList;
-    if (layerValue === 'container') {
-        resetContainer(hostList);
+    const num = info.length;
+    $('.button-info').html('');
+    $('.button-info')
+        .html(`<button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Info
+                </button>       
+                <ul class="dropdown-menu info">`);
+    let check = '';
+    if (num === 1) {
+        check = 'checked';
+    }
+    for (let i = 0; i < num; i++) {
+        $('.dropdown-menu.info').append(
+            `<li>
+                <a href="#" class="dropdown-item" id="info-list">
+                <div class="form-check">
+                    <input class="form-check-input info${i}" data-value="${info[i]}" name="${info[i]}" type="checkbox" onclick="infoCheck(${num})" id="flexCheckDefault" ${check}>
+                    <label class="form-check-label" for="flexCheckDefault">
+                        ${info[i]}
+                    </label>
+                </div>
+                </a>
+            </li>`
+        );
     }
 }
-
-function containerCheck(num) {
-    const containerList = [];
+function infoCheck(num) {
+    const infoList = [];
     for (let i = 0; i < num; i++) {
-        if ($(`.form-check-input.container${i}`).is(':checked')) {
-            containerList.push($(`.form-check-input.container${i}`).data('value'));
+        if ($(`.form-check-input.info${i}`).is(':checked')) {
+            infoList.push($(`.form-check-input.info${i}`).data('value'));
         }
     }
-    console.log(containerList);
-    containerValue = containerList;
-}
-
-function measurementCheck(num, layer) {
-    const measurementList = [];
-    for (let i = 0; i < num; i++) {
-        if ($(`.form-check-input.measurement${i}`).is(':checked')) {
-            measurementList.push($(`.form-check-input.measurement${i}`).data('value'));
-        }
-    }
-    console.log(measurementList);
-    measurementValue = measurementList;
-    resetField(measurementList, layer);
-    if (measurementList[0] === 'requestCount' && layer === 'application') {
-        resetInfo();
-    }
+    infoValue = infoList;
+    console.log(infoList);
 }
 
 function fieldCheck(num) {

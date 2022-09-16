@@ -2,18 +2,28 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const { dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
-const bucket = process.env.INFLUX_BUCKET;
+const bucketData = process.env.INFLUX_BUCKET_DATA;
+const bucketApp = process.env.INFLUX_BUCKET_APP;
 const getTime = '-12h'; //get host and container name from last 1 hr
 
 const getHost = async (layer) => {
     return new Promise((resolve) => {
         try {
             let data = [];
-            const query = `from(bucket: "${bucket}")
-                          |> range(start: ${getTime})
-                          |> keyValues(keyColumns: ["host"])
-                          |> group()
-                          |> distinct(column: "host")`;
+            let query;
+            if (layer === 'application') {
+                query = `from(bucket: "${bucketApp}")
+                        |> range(start: ${getTime})                        
+                        |> group()
+                        |> distinct(column: "host")`;
+            } else {
+                query = `from(bucket: "${bucketData}")
+                        |> range(start: ${getTime})
+                        |> keyValues(keyColumns: ["host"])
+                        |> group()
+                        |> distinct(column: "host")`;
+            }
+
             queryApi.queryRows(query, {
                 next(row, tableMeta) {
                     const o = tableMeta.toObject(row);
@@ -40,7 +50,7 @@ const getHost = async (layer) => {
 const getContainer = async (host) => {
     return new Promise((resolve) => {
         try {
-            const query = `from(bucket: "${bucket}")
+            const query = `from(bucket: "${bucketData}")
                             |> range(start: ${getTime})
                             |> filter(fn: (r) => r["host"] == "${host.host}")
                             |> keyValues(keyColumns: ["${host.host}","host"])  
@@ -85,16 +95,24 @@ const getChart = async (data) => {
             let query;
             if (data.layer === 'application') {
                 if (data.measurement[0] === 'requestCount') {
-                    query = `from(bucket: "${bucket}")
+                    query = `from(bucket: "${bucketApp}")
                         |> range(start: ${data.timeRange})
                         |> filter(fn: (r) => r["host"] == "${data.host[0]}")                        
                         |> filter(fn: (r) => r["_field"] == "duration")
                         |> group(columns: ["_field"])
                         |> count()
                         `;
+                } else if (data.measurement[0] === 'customize') {
+                    query = `from(bucket: "${bucketApp}")
+                        |> range(start: ${data.timeRange})
+                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")                        
+                        |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
+                        |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: true)
+                        |> yield(name: "mean")
+                        `;
                 } else {
                     if (data.info[0] === 'duration') {
-                        query = `from(bucket: "${bucket}")
+                        query = `from(bucket: "${bucketApp}")
                           |> range(start: ${data.timeRange})                      
                           |> filter(fn: (r) => r["host"] == "${data.host[0]}")
                           |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
@@ -103,7 +121,7 @@ const getChart = async (data) => {
                           |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: true)
                           |> yield(name: "${data.aggregate}")`;
                     } else if (data.info[0] === 'count') {
-                        query = `from(bucket: "${bucket}")
+                        query = `from(bucket: "${bucketApp}")
                         |> range(start: ${data.timeRange})
                         |> filter(fn: (r) => r["host"] == "${data.host[0]}")
                         |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
@@ -112,7 +130,7 @@ const getChart = async (data) => {
                         |> aggregateWindow(every: ${data.timeInterval}, fn: count, createEmpty: true)
                         `;
                     } else if (data.info[0] === 'countSum') {
-                        query = `from(bucket: "${bucket}")
+                        query = `from(bucket: "${bucketApp}")
                         |> range(start: ${data.timeRange})
                         |> filter(fn: (r) => r["host"] == "${data.host[0]}")
                         |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
@@ -123,7 +141,7 @@ const getChart = async (data) => {
                     }
                 }
             } else {
-                query = `from(bucket: "${bucket}")
+                query = `from(bucket: "${bucketData}")
                       |> range(start: ${data.timeRange})                      
                       |> filter(fn: (r) => r["host"] == "${data.host[0]}")
                       ${containerFilter}
@@ -265,19 +283,28 @@ const getChartSettings = async (data) => {
         return e;
     }
 };
-const getField = async (field) => {
+const getField = async (data) => {
     return new Promise((resolve) => {
         try {
-            const query = `from(bucket: "${bucket}")
-                            |> range(start: ${getTime})                            
-                            |> keyValues(keyColumns: ["${field}"])  
+            let query;
+            console.log(data);
+            if (data.measurement === 'customize') {
+                query = `from(bucket: "${bucketApp}")
+                            |> range(start: ${getTime})
+                            |> filter(fn: (r) => r["host"] == "${data.host}")
                             |> group()
-                            |> distinct(column: "${field}")`;
-            let data = [];
+                            |> distinct(column: "_field")`;
+            } else {
+                query = `from(bucket: "${bucketApp}")
+                            |> range(start: ${getTime})
+                            |> group()
+                            |> distinct(column: "${data.measurement}")`;
+            }
+            let fieldData = [];
             queryApi.queryRows(query, {
                 next(row, tableMeta) {
                     const o = tableMeta.toObject(row);
-                    data.push(o._value);
+                    fieldData.push(o._value);
                 },
                 error(error) {
                     console.error(error);
@@ -286,7 +313,7 @@ const getField = async (field) => {
                 },
                 complete() {
                     console.log('Finished SUCCESS');
-                    resolve(data);
+                    resolve(fieldData);
                 },
             });
         } catch (e) {
