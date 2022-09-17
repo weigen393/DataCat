@@ -9,7 +9,7 @@ const signUp = async (req, res) => {
     const data = await user.signUp(req.body);
     req.session.auth = true;
     req.session.user = data;
-    res.status(200).send('sign up');
+    res.status(200).send(data);
 };
 const signIn = async (req, res) => {
     res.status(200).send('sign in');

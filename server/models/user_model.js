@@ -3,11 +3,9 @@ const { users, roles } = require('./mongodb_model');
 const bcrypt = require('bcrypt');
 
 const emailCheck = async (email) => {
-    console.log('hello');
     const query = await users.find({
         email: email,
     });
-    console.log(query);
     if (query.length) {
         return true;
     } else {
@@ -25,7 +23,6 @@ const signUp = async (data) => {
         };
         const result = await users.create(newData);
         const id = result._id.valueOf();
-        console.log(id);
         roleId = 1;
         const userData = {
             id: id,

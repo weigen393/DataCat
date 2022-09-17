@@ -8,9 +8,10 @@ const getHomePage = async (req, res) => {
 };
 
 const getListPage = async (req, res) => {
-    req.body.userId = '2'; // for test
-    const list = await dashboard.getBoardList(req.body.userId);
-    return res.render('list', { list: list, userId: req.body.userId });
+    // req.body.userId = '2'; // for test
+    console.log('id', req.params.userId);
+    const list = await dashboard.getBoardList(req.params.userId);
+    return res.render('list', { list: list, userId: req.params.userId });
 };
 
 const getDashboardPage = async (req, res) => {
