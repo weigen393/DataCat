@@ -1,0 +1,42 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")    
+    block css           
+      title DataCat
+      link(rel="stylesheet" href="../../../../../public/index.css") 
+      script(src="https://code.jquery.com/jquery-3.6.0.min.js")   
+  body    
+    .content
+      .box-title
+        a.sign-up.sign-title(href='#') Sign Up
+        a.sign-in.sign-title(href='#') Sign In
+      .picture
+        img.dataCat(src="/images/dataCat.png",alt="dataCat Image")
+      .sign-up-box
+        .sign-text
+          p Name: 
+          input.signupName(type='text' name='name')
+          br          
+          p Email: 
+          input.signupEmail(type='text' name='email')
+          br          
+          p Password: 
+          input.signupPwd(type='text' name='password')
+          br          
+          button.signup(type='button' name='submit' value='Sign Up') Sign Up        
+      .sign-in-box        
+        .sign-text
+          p Email: 
+          input.signinEmail(type='text' name='email')
+          br
+          
+          p Password: 
+          input.signinPwd(type='text' name='password')
+          br        
+          button.signin(type='button' name='submit' value='Sign In') Sign In 
+    
+    block js
+      script(src="/public/index.js")

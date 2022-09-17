@@ -1,6 +1,12 @@
 require('dotenv').config();
 const dashboard = require('../models/dashboard_model');
 
+const getHomePage = async (req, res) => {
+    // req.body.userId = '2'; // for test
+    // const list = await dashboard.getBoardList(req.body.userId);
+    return res.render('index');
+};
+
 const getListPage = async (req, res) => {
     req.body.userId = '2'; // for test
     const list = await dashboard.getBoardList(req.body.userId);
@@ -32,6 +38,7 @@ const getChartPage = async (req, res) => {
 };
 
 module.exports = {
+    getHomePage,
     getListPage,
     getDashboardPage,
     getChartPage,
