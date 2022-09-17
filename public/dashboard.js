@@ -2,7 +2,7 @@ const dashboardData = data;
 const chartId = [];
 const interval = [];
 showAll();
-function showAll() {
+async function showAll() {
     for (let i = 0; i < dashboardData.charts.length; i++) {
         var value = {
             layer: dashboardData.charts[i].layer,
@@ -20,7 +20,7 @@ function showAll() {
         chartId.push(i);
         // chartId.push(dashboardData.charts[i]._id);
         interval.push(dashboardData.charts[i].interval);
-        $.ajax({
+        await $.ajax({
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
@@ -167,14 +167,14 @@ function showNumber(data, num) {
 $('.create-chart').on('click', () => {
     window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;
 });
-$('h1').on('blur', () => {
+$('h1').on('blur', async () => {
     console.log('change');
     const text = {
         title: $('.dashboard-title').text(),
         description: $('.dashboard-description').text(),
     };
 
-    $.ajax({
+    await $.ajax({
         method: 'post',
         headers: {
             'Content-Type': 'application/json',
@@ -205,12 +205,12 @@ jQuery(function ($) {
         }
     });
 });
-function delChart(chartId) {
+async function delChart(chartId) {
     const sendData = {
         dashboardId: dashboardData._id,
         chartId: chartId,
     };
-    $.ajax({
+    await $.ajax({
         method: 'post',
         headers: {
             'Content-Type': 'application/json',

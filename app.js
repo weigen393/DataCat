@@ -3,14 +3,26 @@ const { mongoConnect } = require('./util/mongodb');
 const { PORT, API_VERSION } = process.env;
 const express = require('express');
 const app = express();
+const session = require('express-session');
 
 app.use(express.json());
 app.set('view engine', 'pug');
 app.use('/public', express.static('./public'));
 app.use('/images', express.static('./images'));
 
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        name: 'sid',
+        saveUninitialized: false,
+        resave: false,
+    })
+);
+
 //API routes
+app.use('/', require('./server/routes/main_route'));
 app.use('/api/' + API_VERSION, [
+    require('./server/routes/user_route'),
     require('./server/routes/chart_route'),
     require('./server/routes/dashboard_route'),
     require('./server/routes/main_route'),

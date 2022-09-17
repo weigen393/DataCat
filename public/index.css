@@ -12,6 +12,11 @@ body {
   background: #3f2cb3;
   /* min-height: 100%; */
 }
+.title {
+  color: white;
+  font-size: xxx-large;
+  margin: 0;
+}
 .box-title {
   display: flex;
 }

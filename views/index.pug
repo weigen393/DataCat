@@ -10,6 +10,7 @@ html(lang="en")
       script(src="https://code.jquery.com/jquery-3.6.0.min.js")   
   body    
     .content
+      p.title DATACAT
       .box-title
         a.sign-up.sign-title(href='#') Sign Up
         a.sign-in.sign-title(href='#') Sign In
@@ -18,25 +19,21 @@ html(lang="en")
       .sign-up-box
         .sign-text
           p Name: 
-          input.signupName(type='text' name='name')
-          br          
+          input.signUpName(type='text' name='name')                   
           p Email: 
-          input.signupEmail(type='text' name='email')
-          br          
+          input.signUpEmail(type='text' name='email')                    
           p Password: 
-          input.signupPwd(type='text' name='password')
-          br          
-          button.signup(type='button' name='submit' value='Sign Up') Sign Up        
+          input.signUpPwd(type='text' name='password')
+          br                
+          button.signUp(type='button' name='submit' value='Sign Up') Sign Up        
       .sign-in-box        
         .sign-text
           p Email: 
-          input.signinEmail(type='text' name='email')
-          br
-          
+          input.signInEmail(type='text' name='email')          
           p Password: 
-          input.signinPwd(type='text' name='password')
-          br        
-          button.signin(type='button' name='submit' value='Sign In') Sign In 
+          input.signInPwd(type='text' name='password')
+          br
+          button.signIn(type='button' name='submit' value='Sign In') Sign In 
     
     block js
       script(src="/public/index.js")

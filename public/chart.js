@@ -117,10 +117,10 @@ $('#layer').on('change', () => {
         // resetInfo();
     }
 });
-function resetHost(layer) {
+async function resetHost(layer) {
     hostValue = [];
     let host = [];
-    $.ajax({
+    await $.ajax({
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
@@ -171,11 +171,11 @@ function hostCheck(num) {
         resetMeasurement(Object.keys(applicationMap), layerValue);
     }
 }
-function resetContainer(host) {
+async function resetContainer(host) {
     containerValue = [];
     let container = [];
     console.log('reset container');
-    $.ajax({
+    await $.ajax({
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
@@ -381,7 +381,7 @@ $('#preview').on('click', () => {
     console.log('preview');
     showPreview();
 });
-function showPreview() {
+async function showPreview() {
     const setData = {
         layer: $('#layer').val(),
         type: $('#type').val(),
@@ -395,7 +395,7 @@ function showPreview() {
         aggregate: $('#aggregate').val(),
     };
     console.log(setData);
-    $.ajax({
+    await $.ajax({
         method: 'get',
         headers: {
             'Content-Type': 'application/json',
@@ -489,7 +489,7 @@ function showNumber(data) {
     console.log(lastNum._value);
     $('.card-body').text(lastNum._value);
 }
-$('#save').on('click', () => {
+$('#save').on('click', async () => {
     const data = {
         dashboardId: dashboardData.dashboardId,
         chartId: dashboardData.chartId,
@@ -506,7 +506,7 @@ $('#save').on('click', () => {
         aggregate: $('#aggregate').val(),
     };
     console.log(data);
-    $.ajax({
+    await $.ajax({
         method: 'post',
         headers: {
             'Content-Type': 'application/json',
