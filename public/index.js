@@ -34,3 +34,29 @@ $('.signUp').on('click', async () => {
         },
     });
 });
+$('.signIn').on('click', async () => {
+    console.log('sign in');
+    const data = {
+        email: $('.signInEmail').val(),
+        password: $('.signInPwd').val(),
+    };
+    console.log(data);
+    await $.ajax({
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: `/api/1.0/user/signin`,
+        data: JSON.stringify(data),
+        error: (err) => {
+            console.log(err);
+            console.log(err.responseText);
+        },
+        success: (result) => {
+            if (result.status === 200) {
+                console.log('success');
+            }
+            window.location.href = `/api/1.0/dashboard-list/${result.id}`;
+        },
+    });
+});

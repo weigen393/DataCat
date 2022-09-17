@@ -11,6 +11,7 @@ const getListPage = async (req, res) => {
     // req.body.userId = '2'; // for test
     console.log('id', req.params.userId);
     const list = await dashboard.getBoardList(req.params.userId);
+    console.log(list);
     return res.render('list', { list: list, userId: req.params.userId });
 };
 

@@ -5,6 +5,9 @@ const { queryApi } = require('../../util/influxdb');
 const getBoardList = async (id) => {
     try {
         const query = await dashboards.find({ userId: id }, 'dashboards');
+        if (!query[0]) {
+            return '';
+        }
         return query[0].dashboards;
     } catch (e) {
         console.log(e.message);

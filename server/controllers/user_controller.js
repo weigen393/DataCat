@@ -7,12 +7,22 @@ const signUp = async (req, res) => {
         return res.status(400).send('email used');
     }
     const data = await user.signUp(req.body);
+    if (data.error) {
+        return res.status(400).send(data.error);
+    }
     req.session.auth = true;
     req.session.user = data;
     res.status(200).send(data);
 };
 const signIn = async (req, res) => {
-    res.status(200).send('sign in');
+    const data = await user.signIn(req.body);
+    console.log(data);
+    if (data.error) {
+        return res.status(400).send(data.error);
+    }
+    req.session.auth = true;
+    req.session.user = data;
+    res.status(200).send(data);
 };
 
 module.exports = {
