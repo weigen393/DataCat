@@ -24,6 +24,7 @@ $('.signUp').on('click', async () => {
         data: JSON.stringify(data),
         error: (err) => {
             console.log(err);
+            console.log(err.responseText);
         },
         success: (result) => {
             if (result.status === 200) {

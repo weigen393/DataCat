@@ -3,12 +3,16 @@ const { users, roles } = require('./mongodb_model');
 const bcrypt = require('bcrypt');
 
 const emailCheck = async (email) => {
-    // const query = await users.find();
-    // if (query.length) {
-    //     return true;
-    // } else {
-    //     return false;
-    // }
+    console.log('hello');
+    const query = await users.find({
+        email: email,
+    });
+    console.log(query);
+    if (query.length) {
+        return true;
+    } else {
+        return false;
+    }
 };
 const signUp = async (data) => {
     try {
