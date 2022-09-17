@@ -4,7 +4,7 @@ const { dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
 const bucketData = process.env.INFLUX_BUCKET_DATA;
 const bucketApp = process.env.INFLUX_BUCKET_APP;
-const getTime = '-12h'; //get host and container name from last 1 hr
+const getTime = '-48h'; //get host and container name from last 1 hr
 
 const getHost = async (layer) => {
     return new Promise((resolve) => {
@@ -89,8 +89,19 @@ const getChart = async (data) => {
             }
             let containerFilter = '';
             if (data.layer === 'container') {
-                containerFilter = `|> filter(fn: (r) => r["container_name"] == "${data.container[0]}")`;
+                var num = data.container.length;
+                if (num > 1) {
+                    containerFilter = '|> filter(fn: (r) => ';
+                    for (let i = 0; i < num; i++) {
+                        containerFilter = containerFilter + ` r["container_name"] == "${data.container[i]}" or`;
+                    }
+                    containerFilter = containerFilter.slice(0, -2) + ')';
+                } else {
+                    containerFilter = `|> filter(fn: (r) => r["container_name"] == "${data.container[0]}")`;
+                }
             }
+            let hostFilter = '';
+            let fieldFilter = '';
             const chartData = [];
             let query;
             if (data.layer === 'application') {

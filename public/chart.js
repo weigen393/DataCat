@@ -257,9 +257,9 @@ function measurementCheck(num, layer) {
     console.log(measurementList);
     measurementValue = measurementList;
     resetField(measurementList, layer);
-    // if (measurementList[0] === 'requestCount' || measurementList[0] === 'customize') {
-    resetInfo();
-    // }
+    if (layer === 'application') {
+        resetInfo();
+    }
 }
 async function resetField(measurement, layer) {
     console.log('hi', measurement, layer);
