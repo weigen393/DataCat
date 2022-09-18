@@ -27,6 +27,7 @@ app.use('/api/' + API_VERSION, [
     require('./server/routes/user_route'),
     require('./server/routes/chart_route'),
     require('./server/routes/dashboard_route'),
+    require('./server/routes/alert_route'),
     require('./server/routes/main_route'),
 ]);
 

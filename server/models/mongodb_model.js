@@ -34,9 +34,31 @@ const dashboardSchema = new mongoose.Schema({
         },
     ],
 });
+const alertSchema = new mongoose.Schema({
+    userId: String,
+    alerts: [
+        {
+            title: String,
+            description: String,
+            layer: String,
+            host: Array,
+            container: Array,
+            measurement: Array,
+            field: Array,
+            info: Array,
+            interval: String,
+            aggregate: String,
+            schedule: String,
+            checkType: String,
+            threshold: Number,
+            deadTime: Number,
+        },
+    ],
+});
 
 module.exports = {
     users: mongoose.model('users', userSchema),
     roles: mongoose.model('roles', roleSchema),
     dashboards: mongoose.model('dashboards', dashboardSchema),
+    alerts: mongoose.model('alerts', alertSchema),
 };

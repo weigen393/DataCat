@@ -1,0 +1,24 @@
+extends  layout.pug
+block css
+  link(rel="stylesheet" href="../../../../../public/list.css") 
+block content
+  .content-wrapper(style='background-color: #0c062b')
+    .content-header
+      .container-fluid
+        .row.mb-2
+          .col-sm-6
+            h1.dashboard-title Alert
+    .content
+      a.create-alert(href="#") Create Alert
+      
+      .alert-list
+        each item in list
+          li.dashboard         
+            p.title #{item.title}
+            p.description #{item.description}
+            a.enter(href=`/api/1.0/alerts/${item._id.valueOf()}`) Enter
+            br
+            a.delete(href='#', value=`${item._id.valueOf()}`) Delete
+
+block js
+  script(src="/public/alertList.js") 

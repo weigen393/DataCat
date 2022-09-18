@@ -1,31 +1,27 @@
 require('dotenv').config();
 const dashboard = require('../models/dashboard_model');
+const alert = require('../models/alert_model');
 
 const getHomePage = async (req, res) => {
-    // req.body.userId = '2'; // for test
-    // const list = await dashboard.getBoardList(req.body.userId);
     return res.render('index');
 };
 
 const getListPage = async (req, res) => {
-    // req.body.userId = '2'; // for test
-    console.log('id', req.params.userId);
-    const list = await dashboard.getBoardList(req.params.userId);
+    console.log('id', req.session.user.id);
+    const list = await dashboard.getBoardList(req.session.user.id);
     console.log(list);
     return res.render('list', { list: list, userId: req.session.user.id, userName: req.session.user.name });
 };
 
 const getDashboardPage = async (req, res) => {
-    req.body.userId = '2'; // for test
     console.log(req.session.user);
     const page = await dashboard.getDashboardPage(req.body.userId, req.params.dashboardId);
     return res.render('dashboard', { userName: req.session.user.name, userId: req.session.user.id, dashboards: page });
 };
 
 const getChartPage = async (req, res) => {
-    req.body.userId = '2'; // for test
     console.log(req.params.dashboardId);
-    const title = await dashboard.getDashboardTitle(req.body.userId, req.params.dashboardId);
+    const title = await dashboard.getDashboardTitle(req.session.user.id, req.params.dashboardId);
 
     if (req.params.chartId === 'new') {
         return res.render('chartPage', {
@@ -41,10 +37,32 @@ const getChartPage = async (req, res) => {
         });
     }
 };
-
+const getAlertList = async (req, res) => {
+    console.log('id', req.session.user.id);
+    const list = await alert.getAlertList(req.session.user.id);
+    console.log(list);
+    return res.render('alertList', { list: list, userId: req.session.user.id, userName: req.session.user.name });
+};
+const getAlertPage = async (req, res) => {
+    if (req.params.alertId === 'new') {
+        return res.render('alertPage', {
+            userName: req.session.user.name,
+            userId: req.session.user.id,
+            alerts: {},
+        });
+    } else {
+        return res.render('alertPage', {
+            userName: req.session.user.name,
+            userId: req.session.user.id,
+            alerts: { alertId: req.params.alertId },
+        });
+    }
+};
 module.exports = {
     getHomePage,
     getListPage,
     getDashboardPage,
     getChartPage,
+    getAlertList,
+    getAlertPage,
 };
