@@ -102,36 +102,40 @@ function showLineChart(data, num) {
     }
     var line_data1 = {
         data: value,
-        color: '#3c8dbc',
+        color: '#356fe2',
     };
     $.plot(`#line-chart-${num}`, [line_data1], {
         grid: {
             hoverable: true,
-            borderColor: '#f3f3f3',
+            borderColor: '#3f2cb3',
             borderWidth: 1,
-            tickColor: '#f3f3f3',
+            tickColor: '#3f2cb3',
+            backgroundColor: '#130d40',
+            color: '#ffffff',
         },
         series: {
             shadowSize: 0,
             lines: {
                 show: true,
+                lineWidth: 3,
             },
             points: {
                 show: false,
             },
         },
-        lines: {
-            fill: false,
-            color: ['#3c8dbc'],
-        },
+        colors: '#ffffff',
         yaxis: {
             show: true,
+            tickColor: '#ffffff',
+            color: '#ffffff',
         },
         xaxis: {
             mode: 'time',
             timezone: 'browser',
             timeformat: '%Y-%m-%d %H:%M:%S',
             show: true,
+            tickColor: '#ffffff',
+            color: '#ffffff',
         },
     });
     //Initialize tooltip on hover
@@ -140,6 +144,7 @@ function showLineChart(data, num) {
             position: 'absolute',
             display: 'none',
             opacity: 0.8,
+            color: '#ffffff',
         })
         .appendTo('body');
     $(`#line-chart-${num}`).bind('plothover', function (event, pos, item) {
@@ -152,6 +157,7 @@ function showLineChart(data, num) {
                 .css({
                     top: item.pageY + 5,
                     left: item.pageX + 5,
+                    color: '#ffffff',
                 })
                 .fadeIn(200);
         } else {

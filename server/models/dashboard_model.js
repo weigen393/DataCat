@@ -15,10 +15,11 @@ const getBoardList = async (id) => {
     }
 };
 
-const addDashboard = async (data) => {
+const addDashboard = async (data, userId) => {
     try {
-        const query = await dashboards.findOneAndUpdate(
-            { userId: data.userId },
+        console.log(userId);
+        let query = await dashboards.findOneAndUpdate(
+            { userId: userId },
             {
                 $push: {
                     dashboards: { title: data.title, description: data.description },
@@ -28,6 +29,14 @@ const addDashboard = async (data) => {
                 returnDocument: 'after',
             }
         );
+        if (!query) {
+            console.log(data);
+            query = await dashboards.create({
+                userId: userId,
+                dashboards: { title: data.title, description: data.description, charts: [] },
+            });
+        }
+        console.log(query);
         const id = query.dashboards.pop()._id.valueOf();
         return id;
     } catch (e) {

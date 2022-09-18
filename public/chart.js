@@ -411,6 +411,7 @@ async function showPreview() {
             }
             console.log('result', result);
             if ($('#type').val() === 'line') {
+                $('.card-body').text('');
                 showLineChart(result);
             } else if ($('#type').val() === 'number') {
                 showNumber(result);
@@ -427,7 +428,7 @@ function showLineChart(data) {
     }
     var line_data1 = {
         data: value,
-        color: '#3c8dbc',
+        color: '#ffffff',
     };
     $.plot('#line-chart', [line_data1], {
         grid: {
@@ -435,20 +436,24 @@ function showLineChart(data) {
             borderColor: '#f3f3f3',
             borderWidth: 1,
             tickColor: '#f3f3f3',
+            backgroundColor: '#130d40',
         },
-        series: {
-            shadowSize: 0,
-            lines: {
-                show: true,
-            },
-            points: {
-                show: false,
-            },
-        },
-        lines: {
-            fill: false,
-            color: ['#3c8dbc'],
-        },
+        // series: {
+        //     shadowSize: 0,
+        //     lines: {
+        //         show: true,
+        //         color: ['#ffffff'], //#3c8dbc
+        //         lineWidth: 100,
+        //     },
+        //     points: {
+        //         show: false,
+        //     },
+        // },
+        // lines: {
+        //     fill: false,
+        //     color: ['#ffffff'], //#3c8dbc
+        //     lineWidth: 100,
+        // },
         yaxis: {
             show: true,
         },

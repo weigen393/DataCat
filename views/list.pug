@@ -1,12 +1,13 @@
 extends  layout.pug
-
+block css
+  link(rel="stylesheet" href="../../../../../public/list.css") 
 block content
-  .content-wrapper
+  .content-wrapper(style='background-color: #0c062b')
     .content-header
       .container-fluid
         .row.mb-2
           .col-sm-6
-            h1 Dashboard
+            h1.dashboard-title Dashboard
     .content
       a.create-dashboard(href="#") Create Dashboard
       

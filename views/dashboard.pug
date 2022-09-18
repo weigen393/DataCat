@@ -1,7 +1,8 @@
 extends  layout.pug
-
+block css
+  link(rel="stylesheet" href="../../../../../public/dashboard.css") 
 block content
-  .content-wrapper
+  .content-wrapper(style='background-color: #0c062b')
     .content-header
       .container-fluid
         .row.mb-2
@@ -34,7 +35,7 @@ block content
       each item in dashboards.charts
         if item.type==='line'                  
           .content-chart
-            .card.card-primary.card-outline
+            .card.card-primary.card-outline(style='background-color: #130d40; color: #ffffff')
               .card-header
                 h3.card-title
                   i.far.fa-chart-bar #{item.title}                   

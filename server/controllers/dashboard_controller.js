@@ -2,7 +2,10 @@ require('dotenv').config();
 const dashboard = require('../models/dashboard_model');
 
 const addDashboard = async (req, res) => {
-    const add = await dashboard.addDashboard(req.body);
+    console.log(typeof req.session);
+    console.log(req.session);
+    const add = await dashboard.addDashboard(req.body, req.session.user.id);
+
     console.log('add dashboard');
     res.status(200).send(add);
 };
