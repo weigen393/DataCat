@@ -16,7 +16,7 @@ block content
           li.dashboard         
             p.title #{item.title}
             p.description #{item.description}
-            a.enter(href=`./dashboards/${item._id.valueOf()}`) Enter
+            a.enter(href=`/api/1.0/dashboards/${item._id.valueOf()}`) Enter
             br
             a.delete(href='#', value=`${item._id.valueOf()}`) Delete
 

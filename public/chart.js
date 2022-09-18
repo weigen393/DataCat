@@ -304,8 +304,8 @@ async function resetField(measurement, layer) {
     }
     console.log(field);
     $('.field').html(``);
-    const num = field.length;
-    for (let i = 0; i < field.length; i++) {
+    const num = field?.length;
+    for (let i = 0; i < num; i++) {
         $('.field').append(
             `<li>
               <a href="#" class="dropdown-item" id="measurement-list">
@@ -428,7 +428,7 @@ function showLineChart(data) {
     }
     var line_data1 = {
         data: value,
-        color: '#ffffff',
+        color: '#356fe2',
     };
     $.plot('#line-chart', [line_data1], {
         grid: {
@@ -438,22 +438,19 @@ function showLineChart(data) {
             tickColor: '#f3f3f3',
             backgroundColor: '#130d40',
         },
-        // series: {
-        //     shadowSize: 0,
-        //     lines: {
-        //         show: true,
-        //         color: ['#ffffff'], //#3c8dbc
-        //         lineWidth: 100,
-        //     },
-        //     points: {
-        //         show: false,
-        //     },
-        // },
-        // lines: {
-        //     fill: false,
-        //     color: ['#ffffff'], //#3c8dbc
-        //     lineWidth: 100,
-        // },
+        series: {
+            shadowSize: 0,
+            lines: {
+                show: true,
+            },
+            points: {
+                show: false,
+            },
+        },
+        lines: {
+            fill: false,
+            color: ['#ffffff'], //#3c8dbc
+        },
         yaxis: {
             show: true,
         },

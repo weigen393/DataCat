@@ -12,13 +12,14 @@ const getListPage = async (req, res) => {
     console.log('id', req.params.userId);
     const list = await dashboard.getBoardList(req.params.userId);
     console.log(list);
-    return res.render('list', { list: list, userId: req.params.userId });
+    return res.render('list', { list: list, userId: req.session.user.id, userName: req.session.user.name });
 };
 
 const getDashboardPage = async (req, res) => {
     req.body.userId = '2'; // for test
+    console.log(req.session.user);
     const page = await dashboard.getDashboardPage(req.body.userId, req.params.dashboardId);
-    return res.render('dashboard', { userId: req.body.userId, dashboards: page });
+    return res.render('dashboard', { userName: req.session.user.name, userId: req.session.user.id, dashboards: page });
 };
 
 const getChartPage = async (req, res) => {
@@ -28,12 +29,14 @@ const getChartPage = async (req, res) => {
 
     if (req.params.chartId === 'new') {
         return res.render('chartPage', {
-            userId: req.body.userId,
+            userName: req.session.user.name,
+            userId: req.session.user.id,
             dashboards: { dashboardId: req.params.dashboardId, title: title },
         });
     } else {
         return res.render('chartPage', {
-            userId: req.body.userId,
+            userName: req.session.user.name,
+            userId: req.session.user.id,
             dashboards: { dashboardId: req.params.dashboardId, chartId: req.params.chartId, title: title },
         });
     }

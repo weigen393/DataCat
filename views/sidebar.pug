@@ -7,12 +7,12 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4(style='background-color: #13
       .image
         img(src="/images/user.png",alt="User Image").img-circle.elevation-2
       .info
-        a.d-block(href='#') #{userId}
+        a.d-block(href='#') #{userName}
           
     nav.mt-2
       ul.nav.nav-pills.nav-sidebar.flex-column(data-widget="treeview" role="menu" data-accordion="false")
         li.nav-item
-          a.nav-link(href='/api/1.0/dashboard-list')
+          a.nav-link(href=`/api/1.0/dashboard-list/${userId}`)
             p Dashboard
         li.nav-item
           a.nav-link(href='#')

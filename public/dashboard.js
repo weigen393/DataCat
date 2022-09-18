@@ -105,6 +105,7 @@ function showLineChart(data, num) {
         color: '#356fe2',
     };
     $.plot(`#line-chart-${num}`, [line_data1], {
+        colors: '#ffffff',
         grid: {
             hoverable: true,
             borderColor: '#3f2cb3',
@@ -122,12 +123,13 @@ function showLineChart(data, num) {
             points: {
                 show: false,
             },
+            color: '#ffffff',
         },
-        colors: '#ffffff',
+
         yaxis: {
             show: true,
             tickColor: '#ffffff',
-            color: '#ffffff',
+            // color: '#ffffff',
         },
         xaxis: {
             mode: 'time',
@@ -135,9 +137,9 @@ function showLineChart(data, num) {
             timeformat: '%Y-%m-%d %H:%M:%S',
             show: true,
             tickColor: '#ffffff',
-            color: '#ffffff',
         },
     });
+    $('.tickLabel').css('color', 'white');
     //Initialize tooltip on hover
     $('<div class="tooltip-inner" id="line-chart-tooltip"></div>')
         .css({

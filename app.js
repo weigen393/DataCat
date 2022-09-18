@@ -4,6 +4,7 @@ const { PORT, API_VERSION } = process.env;
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 app.use(express.json());
 app.set('view engine', 'pug');
@@ -16,6 +17,7 @@ app.use(
         name: 'sid',
         saveUninitialized: false,
         resave: false,
+        store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }),
     })
 );
 
