@@ -188,7 +188,7 @@ const getChart = async (data) => {
         }
     });
 };
-const saveChart = async (data) => {
+const saveChart = async (userId, data) => {
     try {
         let query;
         if (data.chartId === undefined) {
@@ -213,8 +213,9 @@ const saveChart = async (data) => {
                 }
             );
         } else {
-            query = await dashboards.findById('631ac29e8fcde150bcb8415d', function (e, dataset) {
+            query = await dashboards.findOne({ 'dashboards._id': data.dashboardId }, function (e, dataset) {
                 if (e) console.log(e);
+                console.log('dataset', dataset);
                 let part = dataset.dashboards.id(data.dashboardId).charts.id(data.chartId);
                 part.title = data.title;
                 part.layer = data.layer;

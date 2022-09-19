@@ -1,0 +1,147 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  /* border: none;
+  padding: none; */
+  /* margin: 0px;
+  padding: 0;
+  height: 100%; */
+  /* display: flex;
+  flex-direction: column; */
+  
+  background-color: #01175e;
+  /* font-family: 'ArcadeClassic', sans-serif; */
+  font-family: 'Joystix', sans-serif;
+  /* min-height: 100%; */
+}
+.dashboard-title {
+  color: white;
+  font-size: xxx-large;
+  width: 50%;
+  padding: 10px 12px;
+}
+.nav-link{
+  width: 50%
+}
+.chart-title {
+  color: white;
+  font-size: xxx-large;  
+}
+.metric-parameter{
+  display: flex;
+  justify-content: left;
+}
+.chart-parameter{
+  display: flex;
+  justify-content: left;
+}
+#layer {
+  width: 220px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+  background-color:darkblue;
+  color: white;
+  border:0;
+}
+#type {
+  width: 190px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+  background-color:darkblue;
+  color: white;
+  border:0;
+  margin-left: 31px;
+}
+#range {
+  width: 190px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border:0;
+}
+#interval {
+  width: 150px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+  background-color:deepskyblue;
+  color: white;
+  border:0;
+}
+#aggregate {
+  width: 150px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+  background-color: #28a745;
+  color: white;
+  border:0;
+}
+option {
+
+  /* line-height:100px;
+  
+  height:100px; */
+  color: black;
+  background-color: white;
+  padding:10px 0;
+  
+}
+.text{
+  color: white;
+  font-size: large;
+  /* vertical-align: middle; */
+  margin:auto 10px;
+  /* width: 50% */
+}
+.card {
+  margin:0px 18px;
+  padding:20px;
+  border-radius: 30px;;
+}
+.card-body{
+  height: 500px;
+  color: #ffffff;
+  background-color: #130d40;
+  justify-content: center;
+  align-items: center;
+  margin-left:40px;
+}
+.flot-x-axis {
+  fill: white
+}
+.flot-y-axis {
+  fill: white
+}
+.chart-button{
+  display:flex;  
+  /* border-color: white;
+  border:10px; */
+  justify-content:right;
+  /* text-align: right; */
+}
+.preview-chart{
+  color:white;
+  border:5px;
+  border-color: white;
+  background-color: blue;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  margin-right: 15px;
+}
+.save-chart{
+  color:white;
+  border:5px;
+  border-color: white;
+  background-color: blue;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  margin-right: 19px;
+}

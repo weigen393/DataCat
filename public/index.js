@@ -1,13 +1,17 @@
 $('.sign-up').on('click', () => {
     $('.sign-up-box').css('display', 'flex');
     $('.sign-in-box').css('display', 'none');
+    $('.signUp').css('display', 'flex');
+    $('.signIn').css('display', 'none');
 });
 $('.sign-in').on('click', () => {
     $('.sign-in-box').css('display', 'flex');
     $('.sign-up-box').css('display', 'none');
+    $('.signIn').css('display', 'flex');
+    $('.signUp').css('display', 'none');
 });
 
-$('.signUp').on('click', async () => {
+$('.signBtn').on('click', async () => {
     console.log('sign up');
     const data = {
         name: $('.signUpName').val(),

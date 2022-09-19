@@ -20,7 +20,7 @@ const getChart = async (req, res) => {
 const saveChart = async (req, res) => {
     console.log('saveChart');
     console.log(req.body);
-    const data = await chart.saveChart(req.body);
+    const data = await chart.saveChart(req.session.user.id, req.body);
     res.status(200).send(data);
 };
 const delChart = async (req, res) => {

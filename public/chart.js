@@ -75,7 +75,7 @@ async function setChart(dashboardId, chartId) {
             }
 
             resetField(measurement, layer);
-            $('.chartTitle').text(setData[0].title);
+            $('.chart-title').text(setData[0].title);
             $(`select option[value=${layer}]`).attr('selected', true);
             $(`select option[value=${setData[0].type}]`).attr('selected', true);
             $(`select option[value=${setData[0].timeRange}]`).attr('selected', true);
@@ -442,6 +442,7 @@ function showLineChart(data) {
             shadowSize: 0,
             lines: {
                 show: true,
+                lineWidth: 5,
             },
             points: {
                 show: false,
@@ -449,7 +450,8 @@ function showLineChart(data) {
         },
         lines: {
             fill: false,
-            color: ['#ffffff'], //#3c8dbc
+
+            // color: ['#ffffff'], //#3c8dbc
         },
         yaxis: {
             show: true,
@@ -457,7 +459,8 @@ function showLineChart(data) {
         xaxis: {
             mode: 'time',
             timezone: 'browser',
-            timeformat: '%Y-%m-%d %H:%M:%S',
+            timeBase: 'milliseconds',
+            timeformat: '%H:%M:%S',
             show: true,
         },
     });
@@ -475,7 +478,8 @@ function showLineChart(data) {
                 y = item.datapoint[1].toFixed(2);
 
             $('#line-chart-tooltip')
-                .html(item.series.label + ' of ' + x + ' = ' + y)
+                // .html(item.series.label + ' of ' + x + ' = ' + y)
+                .html(y)
                 .css({
                     top: item.pageY + 5,
                     left: item.pageX + 5,
@@ -495,7 +499,7 @@ $('#save').on('click', async () => {
     const data = {
         dashboardId: dashboardData.dashboardId,
         chartId: dashboardData.chartId,
-        title: $('.chartTitle').text(),
+        title: $('.chart-title').text(),
         layer: $('#layer').val(),
         type: $('#type').val(),
         host: hostValue,

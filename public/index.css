@@ -7,46 +7,56 @@ body {
   margin: 0px;
   padding: 0;
   height: 100%;
+  font-family: 'Joystix', sans-serif;  
+  /* font-family: 'ArcadeClassic', sans-serif;                                               */
   /* display: flex;
   flex-direction: column; */
-  background: #3f2cb3;
+  /* background: #3f2cb3; */
+  background-image: url("../../images/data_background_3.jpg");
+  /* background-repeat: no-repeat; */
+  background-size: cover;
   /* min-height: 100%; */
 }
 .title {
   color: white;
   font-size: xxx-large;
-  margin: 0;
+  margin: 20px 0 0 0 ;
 }
 .box-title {
   display: flex;
 }
 .sign-text {
-  color: white;
+  color: white;  
 }
 .sign-title {
-  height: 80px;
-  width: 20vw;
+  height: 60px;
+  width: 25vw;
   color: white;
-  font-size: xx-large;
-  text-decoration: none;
+  font-size: x-large;
+  /* text-decoration: none; */
   display: flex;
   align-items: center;
   justify-content: center;
+  /* border: 2px solid white;
+  border-radius: 5px; */
 }
 .content {
   margin: 100px auto auto auto;
   padding: 0;
   height: 600px;
-  width: 50vw;
+  width: 40vw;
   display: flex;
   align-items: center;
   text-align: center;
   flex-direction: column;
   background: #130d40;
+  /* background: black; */
+  background-color: transparent 50%;
+  border-radius: 100px;
 }
 .picture {
   justify-content: center;
-  height: 30vh;
+  height: 23vh;
   width: 20vw;
 }
 .picture img {
@@ -59,6 +69,7 @@ body {
   height: 70vh;
   width: 50%;
   display: none;
+  text-align: left;
   justify-content: center;
   /* flex-direction: column;
   background: #130d40; */
@@ -69,8 +80,30 @@ body {
   height: 70vh;
   width: 50%;
   display: flex;  
+  text-align: left;
   justify-content: center;
   /* flex-direction: column;
   background: #130d40; */
+}
+.text {
+  color: white;
+  margin:10px 0; 
+}
+.signBtn {
+  color: white;
+  margin:15px 0;
+  text-align: left;
+  justify-content: center;
+  text-decoration: none;
+  padding: 5px;
+  border: 2px solid white;
+  border-radius: 5px;
+  display: flex;
+}
+.signUp {  
+  display: flex;
+}
+.signIn {  
+  display: none;
 }
 

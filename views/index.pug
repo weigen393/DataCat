@@ -6,7 +6,8 @@ html(lang="en")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")    
     block css           
       title DataCat
-      link(rel="stylesheet" href="../../../../../public/index.css") 
+      link(rel="stylesheet" href="../../../../../public/index.css")
+      link(href="http://fonts.cdnfonts.com/css/joystix" rel="stylesheet")
       script(src="https://code.jquery.com/jquery-3.6.0.min.js")   
   body    
     .content
@@ -15,25 +16,24 @@ html(lang="en")
         a.sign-up.sign-title(href='#') Sign Up
         a.sign-in.sign-title(href='#') Sign In
       .picture
-        img.dataCat(src="/images/dataCat.png",alt="dataCat Image")
+        img.dataCat(src="/images/dataCat_laptop.png",alt="dataCat Image")
       .sign-up-box
         .sign-text
-          p Name: 
+          p.text Name: 
           input.signUpName(type='text' name='name')                   
-          p Email: 
+          p.text Email: 
           input.signUpEmail(type='text' name='email')                    
-          p Password: 
+          p.text Password: 
           input.signUpPwd(type='text' name='password')
-          br                
-          button.signUp(type='button' name='submit' value='Sign Up') Sign Up        
+      a.signBtn.signUp(href='#' name='submit' value='Sign Up') Sign Up        
       .sign-in-box        
         .sign-text
-          p Email: 
+          p.text Email: 
           input.signInEmail(type='text' name='email')          
-          p Password: 
+          p.text Password: 
           input.signInPwd(type='text' name='password')
           br
-          button.signIn(type='button' name='submit' value='Sign In') Sign In 
+      a.signBtn.signIn(href='#' name='submit' value='Sign In') Sign In 
     
     block js
       script(src="/public/index.js")
