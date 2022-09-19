@@ -1,6 +1,10 @@
 * {
   box-sizing: border-box;
 }
+/* @font-face {
+  font-family: 'Joystix', sans-serif;
+  src: url('../plugins/joystix.ttf') format('truetype');
+} */
 body {
   /* border: none;
   padding: none; */
@@ -14,6 +18,7 @@ body {
   font-family: 'Joystix', sans-serif;
   /* min-height: 100%; */
 }
+
 .dashboard-title {
   color: white;
   font-size: xxx-large;

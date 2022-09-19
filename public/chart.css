@@ -1,6 +1,10 @@
 * {
   box-sizing: border-box;
 }
+/* @font-face {
+  font-family: 'Joystix', sans-serif;
+  src: url('../plugins/joystix.ttf') format('truetype');
+} */
 body {
   /* border: none;
   padding: none; */
@@ -15,6 +19,7 @@ body {
   font-family: 'Joystix', sans-serif;
   /* min-height: 100%; */
 }
+
 .dashboard-title {
   color: white;
   font-size: xxx-large;
@@ -46,7 +51,7 @@ body {
   border:0;
 }
 #type {
-  width: 190px;
+  width: 200px;
   font-weight: 400;
   line-height: 1.5;
   font-size: 1rem;
@@ -56,7 +61,7 @@ body {
   margin-left: 31px;
 }
 #range {
-  width: 190px;
+  width: 180px;
   font-weight: 400;
   line-height: 1.5;
   font-size: 1rem;
@@ -65,7 +70,7 @@ body {
   border:0;
 }
 #interval {
-  width: 150px;
+  width: 140px;
   font-weight: 400;
   line-height: 1.5;
   font-size: 1rem;
@@ -74,7 +79,7 @@ body {
   border:0;
 }
 #aggregate {
-  width: 150px;
+  width: 140px;
   font-weight: 400;
   line-height: 1.5;
   font-size: 1rem;
@@ -82,15 +87,17 @@ body {
   color: white;
   border:0;
 }
+select {
+  text-align: center;
+}
 option {
-
   /* line-height:100px;
   
   height:100px; */
   color: black;
   background-color: white;
   padding:10px 0;
-  
+  text-align: left;
 }
 .text{
   color: white;
@@ -144,4 +151,14 @@ option {
   padding: 10px;
   margin: 5px;
   margin-right: 19px;
+}
+.card-number{
+  font-size: xxx-large;
+  color:white;
+  text-align: center;
+  vertical-align: center;  
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 300px;
 }

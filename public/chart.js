@@ -411,9 +411,14 @@ async function showPreview() {
             }
             console.log('result', result);
             if ($('#type').val() === 'line') {
-                $('.card-body').text('');
+                $('.card-number').html('');
+                $('.card-number').css('height', '0px');
+                $('.card-body').css('height', '500px');
                 showLineChart(result);
             } else if ($('#type').val() === 'number') {
+                $('.card-body').html('');
+                $('.card-body').css('height', '0px');
+                $('.card-number').css('height', '400px');
                 showNumber(result);
             }
         },
@@ -442,7 +447,7 @@ function showLineChart(data) {
             shadowSize: 0,
             lines: {
                 show: true,
-                lineWidth: 5,
+                lineWidth: 4,
             },
             points: {
                 show: false,
@@ -493,7 +498,7 @@ function showLineChart(data) {
 function showNumber(data) {
     const lastNum = data.pop();
     console.log(lastNum._value);
-    $('.card-body').text(lastNum._value);
+    $('.card-number').text(lastNum._value.toFixed(2)).attr('class', 'card-number');
 }
 $('#save').on('click', async () => {
     const data = {
