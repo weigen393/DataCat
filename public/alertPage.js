@@ -519,22 +519,22 @@ $('#save').on('click', async () => {
         deadTime: $('#deadTime').val(),
     };
     console.log(data);
-    // await $.ajax({
-    //     method: 'post',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     url: '/api/1.0/chart/save',
-    //     data: JSON.stringify(data),
-    //     error: (err) => {
-    //         console.log(err);
-    //     },
-    //     success: (result) => {
-    //         if (result.status === 200) {
-    //             console.log('success');
-    //         }
-    //         console.log('result', result);
-    //         window.location.href = `/api/1.0/dashboards/${dashboardData.dashboardId}`;
-    //     },
-    // });
+    await $.ajax({
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: '/api/1.0/alerts/save',
+        data: JSON.stringify(data),
+        error: (err) => {
+            console.log(err);
+        },
+        success: (result) => {
+            if (result.status === 200) {
+                console.log('success');
+            }
+            console.log('result', result);
+            window.location.href = `/api/1.0/dashboards/${dashboardData.dashboardId}`;
+        },
+    });
 });
