@@ -83,10 +83,6 @@ async function setChart(dashboardId, chartId) {
             $(`select option[value=${setData[0].aggregate}]`).attr('selected', true);
         },
     });
-    if (setData[0].container !== undefined) {
-        containerValue = setData[0].container;
-        $(`input[data-value="${setData[0].container[0]}"]`).attr('checked', true);
-    }
 
     console.log(setData[0].host[0]);
     showPreview();
@@ -95,6 +91,10 @@ async function setChart(dashboardId, chartId) {
         $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
         $(`input[data-value="${setData[0].measurement[0]}"]`).attr('checked', true);
         $(`input[data-value="${setData[0].info[0]}"]`).attr('checked', true);
+        if (setData[0].container !== undefined) {
+            containerValue = setData[0].container;
+            $(`input[data-value="${setData[0].container[0]}"]`).attr('checked', true);
+        }
     }, 2000);
 }
 $('#layer').on('change', () => {
