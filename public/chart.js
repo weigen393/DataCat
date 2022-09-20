@@ -95,6 +95,7 @@ async function setChart(dashboardId, chartId) {
             containerValue = setData[0].container;
             $(`input[data-value="${setData[0].container[0]}"]`).attr('checked', true);
         }
+        showPreview();
     }, 2000);
 }
 $('#layer').on('change', () => {
