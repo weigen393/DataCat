@@ -211,26 +211,39 @@ jQuery(function ($) {
     });
 });
 async function delChart(chartId) {
-    const sendData = {
-        dashboardId: dashboardData._id,
-        chartId: chartId,
-    };
-    await $.ajax({
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        url: '/api/1.0/chart/delete',
-        data: JSON.stringify(sendData),
-        error: (err) => {
-            console.log(err);
-        },
-        success: (result) => {
-            if (result.status === 200) {
-                console.log('success');
-            }
-            console.log('result', result);
-            window.location.href = `/api/1.0/dashboards/${dashboardData._id}`;
-        },
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const sendData = {
+                dashboardId: dashboardData._id,
+                chartId: chartId,
+            };
+            await $.ajax({
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                url: '/api/1.0/chart/delete',
+                data: JSON.stringify(sendData),
+                error: (err) => {
+                    console.log(err);
+                },
+                success: async (result) => {
+                    if (result.status === 200) {
+                        console.log('success');
+                    }
+                    console.log('result', result);
+                    await Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+                    window.location.href = `/api/1.0/dashboards/${dashboardData._id}`;
+                },
+            });
+        }
     });
 }
