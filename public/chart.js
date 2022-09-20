@@ -95,7 +95,7 @@ async function setChart(dashboardId, chartId) {
         $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
         $(`input[data-value="${setData[0].measurement[0]}"]`).attr('checked', true);
         $(`input[data-value="${setData[0].info[0]}"]`).attr('checked', true);
-    }, 1000);
+    }, 2000);
 }
 $('#layer').on('change', () => {
     const layer = $('#layer').val();
