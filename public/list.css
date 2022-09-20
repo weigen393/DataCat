@@ -1,10 +1,10 @@
 * {
   box-sizing: border-box;
 }
-/* @font-face {
-  font-family: 'Joystix', sans-serif;
-  src: url('../plugins/joystix.ttf') format('truetype');
-} */
+@font-face {
+  font-family: 'Joystix';
+  src: url('../../public/plugins/joystix.ttf') format('truetype');
+}
 body {
   /* border: none;
   padding: none; */
@@ -21,8 +21,11 @@ body {
 
 .dashboard-title {
   color: white;
-  font-size: xxx-large;
-  width: 50%
+  font-size: 2rem;
+  width: 50%;
+  display: flex;
+  justify-content: left;
+  vertical-align: middle;
 }
 .nav-link{
   width: 50%
@@ -30,4 +33,33 @@ body {
 .create-dashboard {
   color: white;
   font-size: x-large;
+  text-align: right;
+  justify-content: right;
+  margin-right: 30px;
+  margin-bottom: 10px;
+  display: flex;
+  border-width: 2px;
+  border-color: white;
+}
+
+.list-title {  
+  font-size: x-large;
+  background-color: blue;
+}
+
+tbody {
+  font-size: 1.3rem;
+  height: 100px;
+  padding: auto;
+  vertical-align: center;  
+}
+a {
+  color: white;
+}
+p {
+  margin: 0px 10px 0px 15px;
+  width: 30px;
+}
+.button{
+  display: flex;
 }

@@ -45,11 +45,11 @@ const addDashboard = async (data, userId) => {
     }
 };
 
-const delDashboard = async (data) => {
+const delDashboard = async (data, userId) => {
     try {
         const query = await dashboards.updateOne(
             {
-                userId: data.userId,
+                userId: userId,
             },
             { $pull: { dashboards: { _id: data.dashboardId } } }
         );

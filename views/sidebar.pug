@@ -1,15 +1,15 @@
 aside.main-sidebar.sidebar-dark-primary.elevation-4(style='background-color: #130d40')
-  a.brand-link(href='#')
-    img.brand-image.img-circle.elevation-3(src="/images/dataCat.png", style="opacity: .8")
-    span.brand-text.font-weight-light DataCat
+  a.brand-link(href='#', style="font-size: 1.8rem;display:flex;")
+    img.brand-image(src="/images/dataCat.png", style="margin:2px 10px 0px 15px")
+    span.brand-text.font-weight-light DataCat 
   .sidebar
     .user-panel.mt-3.pb-3.mb-3.d-flex
       .image
         img(src="/images/user.png",alt="User Image").img-circle.elevation-2
       .info
-        a.d-block(href='#') #{userName}    
+        a.d-block(href='#' style="font-size: 1.2rem;") #{userName}    
     nav.mt-2
-      ul.nav.nav-pills.nav-sidebar.flex-column(data-widget="treeview" role="menu" data-accordion="false")
+      ul.nav.nav-pills.nav-sidebar.flex-column(data-widget="treeview" role="menu" data-accordion="false" style="font-size: 1.2rem;")
         li.nav-item
           a.nav-link(href=`/api/1.0/dashboard-list`)
             p Dashboard

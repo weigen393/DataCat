@@ -10,7 +10,7 @@ const addDashboard = async (req, res) => {
     res.status(200).send(add);
 };
 const delDashboard = async (req, res) => {
-    const del = await dashboard.delDashboard(req.body);
+    const del = await dashboard.delDashboard(req.body, req.session.user.id);
     console.log('delete dashboard');
     res.status(200).send('delete');
 };

@@ -112,34 +112,30 @@ function showLineChart(data, num) {
             borderWidth: 1,
             tickColor: '#3f2cb3',
             backgroundColor: '#130d40',
-            color: '#ffffff',
         },
         series: {
             shadowSize: 0,
             lines: {
                 show: true,
-                lineWidth: 3,
+                lineWidth: 4,
             },
             points: {
                 show: false,
             },
-            color: '#ffffff',
         },
 
         yaxis: {
             show: true,
-            tickColor: '#ffffff',
-            // color: '#ffffff',
         },
         xaxis: {
             mode: 'time',
             timezone: 'browser',
-            timeformat: '%Y-%m-%d %H:%M:%S',
+            timeBase: 'milliseconds',
+            timeformat: '%H:%M:%S',
             show: true,
-            tickColor: '#ffffff',
         },
     });
-    $('.tickLabel').css('color', 'white');
+    // $('.tickLabel').css('color', 'white');
     //Initialize tooltip on hover
     $('<div class="tooltip-inner" id="line-chart-tooltip"></div>')
         .css({
@@ -155,7 +151,8 @@ function showLineChart(data, num) {
                 y = item.datapoint[1].toFixed(2);
 
             $('#line-chart-tooltip')
-                .html(item.series.label + ' of ' + x + ' = ' + y)
+                // .html(item.series.label + ' of ' + x + ' = ' + y)
+                .html(y)
                 .css({
                     top: item.pageY + 5,
                     left: item.pageX + 5,
@@ -170,7 +167,7 @@ function showLineChart(data, num) {
 function showNumber(data, num) {
     const lastNum = data.pop();
     console.log(lastNum._value);
-    $(`#number-${num}`).text(lastNum._value);
+    $(`#number-${num}`).text(lastNum._value.toFixed(2)).attr('class', 'card-number');
 }
 $('.create-chart').on('click', () => {
     window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;

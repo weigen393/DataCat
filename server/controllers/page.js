@@ -16,6 +16,7 @@ const getListPage = async (req, res) => {
 const getDashboardPage = async (req, res) => {
     console.log(req.session.user);
     const page = await dashboard.getDashboardPage(req.body.userId, req.params.dashboardId);
+    // console.log('page', page);
     return res.render('dashboard', { userName: req.session.user.name, userId: req.session.user.id, dashboards: page });
 };
 

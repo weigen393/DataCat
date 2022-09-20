@@ -16,40 +16,74 @@ block content
     
     if dashboards.charts.size!==0
       -var num =0;
-      each item in dashboards.charts
-        if item.type==='number'
-          .small-box.bg-info
-            .inner
-              h3(id=`number-${num}`)
-              p %            
-            button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='edit')
-                    span.material-icons settings
-                  
-            button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='delete')
-              span.material-icons delete
-            .icon
-              i.ion.ion-bag
-            a.small-box-footer #{item.title}
-              
-        -num= num+1
-      -var num =0;
-      each item in dashboards.charts
-        if item.type==='line'                  
-          .content-chart
-            .card.card-primary.card-outline(style='background-color: #130d40; color: #ffffff')
-              .card-header
-                h3.card-title
-                  i.far.fa-chart-bar #{item.title}                   
-
-                .card-tools
+      .number-wrapper
+        each item in dashboards.charts
+          if item.type==='number'
+            .small-box.bg-info
+              .inner
+                h3.word(id=`number-${num}`)
+                p % 
+                .btn-group           
                   button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='edit')
                     span.material-icons settings
-                  
+                        
                   button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='delete')
                     span.material-icons delete
-              
-              .card-body(id=`line-chart-${num}`, style="height: 300px")
-        -num= num+1        
+              .icon
+                i.ion.ion-bag
+              a.small-box-footer #{item.title}
+                
+          -num= num+1
+      
+      //- -var graphNum = dashboards.charts.length - num
+      //-   p test
+      //-   p #{graphNum}
+      -var count = 0      
+        //- each item in dashboards.charts
+      .graph-wrapper
+        .graph-wrapper-left
+          -for(let i = 0; i < dashboards.charts.length; i++)            
+            if dashboards.charts[i].type==='line'
+              if count === 0           
+                .content-chart
+                  .card.card-primary.card-outline(style='background-color: #130d40; color: #ffffff')
+                    .card-header
+                      h3.card-title
+                        i.far.fa-chart-bar #{dashboards.charts[i].title}                   
+
+                      .card-tools
+                        button.btn.btn-tool(type="button",value=`${dashboards.charts[i]._id.valueOf()}`,name='edit')
+                          span.material-icons settings
+                        
+                        button.btn.btn-tool(type="button",value=`${dashboards.charts[i]._id.valueOf()}`,name='delete')
+                          span.material-icons delete
+                    
+                    .card-body(id=`line-chart-${i}`, style="height: 300px")
+                  -count= count+1              
+              else
+                -count= count-1 
+        -var count = 1
+        .graph-wrapper-right
+          -for(let i = 0; i < dashboards.charts.length; i++)            
+            if dashboards.charts[i].type==='line'
+              if count === 0           
+                .content-chart
+                  .card.card-primary.card-outline(style='background-color: #130d40; color: #ffffff')
+                    .card-header
+                      h3.card-title
+                        i.far.fa-chart-bar #{dashboards.charts[i].title}                   
+
+                      .card-tools
+                        button.btn.btn-tool(type="button",value=`${dashboards.charts[i]._id.valueOf()}`,name='edit')
+                          span.material-icons settings
+                        
+                        button.btn.btn-tool(type="button",value=`${dashboards.charts[i]._id.valueOf()}`,name='delete')
+                          span.material-icons delete
+                    
+                    .card-body(id=`line-chart-${i}`, style="height: 300px")
+                  -count= count+1              
+              else
+                -count= count-1
 
 block js  
   script(type='text/javascript').

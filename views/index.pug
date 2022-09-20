@@ -7,33 +7,38 @@ html(lang="en")
     block css           
       title DataCat
       link(rel="stylesheet" href="../../../../../public/index.css")
-      link(href="http://fonts.cdnfonts.com/css/joystix" rel="stylesheet")
+      //- link(href="../../../../../public/plugins/joystix.ttf" rel="stylesheet")
+      //- link(href="http://fonts.cdnfonts.com/css/joystix" rel="stylesheet")
       script(src="https://code.jquery.com/jquery-3.6.0.min.js")   
-  body    
-    .content
-      p.title DATACAT
-      .box-title
-        a.sign-up.sign-title(href='#') Sign Up
-        a.sign-in.sign-title(href='#') Sign In
-      .picture
-        img.dataCat(src="/images/dataCat_laptop.png",alt="dataCat Image")
-      .sign-up-box
-        .sign-text
-          p.text Name: 
-          input.signUpName(type='text' name='name')                   
-          p.text Email: 
-          input.signUpEmail(type='text' name='email')                    
-          p.text Password: 
-          input.signUpPwd(type='text' name='password')
-      a.signBtn.signUp(href='#' name='submit' value='Sign Up') Sign Up        
-      .sign-in-box        
-        .sign-text
-          p.text Email: 
-          input.signInEmail(type='text' name='email')          
-          p.text Password: 
-          input.signInPwd(type='text' name='password')
-          br
-      a.signBtn.signIn(href='#' name='submit' value='Sign In') Sign In 
+  
+  body
+    canvas(id="canvas" style='position:absolute;z-index: -1;')
+    .wrapper      
+      .content      
+        p.title DATACAT
+        .box-title
+          a.sign-up.sign-title(href='#') Sign Up
+          a.sign-in.sign-title(href='#') Sign In
+        .picture
+          img.dataCat(src="/images/dataCat_laptop.png",alt="dataCat Image")
+        .sign-up-box
+          .sign-text
+            p.text Name: 
+            input.signUpName(type='text' name='name')                   
+            p.text Email: 
+            input.signUpEmail(type='text' name='email')                    
+            p.text Password: 
+            input.signUpPwd(type='text' name='password')
+        a.signBtn.signUp(href='#' name='submit' value='Sign Up') Sign Up        
+        .sign-in-box        
+          .sign-text
+            p.text Email: 
+            input.signInEmail(type='text' name='email')          
+            p.text Password: 
+            input.signInPwd(type='text' name='password')
+            br
+        a.signBtn.signIn(href='#' name='submit' value='Sign In') Sign In 
     
-    block js
+    block js      
       script(src="/public/index.js")
+      
