@@ -19,11 +19,27 @@ body {
   font-family: 'Joystix', sans-serif;
   /* min-height: 100%; */
 }
-
+.content-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
 .dashboard-title {
   color: white;
-  font-size: xxx-large;  
-  width: 50%
+  font-size: xxx-large;
+  /* margin: 50px; */
+  /* width: 50%; */
+
+}
+.create-chart{
+  color: white;
+  font-size: x-large;
+  text-align: right;
+  justify-content: right;
+  margin-right: 30px;
+  margin-bottom: 10px;
+  display: flex;
+  border-width: 2px;
+  border-color: white;
 }
 .nav-link{
   width: 50%
