@@ -68,7 +68,7 @@ $('.signIn').on('click', async () => {
 // import * as datGui from 'https://cdn.skypack.dev/dat.gui@0.7.7';
 
 const state = {
-    fps: 30,
+    fps: 40,
     color: '#00d6ff',
     charset: '0123456789ABCDEF',
 };

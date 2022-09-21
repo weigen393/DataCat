@@ -232,7 +232,10 @@ const saveChart = async (userId, data) => {
             });
         }
         return 'save success';
-    } catch (e) {}
+    } catch (e) {
+        console.log(e.message);
+        return e;
+    }
 };
 const delChart = async (data) => {
     try {

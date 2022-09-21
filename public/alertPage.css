@@ -20,7 +20,7 @@ body {
   /* min-height: 100%; */
 }
 
-.dashboard-title {
+.alert-title {
   color: white;
   font-size: xxx-large;
   width: 50%;
@@ -29,7 +29,7 @@ body {
 .nav-link{
   width: 50%
 }
-.chart-title {
+.alert-description {
   color: white;
   font-size: xxx-large;  
 }
@@ -125,7 +125,7 @@ option {
 .flot-y-axis {
   fill: white
 }
-.chart-button{
+.alert-button{
   display:flex;  
   /* border-color: white;
   border:10px; */
@@ -171,4 +171,52 @@ option {
   display: flex;
   align-items: center;
   height: 0px;
+}
+.line-wrap {
+  display: flex;
+  height: 5vh;
+  padding: 10px;
+}
+#schedule {
+  width: 15vw;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+#check {
+  width: 21vw;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+.check-text {
+  display: flex;
+  height: 5vh;
+  padding: 10px 0px;
+  color: white;
+  font-size: large;
+  /* vertical-align: middle; */
+  margin:auto 10px;
+  /* width: 50% */
+  
+}
+#thresholdType{
+  margin: 0px 10px;
+  width: 10vw;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+#threshold{
+  width: 10vw;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
+}
+#deadTime {
+  margin: 0px 10px;
+  width: 10vw;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1rem;
 }

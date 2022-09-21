@@ -35,11 +35,13 @@ body {
   font-size: x-large;
   text-align: right;
   justify-content: right;
-  margin-right: 30px;
+  /* margin-right: 30px;
+  margin-left:auto; */
   margin-bottom: 10px;
-  display: flex;
+  /* display: flex; */
   border-width: 2px;
   border-color: white;
+  width: 400px;
 }
 
 .list-title {  

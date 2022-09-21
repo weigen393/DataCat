@@ -1,7 +1,8 @@
 const router = require('express').Router();
-const { saveAlert } = require('../controllers/alert_controller');
+const { saveAlert, delAlert, setAlert } = require('../controllers/alert_controller');
 
 router.post('/alerts/save', saveAlert);
-// router.post('/dashboard-list/delete', delDashboard);
+router.post('/alert-list/delete', delAlert);
+router.post('/alerts/set', setAlert);
 // router.post('/dashboards/:dashboardId/text', updateDashboardText);
 module.exports = router;

@@ -85,7 +85,7 @@ async function setChart(dashboardId, chartId) {
     });
 
     console.log(setData[0].host[0]);
-    showPreview();
+    // showPreview();
     setTimeout(() => {
         $(`input[data-value="${setData[0].host[0]}"]`).attr('checked', true);
         $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
@@ -528,11 +528,18 @@ $('#save').on('click', async () => {
         error: (err) => {
             console.log(err);
         },
-        success: (result) => {
+        success: async (result) => {
             if (result.status === 200) {
                 console.log('success');
             }
             console.log('result', result);
+            await Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             window.location.href = `/api/1.0/dashboards/${dashboardData.dashboardId}`;
         },
     });

@@ -30,16 +30,22 @@ body {
   /* width: 50%; */
 
 }
+.content {
+  display: flex;
+  align-items: right;
+  justify-content: right;
+}
 .create-chart{
   color: white;
   font-size: x-large;
   text-align: right;
   justify-content: right;
-  margin-right: 30px;
+  margin-right: 10px;
   margin-bottom: 10px;
-  display: flex;
+  /* display: flex; */
   border-width: 2px;
   border-color: white;
+  width: 250px;
 }
 .nav-link{
   width: 50%

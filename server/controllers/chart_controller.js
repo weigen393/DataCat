@@ -21,6 +21,7 @@ const saveChart = async (req, res) => {
     console.log('saveChart');
     console.log(req.body);
     const data = await chart.saveChart(req.session.user.id, req.body);
+    console.log(data);
     res.status(200).send(data);
 };
 const delChart = async (req, res) => {

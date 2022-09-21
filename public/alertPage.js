@@ -412,7 +412,9 @@ async function showPreview() {
             }
             console.log('result', result);
 
-            $('.card-body').text('');
+            $('.card-number').html('');
+            $('.card-number').css('height', '0px');
+            $('.card-body').css('height', '500px');
             showLineChart(result);
         },
     });
@@ -440,6 +442,7 @@ function showLineChart(data) {
             shadowSize: 0,
             lines: {
                 show: true,
+                lineWidth: 4,
             },
             points: {
                 show: false,
@@ -447,6 +450,8 @@ function showLineChart(data) {
         },
         lines: {
             fill: false,
+
+            // color: ['#ffffff'], //#3c8dbc
         },
         yaxis: {
             show: true,
@@ -454,7 +459,8 @@ function showLineChart(data) {
         xaxis: {
             mode: 'time',
             timezone: 'browser',
-            timeformat: '%Y-%m-%d %H:%M:%S',
+            timeBase: 'milliseconds',
+            timeformat: '%H:%M:%S',
             show: true,
         },
     });
@@ -472,7 +478,8 @@ function showLineChart(data) {
                 y = item.datapoint[1].toFixed(2);
 
             $('#line-chart-tooltip')
-                .html(item.series.label + ' of ' + x + ' = ' + y)
+                // .html(item.series.label + ' of ' + x + ' = ' + y)
+                .html(y)
                 .css({
                     top: item.pageY + 5,
                     left: item.pageX + 5,
@@ -487,14 +494,14 @@ function showLineChart(data) {
 $('#check').on('change', () => {
     const checkType = $('#check').val();
     if (checkType === 'threshold') {
-        $('.check-text').html(`<p>When value is</p>
-                    <select class="form-select form-select-sm" aria-label="Default select example" id='thresholdType' style='width:20%'>
+        $('.check-text').html(`<p class='text'>When value is</p>
+                    <select class="form-select form-select-sm" id='thresholdType'>
                       <option value='above' selected>above</option>
                       <option value='below'>below</option>        
                     </select>
-                    <input id='threshold'>`);
+                    <input id='threshold' placeholder='value'>`);
     } else if (checkType === 'alive') {
-        $('.check-text').html(`<p>When not reporting for</p>
+        $('.check-text').html(`<p class='text'>When not reporting for</p>
                                 <input id='deadTime'>s
         `);
     }
@@ -502,6 +509,7 @@ $('#check').on('change', () => {
 
 $('#save').on('click', async () => {
     const data = {
+        alertId: alertData.alertId,
         title: $('.alert-title').text(),
         description: $('.alert-description').text(),
         layer: $('#layer').val(),
@@ -534,7 +542,32 @@ $('#save').on('click', async () => {
                 console.log('success');
             }
             console.log('result', result);
-            window.location.href = `/api/1.0/dashboards/${dashboardData.dashboardId}`;
+            const sendData = {
+                alertId: result.alertId,
+                schedule: result.schedule,
+            };
+            setAlert(sendData);
+            window.location.href = `/api/1.0/alert-list`;
         },
     });
 });
+async function setAlert(sendData) {
+    console.log(sendData);
+    await $.ajax({
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        url: '/api/1.0/alerts/set',
+        data: JSON.stringify(sendData),
+        error: (err) => {
+            console.log(err);
+        },
+        success: (result) => {
+            if (result.status === 200) {
+                console.log('success');
+            }
+            console.log('result', result);
+        },
+    });
+}

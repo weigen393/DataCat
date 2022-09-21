@@ -50,8 +50,9 @@ const alertSchema = new mongoose.Schema({
             aggregate: String,
             schedule: String,
             checkType: String,
-            threshold: Number,
-            deadTime: Number,
+            thresholdType: String,
+            threshold: String,
+            deadTime: String,
         },
     ],
 });

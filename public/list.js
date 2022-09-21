@@ -40,7 +40,6 @@ jQuery(function ($) {
             if (result.isConfirmed) {
                 console.log($(this).attr('value'));
                 const data = {
-                    userId: $('.d-block').text(),
                     dashboardId: $(this).attr('value'),
                 };
                 await $.ajax({

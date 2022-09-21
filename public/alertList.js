@@ -4,27 +4,39 @@ $('.create-alert').on('click', () => {
 
 jQuery(function ($) {
     $('.delete').on('click', function () {
-        console.log($(this).attr('value'));
-        const data = {
-            userId: $('.d-block').text(),
-            dashboardId: $(this).attr('value'),
-        };
-        $.ajax({
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            url: '/api/1.0/dashboard-list/delete',
-            data: JSON.stringify(data),
-            error: (err) => {
-                console.log(err);
-            },
-            success: (result) => {
-                if (result.status === 200) {
-                    console.log('delete dashboard success');
-                }
-                window.location.href = `/api/1.0/dashboard-list`;
-            },
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                console.log($(this).attr('value'));
+                const data = {
+                    alertId: $(this).attr('value'),
+                };
+                await $.ajax({
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    url: '/api/1.0/alert-list/delete',
+                    data: JSON.stringify(data),
+                    error: (err) => {
+                        console.log(err);
+                    },
+                    success: async (result) => {
+                        if (result.status === 200) {
+                            console.log('delete alert success');
+                        }
+                        await Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+                        window.location.href = `/api/1.0/alert-list`;
+                    },
+                });
+            }
         });
     });
 });
