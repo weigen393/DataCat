@@ -1,5 +1,4 @@
 const alertData = data;
-const dashboardData = data;
 const systemMap = {
     cpu: ['usage_system'],
     disk: ['used', 'used_percent'],
@@ -28,13 +27,13 @@ let measurementValue = [];
 let fieldValue = [];
 let infoValue = [];
 
-if (dashboardData.chartId !== undefined) {
+if (alertData.alertId !== undefined) {
     console.log('it is not new');
-    setChart(dashboardData.dashboardId, dashboardData.chartId);
+    resetAlert(alertData.alertId);
 }
-async function setChart(dashboardId, chartId) {
+async function resetAlert(alertId) {
     const sendData = {
-        chartId: chartId,
+        alertId: alertId,
     };
     console.log(sendData);
     let setData;
@@ -43,7 +42,7 @@ async function setChart(dashboardId, chartId) {
         headers: {
             'Content-Type': 'application/json',
         },
-        url: '/api/1.0/chart/edit',
+        url: '/api/1.0/alerts/edit',
         data: sendData,
         error: (err) => {
             console.log(err);
@@ -54,20 +53,20 @@ async function setChart(dashboardId, chartId) {
             }
             console.log('result', result);
             setData = result;
-            console.log(result[0].host);
-            const layer = setData[0].layer;
-            const measurement = setData[0].measurement;
+            console.log(result.host);
+            const layer = setData.layer;
+            const measurement = setData.measurement;
             resetHost(layer);
-            measurementValue = setData[0].measurement;
-            fieldValue = setData[0].field;
-            infoValue = setData[0].info;
-            hostValue = setData[0].host;
+            measurementValue = setData.measurement;
+            fieldValue = setData.field;
+            infoValue = setData.info;
+            hostValue = setData.host;
             if (layer === 'system') {
                 $('.button-container').html(``);
                 resetMeasurement(Object.keys(systemMap), layer);
             } else if (layer === 'container') {
                 $('.field').html(``);
-                resetContainer(setData[0].host);
+                resetContainer(setData.host);
                 resetMeasurement(Object.keys(containerMap), layer);
             } else if (layer === 'application') {
                 $('.button-container').html(``);
@@ -76,27 +75,40 @@ async function setChart(dashboardId, chartId) {
             }
 
             resetField(measurement, layer);
-            $('.chartTitle').text(setData[0].title);
+            $('.alert-title').text(setData.title);
+            $('.alert-description').text(setData.description);
             $(`select option[value=${layer}]`).attr('selected', true);
-            $(`select option[value=${setData[0].type}]`).attr('selected', true);
-            $(`select option[value=${setData[0].timeRange}]`).attr('selected', true);
-            $(`select option[value=${setData[0].interval}]`).attr('selected', true);
-            $(`select option[value=${setData[0].aggregate}]`).attr('selected', true);
+            // $(`select option[value=${setData.type}]`).attr('selected', true);
+            $(`select option[value=${setData.timeRange}]`).attr('selected', true);
+            $(`select option[value=${setData.interval}]`).attr('selected', true);
+            $(`select option[value=${setData.aggregate}]`).attr('selected', true);
+            $(`select option[value=${setData.schedule}]`).attr('selected', true);
+            $(`select option[value=${setData.checkType}]`).attr('selected', true);
         },
     });
-    if (setData[0].container !== undefined) {
-        containerValue = setData[0].container;
-        $(`input[data-value="${setData[0].container[0]}"]`).attr('checked', true);
+    if (setData.container !== undefined) {
+        containerValue = setData.container;
+        $(`input[data-value="${setData.container[0]}"]`).attr('checked', true);
+    }
+    if (setData.thresholdType !== undefined) {
+        $(`select option[value=${setData.thresholdType}]`).attr('selected', true);
+        $('.check-text').html(`<p class='text'>When value is</p>
+                    <select class="form-select form-select-sm" id='thresholdType'>
+                      <option value='above' selected>above</option>
+                      <option value='below'>below</option>        
+                    </select>
+                    <input id='threshold' placeholder='value'>`);
+        $('#threshold').attr('value', setData.threshold);
     }
 
-    console.log(setData[0].host[0]);
+    console.log(setData.host[0]);
     showPreview();
     setTimeout(() => {
-        $(`input[data-value="${setData[0].host[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData[0].measurement[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData[0].info[0]}"]`).attr('checked', true);
-    }, 1000);
+        $(`input[data-value="${setData.host[0]}"]`).attr('checked', true);
+        $(`input[data-value="${setData.field[0]}"]`).attr('checked', true);
+        $(`input[data-value="${setData.measurement[0]}"]`).attr('checked', true);
+        $(`input[data-value="${setData.info[0]}"]`).attr('checked', true);
+    }, 2000);
 }
 $('#layer').on('change', () => {
     const layer = $('#layer').val();
@@ -518,6 +530,7 @@ $('#save').on('click', async () => {
         measurement: measurementValue,
         field: fieldValue,
         info: infoValue,
+        timeRange: $('#range').val(),
         interval: $('#interval').val(),
         aggregate: $('#aggregate').val(),
         schedule: $('#schedule').val(),

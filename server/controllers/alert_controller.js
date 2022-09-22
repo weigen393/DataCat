@@ -18,9 +18,16 @@ const setAlert = async (req, res) => {
     const data = await alert.setAlert(req.session.user.id, req.body);
     res.status(200).send(data);
 };
+const editAlert = async (req, res) => {
+    console.log('editAlert');
+    console.log(req.query);
+    const data = await alert.getAlertSettings(req.session.user.id, req.query);
+    res.status(200).send(data);
+};
 
 module.exports = {
     saveAlert,
     delAlert,
     setAlert,
+    editAlert,
 };

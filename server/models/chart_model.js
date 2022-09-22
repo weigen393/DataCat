@@ -230,6 +230,22 @@ const saveChart = async (userId, data) => {
                 part.aggregate = data.aggregate;
                 dataset.save();
             });
+            // query = await dashboards.findOneAndUpdate(
+            //     { 'charts._id': data.chartId },
+            //     {
+            //         'charts.$.title': data.title,
+            //         'charts.$.layer': data.layer,
+            //         'charts.$.type': data.type,
+            //         'charts.$.host': data.host,
+            //         'charts.$.container': data.container,
+            //         'charts.$.measurement': data.measurement,
+            //         'charts.$.field': data.field,
+            //         'charts.$.info': data.info,
+            //         'charts.$.timeRange': data.timeRange,
+            //         'charts.$.interval': data.interval,
+            //         'charts.$.aggregate': data.aggregate,
+            //     }
+            // );
         }
         return 'save success';
     } catch (e) {

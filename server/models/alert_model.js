@@ -34,6 +34,7 @@ const saveAlert = async (userId, data) => {
                             measurement: data.measurement,
                             field: data.field,
                             info: data.info,
+                            timeRange: data.timeRange,
                             interval: data.interval,
                             aggregate: data.aggregate,
                             schedule: data.schedule,
@@ -49,38 +50,38 @@ const saveAlert = async (userId, data) => {
                 }
             );
         } else {
-            query = await alerts.findOne({ 'alerts._id': data.alertId }, function (e, dataset) {
-                if (e) console.log(e);
-                let part = dataset.alerts.id(data.alertId);
-                part.title = data.title;
-                part.description = data.description;
-                part.layer = data.layer;
-                part.host = data.host;
-                part.container = data.container;
-                part.measurement = data.measurement;
-                part.field = data.field;
-                part.info = data.info;
-                part.interval = data.interval;
-                part.aggregate = data.aggregate;
-                part.schedule = data.schedule;
-                part.checkType = data.checkType;
-                part.thresholdType = data.thresholdType;
-                part.threshold = data.threshold;
-                part.deadTime = data.deadTime;
-                dataset.save();
-            });
+            query = await alerts.findOneAndUpdate(
+                { 'alerts._id': data.alertId },
+                {
+                    'alerts.$.title': data.title,
+                    'alerts.$.description': data.description,
+                    'alerts.$.layer': data.layer,
+                    'alerts.$.host': data.host,
+                    'alerts.$.container': data.container,
+                    'alerts.$.measurement': data.measurement,
+                    'alerts.$.field': data.field,
+                    'alerts.$.info': data.info,
+                    'alerts.$.timeRange': data.timeRange,
+                    'alerts.$.interval': data.interval,
+                    'alerts.$.aggregate': data.aggregate,
+                    'alerts.$.schedule': data.schedule,
+                    'alerts.$.checkType': data.checkType,
+                    'alerts.$.thresholdType': data.thresholdType,
+                    'alerts.$.threshold': data.threshold,
+                    'alerts.$.deadTime': data.deadTime,
+                }
+            );
         }
         if (data.alertId === undefined) {
-            console.log(query);
+            console.log('q', query);
+            // const id = query.alerts.pop()._id.valueOf();
             const id = query.alerts.pop()._id.valueOf();
-
             return { alertId: id, schedule: data.schedule };
         } else {
             return { alertId: data.alertId, schedule: data.schedule };
         }
     } catch (e) {
         console.log(e.message);
-        return e;
     }
 };
 const delAlert = async (userId, data) => {
@@ -129,9 +130,28 @@ const setAlert = async (userId, data) => {
         return e;
     }
 };
+const getAlertSettings = async (userId, data) => {
+    try {
+        console.log(data.alertId);
+        const query = await alerts.find(
+            {
+                'alerts._id': data.alertId,
+            },
+            {
+                alerts: { $elemMatch: { _id: data.alertId } },
+            }
+        );
+        console.log(query);
+        return query[0].alerts[0];
+    } catch (e) {
+        console.log(e);
+        return e;
+    }
+};
 module.exports = {
     getAlertList,
     saveAlert,
     delAlert,
     setAlert,
+    getAlertSettings,
 };

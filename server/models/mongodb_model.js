@@ -46,6 +46,7 @@ const alertSchema = new mongoose.Schema({
             measurement: Array,
             field: Array,
             info: Array,
+            timeRange: String,
             interval: String,
             aggregate: String,
             schedule: String,
