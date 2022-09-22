@@ -91,9 +91,18 @@ const delAlert = async (userId, data) => {
             },
             { $pull: { alerts: { _id: data.alertId } } }
         );
+        await delRedisAlert(data.alertId);
         return console.log('delete success');
     } catch (e) {
         console.log(e.message);
+        return e;
+    }
+};
+const delRedisAlert = async (alertId) => {
+    try {
+        redis.zrem('alert', alertId);
+    } catch (e) {
+        console.log(e);
         return e;
     }
 };

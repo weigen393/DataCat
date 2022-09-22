@@ -1,5 +1,7 @@
 require('dotenv').config({ path: './worker/.env' });
 const { queryApi } = require('./util/influxdb');
+const bucketData = process.env.INFLUX_BUCKET_DATA;
+const bucketApp = process.env.INFLUX_BUCKET_APP;
 const redis = require('./util/redis');
 const { mongoConnect, mongoDisconnect } = require('./util/mongodb');
 const { alerts } = require('./util/mongodb_model');
@@ -22,10 +24,26 @@ async function checkAlert() {
                 console.log('new', newTime);
                 if (await redis.zadd('alert', 'CH', newTime.toString(), alertId)) {
                     console.log('run job 1', alertId);
+                    const value = await getData(settings);
+                    console.log(value, +settings.threshold);
+                    if (value >= +settings.threshold) {
+                        console.log('alert!');
+                        await sendAlert(settings);
+                    } else {
+                        console.log('pass');
+                    }
                 }
             } else {
                 if (await redis.zadd('alert', 'CH', newTime.toString(), alertId)) {
-                    console.log('run job 2');
+                    console.log('run job 1 now');
+                    const value = await getData(settings);
+                    console.log(value, +settings.threshold);
+                    if (value >= +settings.threshold) {
+                        console.log('alert!');
+                        await sendAlert(settings);
+                    } else {
+                        console.log('pass');
+                    }
                 }
             }
         } else {
@@ -46,6 +64,109 @@ async function checkAlert() {
 
 checkAlert();
 // mongoDisconnect();
+const getData = async (data) => {
+    return new Promise((resolve) => {
+        try {
+            console.log('data', data);
+            let cpuFilter = '';
+            if (data.measurement[0] === 'cpu') {
+                cpuFilter = `|> filter(fn: (r) => r["cpu"] == "cpu-total")`;
+            }
+            let containerFilter = '';
+            if (data.layer === 'container') {
+                containerFilter = `|> filter(fn: (r) => r["container_name"] == "${data.container[0]}")`;
+            }
+            let minmaxFilter = '';
+            if (data.checkType === 'threshold') {
+                if (data.thresholdType === 'above') {
+                    minmaxFilter = '|> max()';
+                } else if (data.thresholdType === 'below') {
+                    minmaxFilter = '|> min()';
+                }
+            } else if (data.checkType === 'deadtime') {
+                console.log('deadtime');
+            }
+            const chartData = [];
+            let query;
+            if (data.layer === 'application') {
+                if (data.measurement[0] === 'requestCount') {
+                    query = `from(bucket: "${bucketApp}")
+                      |> range(start: -${+data.schedule + 10}s)
+                      |> filter(fn: (r) => r["host"] == "${data.host[0]}")                        
+                      |> filter(fn: (r) => r["_field"] == "duration")
+                      |> group(columns: ["_field"])
+                      |> count()
+                      `;
+                } else if (data.measurement[0] === 'customize') {
+                    query = `from(bucket: "${bucketApp}")
+                      |> range(start: -${+data.schedule + 10}s)
+                      |> filter(fn: (r) => r["host"] == "${data.host[0]}")                        
+                      |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
+                      ${minmaxFilter}`;
+                } else {
+                    if (data.info[0] === 'duration') {
+                        query = `from(bucket: "${bucketApp}")
+                        |> range(start: -${+data.schedule + 10}s)                      
+                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                        |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
+                        |> filter(fn: (r) => r["_field"] == "${data.info[0]}") 
+                        |> group(columns: ["_field"])                     
+                        ${minmaxFilter}`;
+                    } else if (data.info[0] === 'count') {
+                        query = `from(bucket: "${bucketApp}")
+                      |> range(start: -${+data.schedule + 10}s)
+                      |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                      |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
+                      |> filter(fn: (r) => r["_field"] == "duration")
+                      |> group(columns: ["_field"])
+                      ${minmaxFilter}`;
+                    }
+                }
+            } else {
+                query = `from(bucket: "${bucketData}")
+                    |> range(start: -${data.schedule + 10}s)                      
+                    |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                    ${containerFilter}
+                    |> filter(fn: (r) => r["_measurement"] == "${data.measurement[0]}")
+                    |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
+                    ${cpuFilter}
+                    ${minmaxFilter}`;
+            }
+
+            console.log(query);
+            queryApi.queryRows(query, {
+                next(row, tableMeta) {
+                    const o = tableMeta.toObject(row);
+                    if (o._value === null) {
+                        o._value = 0;
+                    }
+                    chartData.push(o);
+                },
+                error(error) {
+                    console.error(error);
+                    console.log('Finished ERROR');
+                    reject(error);
+                },
+                complete() {
+                    console.log('c', chartData);
+                    if (chartData[0]?._value === undefined) {
+                        console.log('Finished SUCCESS');
+                        resolve(0);
+                    } else {
+                        console.log('Finished SUCCESS');
+                        resolve(chartData[0]._value);
+                    }
+                },
+            });
+        } catch (e) {
+            console.log(e.message);
+        }
+    });
+};
+
+const sendAlert = async (data) => {
+    console.log('send alert here', data.measurement);
+};
 function delay(n) {
     return new Promise(function (resolve) {
         console.log('here');

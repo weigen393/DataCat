@@ -328,7 +328,7 @@ function resetInfo() {
     } else if (measurementValue[0] === 'customize') {
         info = ['value'];
     } else {
-        info = ['duration', 'count', 'countSum'];
+        info = ['duration', 'count'];
     }
     const num = info.length;
     $('.button-info').html('');
