@@ -22,18 +22,18 @@ app.use(
     })
 );
 
-redis.subscribe('mychannel', (e) => {
-    console.log('subscribe channel: mychannel');
-});
+// redis.subscribe('mychannel', (e) => {
+//     console.log('subscribe channel: mychannel');
+// });
 
-redis.on('message', (channel, message) => {
-    console.log(`channel: ${channel},message: ${message}`);
-    // sendToClient();
-});
+// redis.on('message', (channel, message) => {
+//     console.log(`channel: ${channel},message: ${message}`);
+//     // sendToClient();
+// });
 
-redis.on('error', (err) => {
-    console.log('response err:' + err);
-});
+// redis.on('error', (err) => {
+//     console.log('response err:' + err);
+// });
 
 // app.get('/streaming', (req, res) => {
 //     res.setHeader('Cache-Control', 'no-cache');
@@ -62,7 +62,7 @@ redis.on('error', (err) => {
 // });
 // });
 //API routes
-// app.use('/', require('./server/routes/main_route'));
+app.use('/', require('./server/routes/main_route'));
 app.use('/api/' + API_VERSION, [
     require('./server/routes/user_route'),
     require('./server/routes/chart_route'),

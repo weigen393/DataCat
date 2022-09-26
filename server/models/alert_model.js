@@ -42,6 +42,7 @@ const saveAlert = async (userId, data) => {
                             thresholdType: data.thresholdType,
                             threshold: data.threshold,
                             deadTime: data.deadTime,
+                            status: 'off',
                         },
                     },
                 },
@@ -69,6 +70,7 @@ const saveAlert = async (userId, data) => {
                     'alerts.$.thresholdType': data.thresholdType,
                     'alerts.$.threshold': data.threshold,
                     'alerts.$.deadTime': data.deadTime,
+                    'alerts.$.status': 'off',
                 }
             );
         }

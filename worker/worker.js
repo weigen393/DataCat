@@ -29,9 +29,12 @@ async function checkAlert() {
                     console.log('run job 1', alertId);
                     const value = await getData(settings);
                     console.log(value, +settings.threshold);
-                    if (value >= +settings.threshold) {
-                        console.log('alert!');
-                        await sendAlert(settings);
+                    if (value >= +settings.threshold && settings.status === 'off') {
+                        await changeStatus(alertId, 'on');
+                        await sendAlert(settings, 'alert');
+                    } else if (value <= +settings.threshold && settings.status === 'on') {
+                        await changeStatus(alertId, 'off');
+                        await sendAlert(settings, 'ok');
                     } else {
                         console.log('pass');
                     }
@@ -41,9 +44,12 @@ async function checkAlert() {
                     console.log('run job 1 now');
                     const value = await getData(settings);
                     console.log(value, +settings.threshold);
-                    if (value >= +settings.threshold) {
-                        console.log('alert!');
-                        await sendAlert(settings);
+                    if (value >= +settings.threshold && settings.status === 'off') {
+                        await changeStatus(alertId, 'on');
+                        await sendAlert(settings, 'alert');
+                    } else if (value <= +settings.threshold && settings.status === 'on') {
+                        await changeStatus(alertId, 'off');
+                        await sendAlert(settings, 'ok');
                     } else {
                         console.log('pass');
                     }
@@ -127,7 +133,7 @@ const getData = async (data) => {
                 }
             } else {
                 query = `from(bucket: "${bucketData}")
-                    |> range(start: -${data.schedule + 10}s)                      
+                    |> range(start: -${+data.schedule + 10}s)                      
                     |> filter(fn: (r) => r["host"] == "${data.host[0]}")
                     ${containerFilter}
                     |> filter(fn: (r) => r["_measurement"] == "${data.measurement[0]}")
@@ -166,11 +172,32 @@ const getData = async (data) => {
         }
     });
 };
-
-const sendAlert = async (data) => {
+const changeStatus = async (alertId, data) => {
+    try {
+        console.log('id', alertId);
+        const query = await alerts.findOneAndUpdate(
+            {
+                'alerts._id': alertId,
+            },
+            {
+                'alerts.$.status': data,
+            }
+        );
+        console.log('change status');
+        console.log(query);
+        return 'success';
+    } catch (e) {
+        console.log(e);
+        return e;
+    }
+};
+const sendAlert = async (data, text) => {
     console.log('send alert here');
-    const message = 'test';
-    // const message = `${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
+    // const message = 'test';
+    let message = `${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
+    if (text === 'ok') {
+        message = `${data.host[0]} ${data.measurement[0]} is ok right now`;
+    }
     console.log(message);
     // const msg = { id: 1, name: 'datacat', content: message };
     // redis.publish('mychannel', JSON.stringify(msg));
@@ -180,6 +207,10 @@ const sendAlert = async (data) => {
     // } catch (e) {
     //     console.log(e);
     // }
+    const id = id;
+    const token = token;
+
+    sendDiscord(id, token, message);
 };
 function delay(n) {
     return new Promise(function (resolve) {

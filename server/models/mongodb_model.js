@@ -54,6 +54,7 @@ const alertSchema = new mongoose.Schema({
             thresholdType: String,
             threshold: String,
             deadTime: String,
+            status: String,
         },
     ],
 });
