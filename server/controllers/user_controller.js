@@ -16,7 +16,7 @@ const signUp = async (req, res) => {
 };
 const signIn = async (req, res) => {
     const data = await user.signIn(req.body);
-    console.log(data);
+    console.log('d', data);
     if (data.error) {
         return res.status(400).send(data.error);
     }

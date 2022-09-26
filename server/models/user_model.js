@@ -44,7 +44,7 @@ const signUp = async (data) => {
 const signIn = async (data) => {
     try {
         const userData = await users.find({ email: data.email });
-        console.log(userData);
+        console.log('u', userData);
         if (!userData[0]) {
             return { error: 'email not found' };
         }
@@ -58,6 +58,7 @@ const signIn = async (data) => {
             email: userData[0].email,
             role: userData[0].roleId,
         };
+        console.log('s', sendData);
         return sendData;
     } catch (e) {
         console.log(e);

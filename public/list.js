@@ -1,4 +1,49 @@
 // const Swal = require('sweetalert2');
+if (!!window.EventSource) {
+    var source = new EventSource('/streaming');
+
+    source.addEventListener(
+        'message',
+        function (e) {
+            console.log('Got', e);
+            $('.dashboard-title').val(e.data);
+            // document.getElementById('data').innerHTML = e.data;
+        },
+        false
+    );
+
+    // source.addEventListener(
+    //     'open',
+    //     function (e) {
+    //         document.getElementById('state').innerHTML = 'Connected';
+    //     },
+    //     false
+    // );
+
+    // source.addEventListener(
+    //     'error',
+    //     function (e) {
+    //         const id_state = document.getElementById('state');
+    //         if (e.eventPhase == EventSource.CLOSED) source.close();
+    //         if (e.target.readyState == EventSource.CLOSED) {
+    //             id_state.innerHTML = 'Disconnected';
+    //         } else if (e.target.readyState == EventSource.CONNECTING) {
+    //             id_state.innerHTML = 'Connecting...';
+    //         }
+    //     },
+    //     false
+    // );
+} else {
+    console.log("Your browser doesn't support SSE");
+}
+// const source = new EventSource('/streaming');
+
+// source.addEventListener('message', (message) => {
+//     console.log('Got', message);
+
+//     // Display the event data in the `content` div
+//     $('.dashboard-title').val(message.data);
+// });
 $('.create-dashboard').on('click', () => {
     console.log('create');
     const data = {

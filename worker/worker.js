@@ -5,6 +5,9 @@ const bucketApp = process.env.INFLUX_BUCKET_APP;
 const redis = require('./util/redis');
 const { mongoConnect, mongoDisconnect } = require('./util/mongodb');
 const { alerts } = require('./util/mongodb_model');
+const { sendEmail, sendDiscord } = require('./util/notify');
+const axios = require('axios');
+
 let count = 0;
 async function checkAlert() {
     mongoConnect();
@@ -165,7 +168,18 @@ const getData = async (data) => {
 };
 
 const sendAlert = async (data) => {
-    console.log('send alert here', data.measurement);
+    console.log('send alert here');
+    const message = 'test';
+    // const message = `${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
+    console.log(message);
+    // const msg = { id: 1, name: 'datacat', content: message };
+    // redis.publish('mychannel', JSON.stringify(msg));
+    // const sendUrl = 'http://localhost:3000/streaming';
+    // try {
+    //     const send = await axios.get(sendUrl, { params: { data: message } });
+    // } catch (e) {
+    //     console.log(e);
+    // }
 };
 function delay(n) {
     return new Promise(function (resolve) {

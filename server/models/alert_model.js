@@ -19,7 +19,7 @@ const getAlertList = async (id) => {
 const saveAlert = async (userId, data) => {
     try {
         let query;
-        console.log('d', data);
+        console.log('d', userId, data);
         if (!data.alertId) {
             query = await alerts.findOneAndUpdate(
                 { userId: userId },

@@ -26,7 +26,7 @@ let containerValue = [];
 let measurementValue = [];
 let fieldValue = [];
 let infoValue = [];
-
+let thresholdValue;
 if (alertData.alertId !== undefined) {
     console.log('it is not new');
     resetAlert(alertData.alertId);
@@ -61,6 +61,7 @@ async function resetAlert(alertId) {
             fieldValue = setData.field;
             infoValue = setData.info;
             hostValue = setData.host;
+            thresholdValue = setData.threshold;
             if (layer === 'system') {
                 $('.button-container').html(``);
                 resetMeasurement(Object.keys(systemMap), layer);
@@ -98,6 +99,11 @@ async function resetAlert(alertId) {
                       <option value='below'>below</option>        
                     </select>
                     <input id='threshold' placeholder='value'>`);
+        $('#threshold').on('input', () => {
+            console.log('threshold change');
+            thresholdValue = $('#threshold').val();
+            showPreview();
+        });
         $('#threshold').attr('value', setData.threshold);
     }
 
@@ -424,9 +430,9 @@ async function showPreview() {
             }
             console.log('result', result);
 
-            $('.card-number').html('');
-            $('.card-number').css('height', '0px');
-            $('.card-body').css('height', '500px');
+            // $('.card-number').html('');
+            // $('.card-number').css('height', '0px');
+            // $('.card-body').css('height', '500px');
             showLineChart(result);
         },
     });
@@ -434,15 +440,22 @@ async function showPreview() {
 function showLineChart(data) {
     const value = [];
     const time = [];
+    const threshold = [];
+    // let thresholdValue = 75;
     for (let i = 0; i < data.length; i++) {
         value.push([Date.parse(data[i]._time), data[i]._value]);
         time.push(data[i]._time);
+        threshold.push([Date.parse(data[i]._time), thresholdValue]);
     }
     var line_data1 = {
         data: value,
         color: '#356fe2',
     };
-    $.plot('#line-chart', [line_data1], {
+    var line_data2 = {
+        data: threshold,
+        color: '#FF0000',
+    };
+    $.plot('#line-chart', [line_data1, line_data2], {
         grid: {
             hoverable: true,
             borderColor: '#f3f3f3',
@@ -512,6 +525,11 @@ $('#check').on('change', () => {
                       <option value='below'>below</option>        
                     </select>
                     <input id='threshold' placeholder='value'>`);
+        $('#threshold').on('input', () => {
+            console.log('threshold change');
+            thresholdValue = $('#threshold').val();
+            showPreview();
+        });
     } else if (checkType === 'alive') {
         $('.check-text').html(`<p class='text'>When not reporting for</p>
                                 <input id='deadTime'>s
@@ -583,4 +601,10 @@ async function setAlert(sendData) {
             console.log('result', result);
         },
     });
+}
+// $('#threshold').on('input', () => {
+//     console.log('threshold change');
+// });
+async function alertLine(value) {
+    showPreview();
 }

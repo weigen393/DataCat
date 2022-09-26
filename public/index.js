@@ -11,7 +11,7 @@ $('.sign-in').on('click', () => {
     $('.signUp').css('display', 'none');
 });
 
-$('.signBtn').on('click', async () => {
+$('.signUp').on('click', async () => {
     console.log('sign up');
     const data = {
         name: $('.signUpName').val(),

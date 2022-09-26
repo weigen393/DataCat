@@ -59,6 +59,27 @@ const getAlertPage = async (req, res) => {
         });
     }
 };
+const getNotifyList = async (req, res) => {
+    console.log('id', req.session.user.id);
+    // const list = await alert.getNotifyList(req.session.user.id);
+    // console.log(list);
+    return res.render('notifyList', { userId: req.session.user.id, userName: req.session.user.name });
+};
+const getNotifyPage = async (req, res) => {
+    if (req.params.alertId === 'new') {
+        return res.render('notifyPage', {
+            userName: req.session.user.name,
+            userId: req.session.user.id,
+            alerts: {},
+        });
+    } else {
+        return res.render('notifyPage', {
+            userName: req.session.user.name,
+            userId: req.session.user.id,
+            alerts: { alertId: req.params.alertId },
+        });
+    }
+};
 module.exports = {
     getHomePage,
     getListPage,
@@ -66,4 +87,6 @@ module.exports = {
     getChartPage,
     getAlertList,
     getAlertPage,
+    getNotifyList,
+    getNotifyPage,
 };
