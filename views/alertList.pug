@@ -1,24 +1,43 @@
 extends  layout.pug
 block css
-  link(rel="stylesheet" href="../../../../../public/list.css") 
+  link(rel="stylesheet" href="../../../../../public/alertList.css") 
 block content
   .content-wrapper(style='background-color: #0c062b')
     .content-header
       .container-fluid
         .row.mb-2
-          .col-sm-6
-            h1.dashboard-title Alert
+          //- .col-sm-6
+          h1.dashboard-title Alert
     .content
-      a.create-alert(href="#") Create Alert
-      
+      a.create-alert(href="#") + Create Alert      
       .alert-list
-        each item in list
-          li.dashboard         
-            p.title #{item.title}
-            p.description #{item.description}
-            a.enter(href=`/api/1.0/alerts/${item._id.valueOf()}`) Edit
-            br
-            a.delete(href='#', value=`${item._id.valueOf()}`) Delete
+        table.table.table-dark
+          thead.list-title.table-dark
+            tr
+              th(scope='col' style='background-color: #0c218a') #
+              th(scope='col' style='background-color: #0c218a;width: 25vw') Title
+              th(scope='col' style='background-color: #0c218a;width: 35vw') Description
+              th(scope='col' style='background-color: #0c218a;width: 25vw') Enter / Delete
+          -var num =1;
+          each item in list
+            tbody
+              tr
+                td.align-middle(scope='row') #{num}
+                td.align-middle #{item.title}
+                td.align-middle #{item.description}
+                td.align-middle
+                  .button
+                    a.enter(href=`/api/1.0/alerts/${item._id.valueOf()}`) Edit
+                    p / 
+                    a.delete(href='#', value=`${item._id.valueOf()}`) Delete
+            -num=num+1
+        //- each item in list
+        //-   li.dashboard         
+        //-     p.title #{item.title}
+        //-     p.description #{item.description}
+        //-     a.enter(href=`/api/1.0/alerts/${item._id.valueOf()}`) Edit
+        //-     br
+        //-     a.delete(href='#', value=`${item._id.valueOf()}`) Delete
 
 block js
   script(src="/public/alertList.js") 

@@ -209,6 +209,7 @@ const sendAlert = async (data, text) => {
     // }
     const id = id;
     const token = token;
+    
 
     sendDiscord(id, token, message);
 };
