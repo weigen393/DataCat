@@ -506,6 +506,7 @@ function showNumber(data) {
 }
 $('#save').on('click', async () => {
     console.log('save');
+    $('#save').prop('disabled', true);
     const check = await checkSelect();
     if (check) {
         saveChart();

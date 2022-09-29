@@ -1,6 +1,7 @@
 const dashboardData = data;
 const chartId = [];
 const interval = [];
+const maxText = 40;
 showAll();
 async function showAll() {
     for (let i = 0; i < dashboardData.charts.length; i++) {
@@ -178,25 +179,50 @@ $('h1').on('blur', async () => {
         title: $('.dashboard-title').text(),
         description: $('.dashboard-description').text(),
     };
-
-    await $.ajax({
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        url: `/api/1.0/dashboards/${dashboardData._id}/text`,
-        data: JSON.stringify(text),
-        error: (err) => {
-            console.log(err);
-        },
-        success: (result) => {
-            if (result.status === 200) {
-                console.log('success');
-            }
-        },
-    });
+    const checkTitle = await checkText(text.title, '.dashboard-title', 'title');
+    const checkDescription = await checkText(text.description, '.dashboard-description', 'description');
+    if (checkTitle && checkDescription) {
+        await $.ajax({
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: `/api/1.0/dashboards/${dashboardData._id}/text`,
+            data: JSON.stringify(text),
+            error: (err) => {
+                console.log(err);
+            },
+            success: (result) => {
+                if (result.status === 200) {
+                    console.log('success');
+                }
+            },
+        });
+    }
 });
-
+async function checkText(text, element, name) {
+    if (text.length > maxText) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Dashboard ${name} is too long!`,
+        }).then(() => {
+            $(element).focus();
+        });
+        return 0;
+    } else if (text.includes('<') || text.includes('>')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Dashboard ${name} includes invalid symbol!`,
+        }).then(() => {
+            $(element).focus();
+        });
+        return 0;
+    } else {
+        return 1;
+    }
+}
 jQuery(function ($) {
     $('.btn').on('click', function () {
         console.log($(this).attr('value'));
