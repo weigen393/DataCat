@@ -378,9 +378,12 @@ function fieldCheck(num) {
     console.log(fieldList);
 }
 
-$('#preview').on('click', () => {
+$('#preview').on('click', async () => {
     console.log('preview');
-    showPreview();
+    const check = await checkSelect();
+    if (check) {
+        showPreview();
+    }
 });
 async function showPreview() {
     const setData = {
@@ -502,6 +505,13 @@ function showNumber(data) {
     $('.card-number').text(lastNum._value.toFixed(2)).attr('class', 'card-number');
 }
 $('#save').on('click', async () => {
+    console.log('save');
+    const check = await checkSelect();
+    if (check) {
+        saveChart();
+    }
+});
+async function saveChart() {
     const data = {
         dashboardId: dashboardData.dashboardId,
         chartId: dashboardData.chartId,
@@ -543,4 +553,40 @@ $('#save').on('click', async () => {
             window.location.href = `/api/1.0/dashboards/${dashboardData.dashboardId}`;
         },
     });
-});
+}
+async function checkSelect() {
+    let selectData = [
+        $('#layer').val(),
+        $('#type').val(),
+        $('#range').val(),
+        $('#interval').val(),
+        $('#aggregate').val(),
+    ];
+    let dropdownData = [];
+    if ($('#layer').val() === 'system') {
+        dropdownData = [hostValue, measurementValue, fieldValue];
+    } else if ($('#layer').val() === 'container') {
+        dropdownData = [hostValue, containerValue, measurementValue, fieldValue];
+    } else if ($('#layer').val() === 'application') {
+        dropdownData = [hostValue, measurementValue, fieldValue, infoValue];
+    }
+    const checkDrop = dropdownData.map((item) => item.length);
+    console.log('check', checkDrop);
+    if (selectData.includes('0')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something should be selected!',
+        });
+        return 0;
+    } else if (checkDrop.includes(0)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something should be selected!',
+        });
+        return 0;
+    } else {
+        return 1;
+    }
+}

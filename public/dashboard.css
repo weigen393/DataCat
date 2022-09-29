@@ -19,14 +19,19 @@ body {
   font-family: 'Joystix', sans-serif;
   /* min-height: 100%; */
 }
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .content-header h1 {
   font-size: 1.8rem;
   margin-bottom: 10px;
+  margin-right: 20px;
+}
+.title-1{
+  display: flex;
 }
 .dashboard-title {
   color: white;
   font-size: xxx-large;
-  /* margin: 50px; */
+  
   /* width: 50%; */
 
 }

@@ -4,7 +4,7 @@ const { dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
 const bucketData = process.env.INFLUX_BUCKET_DATA;
 const bucketApp = process.env.INFLUX_BUCKET_APP;
-const getTime = '-48h'; //get host and container name from last 1 hr
+const getTime = '-24h'; //get host and container name from last 1 hr
 
 const getHost = async (layer) => {
     return new Promise((resolve) => {
@@ -14,6 +14,13 @@ const getHost = async (layer) => {
             if (layer === 'application') {
                 query = `from(bucket: "${bucketApp}")
                         |> range(start: ${getTime})                        
+                        |> group()
+                        |> distinct(column: "host")`;
+            } else if (layer === 'container') {
+                query = `from(bucket: "${bucketData}")
+                        |> range(start: ${getTime})
+                        |> keyValues(keyColumns: ["host"])
+                        |> filter(fn: (r) => exists r.container_name)
                         |> group()
                         |> distinct(column: "host")`;
             } else {

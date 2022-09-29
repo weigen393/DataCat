@@ -6,8 +6,11 @@ block content
     .content-header    
       .container-fluid
         .row.mb-2
-          //- .col-sm-6   
-          h1.dashboard-title(contenteditable='true') #{dashboards.title}
+          //- .col-sm-6
+          .title-1
+            h1.dashboard-title(contenteditable='true') #{dashboards.title}
+            button.btn.btn-tool(type="button")
+              span.material-icons.md-light(href="#") edit
           //- a.nav-link(data-widget='pushmenu' href='#' role='button' )  expand                     
           br
           h1.dashboard-description(contenteditable='true') #{dashboards.description}            
