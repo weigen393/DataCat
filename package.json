@@ -31,6 +31,7 @@
     "mongoose": "^6.5.5",
     "pug": "^3.0.2",
     "redis": "^4.3.1",
-    "sweetalert2": "^11.4.33"
+    "sweetalert2": "^11.4.33",
+    "validator": "^13.7.0"
   }
 }

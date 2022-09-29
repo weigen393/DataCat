@@ -26,7 +26,7 @@ let containerValue = [];
 let measurementValue = [];
 let fieldValue = [];
 let infoValue = [];
-
+const maxText = 40;
 if (dashboardData.chartId !== undefined) {
     console.log('it is not new');
     setChart(dashboardData.dashboardId, dashboardData.chartId);
@@ -508,7 +508,24 @@ $('#save').on('click', async () => {
     console.log('save');
     $('#save').prop('disabled', true);
     const check = await checkSelect();
-    if (check) {
+    const title = $('.chart-title').text();
+    if (title.length > maxText) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Chart title is too long!`,
+        }).then(() => {
+            $('.chart-title').focus();
+        });
+    } else if (title.includes('<') || title.includes('>')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Chart title includes invalid symbol!`,
+        }).then(() => {
+            $('.chart-title').focus();
+        });
+    } else if (check) {
         saveChart();
     }
 });

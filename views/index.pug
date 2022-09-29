@@ -10,6 +10,8 @@ html(lang="en")
       //- link(href="../../../../../public/plugins/joystix.ttf" rel="stylesheet")
       //- link(href="http://fonts.cdnfonts.com/css/joystix" rel="stylesheet")
       script(src="https://code.jquery.com/jquery-3.6.0.min.js")   
+      script(src="https://unpkg.com/validator@latest/validator.min.js")
+      script(src="//cdn.jsdelivr.net/npm/sweetalert2@11")
   
   body
     canvas(id="canvas" style='position:absolute;z-index: -1;')
@@ -28,15 +30,16 @@ html(lang="en")
             p.text Email: 
             input.signUpEmail(type='text' name='email')                    
             p.text Password: 
-            input.signUpPwd(type='text' name='password')
+            input.signUpPwd(type='password' name='password')
         a.signBtn.signUp(href='#' name='submit' value='Sign Up') Sign Up        
-        .sign-in-box        
-          .sign-text
-            p.text Email: 
-            input.signInEmail(type='text' name='email')          
-            p.text Password: 
-            input.signInPwd(type='text' name='password')
-            br
+        .sign-in-box
+          form
+            .sign-text
+              p.text Email: 
+              input.signInEmail(type='text' name='email' required)          
+              p.text Password: 
+              input.signInPwd(type='password' name='password')
+              br
         a.signBtn.signIn(href='#' name='submit' value='Sign In') Sign In 
     
     block js      

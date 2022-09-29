@@ -18,25 +18,32 @@ $('.signUp').on('click', async () => {
         email: $('.signUpEmail').val(),
         password: $('.signUpPwd').val(),
     };
-    console.log(data);
-    await $.ajax({
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        url: `/api/1.0/user/signup`,
-        data: JSON.stringify(data),
-        error: (err) => {
-            console.log(err);
-            console.log(err.responseText);
-        },
-        success: (result) => {
-            if (result.status === 200) {
-                console.log('success');
-            }
-            window.location.href = `/api/1.0/dashboard-list`;
-        },
-    });
+    const check = await validation(data);
+
+    if (check) {
+        console.log(data);
+        await $.ajax({
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: `/api/1.0/user/signup`,
+            data: JSON.stringify(data),
+            error: (err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: err.responseText,
+                });
+            },
+            success: (result) => {
+                if (result.status === 200) {
+                    console.log('success');
+                }
+                window.location.href = `/api/1.0/dashboard-list`;
+            },
+        });
+    }
 });
 $('.signIn').on('click', async () => {
     console.log('sign in');
@@ -44,27 +51,96 @@ $('.signIn').on('click', async () => {
         email: $('.signInEmail').val(),
         password: $('.signInPwd').val(),
     };
-    console.log(data);
-    await $.ajax({
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        url: `/api/1.0/user/signin`,
-        data: JSON.stringify(data),
-        error: (err) => {
-            console.log(err);
-            console.log(err.responseText);
-        },
-        success: (result) => {
-            if (result.status === 200) {
-                console.log('success');
-            }
-            window.location.href = `/api/1.0/dashboard-list`;
-        },
-    });
+    const check = await validation(data);
+    if (check) {
+        console.log(data);
+        await $.ajax({
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: `/api/1.0/user/signin`,
+            data: JSON.stringify(data),
+            error: (err) => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: err.responseText,
+                });
+            },
+            success: (result) => {
+                if (result.status === 200) {
+                    console.log('success');
+                }
+                window.location.href = `/api/1.0/dashboard-list`;
+            },
+        });
+    }
 });
+async function validation(data) {
+    if (data?.name !== undefined) {
+        if (!data.name) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `Input cannot be empty!`,
+            });
+            return 0;
+        }
+        if (!validator.isByteLength(data.name, 0, 20)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `The name is too long!`,
+            });
+            return 0;
+        }
+    }
+    if (!data.email || !data.password) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Input cannot be empty!`,
+        });
+        return 0;
+    }
+    if (!validator.isEmail(data.email)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Invalid email format!`,
+        });
+        return 0;
+    }
 
+    if (!validator.isByteLength(data.password, 6, 16)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Invalid password length!`,
+            footer: `(between 6~16 characters)`,
+        });
+        return 0;
+    }
+    if (
+        !validator.isStrongPassword(data.password, {
+            minLength: 6,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 0,
+        })
+    ) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Invalid password format!`,
+            footer: `(at least a number, an uppercase, and a lowercase is needed, and between 6~16 characters)`,
+        });
+        return 0;
+    }
+    return 1;
+}
 // import * as datGui from 'https://cdn.skypack.dev/dat.gui@0.7.7';
 
 const state = {
