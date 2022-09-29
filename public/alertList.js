@@ -40,3 +40,5 @@ jQuery(function ($) {
         });
     });
 });
+$('.sidebar-alert').css('background-color', 'rgba(255, 255, 255, 0.1)');
+$('.sidebar-alert').css('color', '#fff');

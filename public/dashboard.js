@@ -2,7 +2,30 @@ const dashboardData = data;
 const chartId = [];
 const interval = [];
 const maxText = 40;
-showAll();
+Swal.fire({
+    title: 'Loading ...',
+    width: 600,
+    padding: '3em',
+    color: '#716add',
+    backdrop: `
+      rgba(0,0,123,0.4)
+      url("/images/nyan-cat-nyan.gif")
+      left top
+      no-repeat
+    `,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+});
+async function wrap() {
+    await showAll();
+    Swal.fire({
+        title: 'Loading ...',
+        timer: 10,
+        showCancelButton: false,
+        showConfirmButton: false,
+    });
+}
+wrap();
 async function showAll() {
     for (let i = 0; i < dashboardData.charts.length; i++) {
         var value = {
@@ -31,15 +54,15 @@ async function showAll() {
             error: (err) => {
                 console.log(err);
             },
-            success: (result) => {
+            success: async (result) => {
                 if (result.status === 200) {
                     console.log('success');
                 }
                 console.log('result', result);
                 if (dashboardData.charts[i].type === 'line') {
-                    showLineChart(result, i);
+                    await showLineChart(result, i);
                 } else if (dashboardData.charts[i].type === 'number') {
-                    showNumber(result, i);
+                    await showNumber(result, i);
                 }
 
                 realTime(i, dashboardData.charts[i].interval);
@@ -273,3 +296,5 @@ async function delChart(chartId) {
         }
     });
 }
+$('.sidebar-dashboard').css('background-color', 'rgba(255, 255, 255, 0.1)');
+$('.sidebar-dashboard').css('color', '#fff');

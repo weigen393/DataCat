@@ -608,3 +608,5 @@ async function setAlert(sendData) {
 async function alertLine(value) {
     showPreview();
 }
+$('.sidebar-alert').css('background-color', 'rgba(255, 255, 255, 0.1)');
+$('.sidebar-alert').css('color', '#fff');

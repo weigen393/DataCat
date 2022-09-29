@@ -56,52 +56,49 @@ async function setChart(dashboardId, chartId) {
             console.log(result[0].host);
             const layer = setData[0].layer;
             const measurement = setData[0].measurement;
-            resetHost(layer);
+            await resetHost(layer);
             measurementValue = setData[0].measurement;
             fieldValue = setData[0].field;
             infoValue = setData[0].info;
             hostValue = setData[0].host;
             if (layer === 'system') {
                 $('.button-container').html(``);
-                resetMeasurement(Object.keys(systemMap), layer);
+                await resetMeasurement(Object.keys(systemMap), layer);
             } else if (layer === 'container') {
                 $('.field').html(``);
-                resetContainer(setData[0].host);
-                resetMeasurement(Object.keys(containerMap), layer);
+                await resetContainer(setData[0].host);
+                await resetMeasurement(Object.keys(containerMap), layer);
             } else if (layer === 'application') {
                 $('.button-container').html(``);
-                resetMeasurement(Object.keys(applicationMap), layer);
-                resetInfo();
+                await resetMeasurement(Object.keys(applicationMap), layer);
+                await resetInfo();
             }
-
-            resetField(measurement, layer);
             $('.chart-title').text(setData[0].title);
             $(`select option[value=${layer}]`).attr('selected', true);
             $(`select option[value=${setData[0].type}]`).attr('selected', true);
             $(`select option[value=${setData[0].timeRange}]`).attr('selected', true);
             $(`select option[value=${setData[0].interval}]`).attr('selected', true);
             $(`select option[value=${setData[0].aggregate}]`).attr('selected', true);
+            await resetField(measurement, layer).then(async () => {
+                console.log('hello');
+                console.log(setData[0].host[0]);
+                $(`input[data-value="${setData[0].host[0]}"]`).attr('checked', true);
+                $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
+                $(`input[data-value="${setData[0].measurement[0]}"]`).attr('checked', true);
+                $(`input[data-value="${setData[0].info[0]}"]`).attr('checked', true);
+                if (setData[0].container !== undefined) {
+                    containerValue = setData[0].container;
+                    $(`input[data-value="${setData[0].container[0]}"]`).attr('checked', true);
+                }
+                await showPreview();
+            });
         },
     });
-
-    console.log(setData[0].host[0]);
-    // showPreview();
-    setTimeout(() => {
-        $(`input[data-value="${setData[0].host[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData[0].measurement[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData[0].info[0]}"]`).attr('checked', true);
-        if (setData[0].container !== undefined) {
-            containerValue = setData[0].container;
-            $(`input[data-value="${setData[0].container[0]}"]`).attr('checked', true);
-        }
-        showPreview();
-    }, 2000);
 }
-$('#layer').on('change', () => {
+$('#layer').on('change', async () => {
     const layer = $('#layer').val();
     layerValue = layer;
-    resetHost(layer);
+    await resetHost(layer);
     $('.select-host').text('');
     $('.select-container').text('');
     $('.select-measurement').text('');
@@ -111,11 +108,11 @@ $('#layer').on('change', () => {
         $('.button-container').html(``);
         $('.field').html(``);
         $('.button-info').html('');
-        resetMeasurement(Object.keys(systemMap), layer);
+        await resetMeasurement(Object.keys(systemMap), layer);
     } else if (layer === 'container') {
         $('.field').html(``);
         $('.button-info').html('');
-        resetMeasurement(Object.keys(containerMap), layer);
+        await resetMeasurement(Object.keys(containerMap), layer);
     } else if (layer === 'application') {
         $('.button-container').html(``);
         $('.field').html(``);
@@ -126,6 +123,20 @@ $('#layer').on('change', () => {
 async function resetHost(layer) {
     hostValue = [];
     let host = [];
+    Swal.fire({
+        title: 'Loading ...',
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/nyan-cat-nyan.gif")
+          left top
+          no-repeat
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
     await $.ajax({
         method: 'get',
         headers: {
@@ -158,6 +169,12 @@ async function resetHost(layer) {
                 );
             }
             console.log('reset host');
+            Swal.fire({
+                title: 'Loading ...',
+                timer: 10,
+                showCancelButton: false,
+                showConfirmButton: false,
+            });
         },
     });
 }
@@ -187,6 +204,20 @@ async function resetContainer(host) {
     containerValue = [];
     let container = [];
     console.log('reset container');
+    Swal.fire({
+        title: 'Loading ...',
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/nyan-cat-nyan.gif")
+          left top
+          no-repeat
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
     await $.ajax({
         method: 'get',
         headers: {
@@ -225,6 +256,12 @@ async function resetContainer(host) {
               </li>`
                 );
             }
+            Swal.fire({
+                title: 'Loading ...',
+                timer: 10,
+                showCancelButton: false,
+                showConfirmButton: false,
+            });
         },
     });
 }
@@ -241,7 +278,7 @@ function containerCheck(num) {
     $('.select-container').text(`container: ${containerList}`);
 }
 
-function resetMeasurement(measurement, layer) {
+async function resetMeasurement(measurement, layer) {
     $('.measurement').html(``);
     console.log(measurement);
     const num = measurement.length;
@@ -277,11 +314,6 @@ function measurementCheck(num, layer) {
     }
 }
 async function resetField(measurement, layer) {
-    console.log('hi', measurement, layer);
-    // if (measurement.length === 0) {
-    // $('.field').html(``);
-    //     return;
-    // }
     let field;
     let setData = { measurement: measurement[0], host: hostValue[0] };
     if (layer === 'system') {
@@ -625,3 +657,5 @@ async function checkSelect() {
         return 1;
     }
 }
+$('.sidebar-dashboard').css('background-color', 'rgba(255, 255, 255, 0.1)');
+$('.sidebar-dashboard').css('color', '#fff');

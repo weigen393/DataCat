@@ -113,3 +113,5 @@ jQuery(function ($) {
         });
     });
 });
+$('.sidebar-dashboard').css('background-color', 'rgba(255, 255, 255, 0.1)');
+$('.sidebar-dashboard').css('color', '#fff');
