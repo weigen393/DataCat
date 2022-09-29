@@ -15,9 +15,9 @@ block content
           br
           h1.dashboard-description(contenteditable='true') #{dashboards.description}            
     .content
-      a.create-chart(href="#") + Add Chart
-    
-    if dashboards.charts.size!==0
+      a.create-chart(href="#") + Add Chart   
+
+    if dashboards.charts.length!==0
       -var num =0;
       .number-wrapper
         each item in dashboards.charts
@@ -87,7 +87,9 @@ block content
                   -count= count+1              
               else
                 -count= count-1
-
+    else
+      .hint
+        p Press "ADD CHART" to create chart in this dashboard
 block js  
   script(type='text/javascript').
     let data = !{JSON.stringify(dashboards)}        

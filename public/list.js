@@ -59,10 +59,17 @@ $('.create-dashboard').on('click', () => {
         error: (err) => {
             console.log(err);
         },
-        success: (result) => {
+        success: async (result) => {
             if (result.status === 200) {
                 console.log('create dashboard success');
             }
+            await Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'A new dashboard has been created',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             window.location.href = `/api/1.0/dashboards/${result}`;
         },
     });

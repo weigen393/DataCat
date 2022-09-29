@@ -102,6 +102,11 @@ $('#layer').on('change', () => {
     const layer = $('#layer').val();
     layerValue = layer;
     resetHost(layer);
+    $('.select-host').text('');
+    $('.select-container').text('');
+    $('.select-measurement').text('');
+    $('.select-field').text('');
+    $('.select-info').text('');
     if (layer === 'system') {
         $('.button-container').html(``);
         $('.field').html(``);
@@ -165,11 +170,17 @@ function hostCheck(num) {
     }
     console.log(hostList);
     hostValue = hostList;
+    const hostHint = hostList.map((item) => item.split('.')[0]);
+
     if (layerValue === 'container') {
         resetContainer(hostList);
+        $('.select-host').text(`host: ${hostHint}`);
     } else if (layerValue === 'application') {
         $('.field').html(``);
+        $('.select-host').text(`host: ${hostList}`);
         resetMeasurement(Object.keys(applicationMap), layerValue);
+    } else {
+        $('.select-host').text(`host: ${hostHint}`);
     }
 }
 async function resetContainer(host) {
@@ -226,6 +237,8 @@ function containerCheck(num) {
     }
     console.log(containerList);
     containerValue = containerList;
+    $('.select-container').show();
+    $('.select-container').text(`container: ${containerList}`);
 }
 
 function resetMeasurement(measurement, layer) {
@@ -257,6 +270,7 @@ function measurementCheck(num, layer) {
     }
     console.log(measurementList);
     measurementValue = measurementList;
+    $('.select-measurement').text(`measurement: ${measurementList}`);
     resetField(measurementList, layer);
     if (layer === 'application') {
         resetInfo();
@@ -365,6 +379,8 @@ function infoCheck(num) {
     }
     infoValue = infoList;
     console.log(infoList);
+    $('.select-info').show();
+    $('.select-info').text(`info: ${infoList}`);
 }
 
 function fieldCheck(num) {
@@ -376,6 +392,7 @@ function fieldCheck(num) {
     }
     fieldValue = fieldList;
     console.log(fieldList);
+    $('.select-field').text(`field: ${fieldList}`);
 }
 
 $('#preview').on('click', async () => {
@@ -594,14 +611,14 @@ async function checkSelect() {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Something should be selected!',
+            text: 'Something else should be selected!',
         });
         return 0;
     } else if (checkDrop.includes(0)) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Something should be selected!',
+            text: 'Something else should be selected!',
         });
         return 0;
     } else {
