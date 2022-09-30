@@ -3,64 +3,72 @@ block css
   link(rel="stylesheet" href="../../../../../public/alertPage.css") 
 block content
   .content-wrapper(style='background-color: #0c062b')
-    .content-header
-      .container-fluid
-        .row.mb-2
-          //- .col-sm-6             
-          h1.alert-title(contenteditable='true') Alert title
-          
-          h1.alert-description(contenteditable='true') Description
+    .content-middle
+      .content-header
+        .container-fluid
+          .row.mb-2
+            //- .col-sm-6             
+            h1.alert-title(contenteditable='true') Alert title
             
-    .content.metric-parameter 
-      p.text Metrics: 
-      select.form-select.form-select-sm(id='layer')
-          option(selected) Select Layer
-          option(value='system') System
-          option(value='container') Container
-          option(value='application') Application
+            h1.alert-description(contenteditable='true') Description
+      .content-show
+          p.select-host  
+          p.select-container 
+          p.select-measurement  
+          p.select-field  
+          p.select-info
 
-      .btn-group.button-host
-        button.btn.btn-primary.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false") Host           
-        ul.dropdown-menu.host
+    .content-parameter 
+      .content.metric-parameter 
+        p.text Metrics: 
+        select.form-select.form-select-sm(id='layer')
+            option(selected value='0') Select Layer
+            option(value='system') System
+            option(value='container') Container
+            option(value='application') Application
+
+        .btn-group.button-host
+          button.btn.btn-primary.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false") Host           
+          ul.dropdown-menu.host
+            
+        .btn-group.button-container               
+        .btn-group
+          button.btn.btn-secondary.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false", id='measurement',style='background-color:deepskyblue;') Measurement           
+          ul.dropdown-menu.measurement
+                      
+        .btn-group.button-field
+          button.btn.btn-success.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false", id='field') Field           
+          ul.dropdown-menu.field
+
+        .btn-group.button-info
           
-      .btn-group.button-container               
-      .btn-group
-        button.btn.btn-secondary.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false", id='measurement',style='background-color:deepskyblue;') Measurement           
-        ul.dropdown-menu.measurement
-                    
-      .btn-group.button-field
-        button.btn.btn-success.dropdown-toggle(type="button", data-bs-toggle="dropdown",aria-expanded="false", id='field') Field           
-        ul.dropdown-menu.field
-
-      .btn-group.button-info
-        
-    br
-    .content.chart-parameter
-      p.text Preview Chart:
-      select.form-select.form-select-sm(id='range')
-        option(selected) Select Range
-        option(value='-1m') Past 1m
-        option(value='-5m') Past 5m
-        option(value='-15m') Past 15m
-        option(value='-1h') Past 1h
-        option(value='-3h') Past 3h
-        option(value='-6h') Past 6h
-        option(value='-12h') Past 12h
-        option(value='-24h') Past 24h
-      select.form-select.form-select-sm(id='interval')
-        option(selected) Select Time Interval  
-        option(value='5s') 5s      
-        option(value='10s') 10s
-        option(value='30s') 30s
-        option(value='1m') 1m
-        option(value='5m') 5m
-      select.form-select.form-select-sm(id='aggregate')
-        option(selected) Select Aggregate Function
-        option(value='min') min
-        option(value='max') max
-        option(value='mean') mean
-        option(value='sum') sum
-    br    
+      br
+      .content.chart-parameter
+        p.text Preview Chart:
+        select.form-select.form-select-sm(id='range')
+          option(selected value='0') Select Range
+          option(value='-1m') Past 1m
+          option(value='-5m') Past 5m
+          option(value='-15m') Past 15m
+          option(value='-1h') Past 1h
+          option(value='-3h') Past 3h
+          option(value='-6h') Past 6h
+          option(value='-12h') Past 12h
+          option(value='-24h') Past 24h
+        select.form-select.form-select-sm(id='interval')
+          option(selected value='0') Select Time Interval  
+          option(value='5s') 5s      
+          option(value='10s') 10s
+          option(value='30s') 30s
+          option(value='1m') 1m
+          option(value='5m') 5m
+        select.form-select.form-select-sm(id='aggregate')
+          option(selected value='0') Select Aggregate Function
+          option(value='min') min
+          option(value='max') max
+          option(value='mean') mean
+          option(value='sum') sum
+      br    
     block chart   
         include chart    
 
@@ -69,7 +77,7 @@ block content
     .line-wrap
       p.text Schedule every
       select.form-select.form-select-sm(id='schedule')
-          option(selected) Select Time
+          option(selected value='0') Select Time
           option(value='10') 10s
           option(value='30') 30s
           option(value='60') 1m
@@ -77,14 +85,15 @@ block content
     .line-wrap
       p.text Check Type: 
       select.form-select.form-select-sm(id='check')
-          option(selected) Select Check Type
+          option(selected value='0') Select Check Type
           option(value='threshold') threshold check
           option(value='alive') alive check
     .check-text
     .alert-button
+      a.back-chart(href="/alert-list",id='back') BACK
       a.preview-chart(href="#",id='preview') PREVIEW
       a.save-chart(href="#",id='save') SAVE
-      a.back-chart(href="/api/1.0/alert-list",id='back') BACK
+      
 
     //- a.create-chart(href="#",id='save') SAVE
 

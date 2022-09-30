@@ -1,5 +1,5 @@
 aside.main-sidebar.sidebar-dark-primary.elevation-4(style='background-color: #130d40')
-  a.brand-link(href='/api/1.0/dashboard-list', style="font-size: 1.8rem;display:flex;")
+  a.brand-link(href='/dashboard-list', style="font-size: 1.8rem;display:flex;")
     img.brand-image(src="/images/dataCat.png", style="margin:2px 10px 0px 15px")
     span.brand-text.font-weight-light DataCat 
   .sidebar
@@ -11,16 +11,16 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4(style='background-color: #13
     nav.mt-2
       ul.nav.nav-pills.nav-sidebar.flex-column(data-widget="treeview" role="menu" data-accordion="false" style="font-size: 1.2rem;")
         li.nav-item
-          a.nav-link.sidebar-dashboard(href=`/api/1.0/dashboard-list`)
+          a.nav-link.sidebar-dashboard(href=`/dashboard-list`)
             p Dashboard
         //- li.nav-item
         //-   a.nav-link(href='#')
         //-     p Logs
         li.nav-item
-          a.nav-link.sidebar-alert(href=`/api/1.0/alert-list`)
+          a.nav-link.sidebar-alert(href=`/alert-list`)
             p Alert
         li.nav-item
-          a.nav-link.sidebar-notify(href=`/api/1.0/notify-list`)
+          a.nav-link.sidebar-notify(href=`/notify-list`)
             p Notify
         li.nav-item
           a.nav-link.sidebar-profile(href='#')

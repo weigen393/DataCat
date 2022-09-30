@@ -70,7 +70,7 @@ $('.create-dashboard').on('click', () => {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            window.location.href = `/api/1.0/dashboards/${result}`;
+            window.location.href = `/dashboards/${result}`;
         },
     });
 });
@@ -106,7 +106,7 @@ jQuery(function ($) {
                             console.log('delete dashboard success');
                         }
                         await Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-                        window.location.href = `/api/1.0/dashboard-list`;
+                        window.location.href = `/dashboard-list`;
                     },
                 });
             }

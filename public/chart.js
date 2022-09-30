@@ -80,7 +80,6 @@ async function setChart(dashboardId, chartId) {
             $(`select option[value=${setData[0].interval}]`).attr('selected', true);
             $(`select option[value=${setData[0].aggregate}]`).attr('selected', true);
             await resetField(measurement, layer).then(async () => {
-                console.log('hello');
                 console.log(setData[0].host[0]);
                 $(`input[data-value="${setData[0].host[0]}"]`).attr('checked', true);
                 $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
@@ -126,7 +125,7 @@ async function resetHost(layer) {
     Swal.fire({
         title: 'Loading ...',
         width: 600,
-        padding: '3em',
+        padding: '1.5em 3em 3em 3em',
         color: '#716add',
         backdrop: `
           rgba(0,0,123,0.4)
@@ -178,7 +177,7 @@ async function resetHost(layer) {
         },
     });
 }
-function hostCheck(num) {
+async function hostCheck(num) {
     const hostList = [];
     for (let i = 0; i < num; i++) {
         if ($(`.form-check-input.host${i}`).is(':checked')) {
@@ -190,12 +189,12 @@ function hostCheck(num) {
     const hostHint = hostList.map((item) => item.split('.')[0]);
 
     if (layerValue === 'container') {
-        resetContainer(hostList);
+        await resetContainer(hostList);
         $('.select-host').text(`host: ${hostHint}`);
     } else if (layerValue === 'application') {
         $('.field').html(``);
         $('.select-host').text(`host: ${hostList}`);
-        resetMeasurement(Object.keys(applicationMap), layerValue);
+        await resetMeasurement(Object.keys(applicationMap), layerValue);
     } else {
         $('.select-host').text(`host: ${hostHint}`);
     }
@@ -447,6 +446,20 @@ async function showPreview() {
         timeInterval: $('#interval').val(),
         aggregate: $('#aggregate').val(),
     };
+    Swal.fire({
+        title: 'Loading ...',
+        width: 600,
+        padding: '1.5em 3em 3em 3em',
+        color: '#716add',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/nyan-cat-nyan.gif")
+          left top
+          no-repeat
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
     console.log(setData);
     await $.ajax({
         method: 'get',
@@ -458,7 +471,7 @@ async function showPreview() {
         error: (err) => {
             console.log(err);
         },
-        success: (result) => {
+        success: async (result) => {
             if (result.status === 200) {
                 console.log('success');
             }
@@ -467,17 +480,23 @@ async function showPreview() {
                 $('.card-number').html('');
                 $('.card-number').css('height', '0px');
                 $('.card-body').css('height', '500px');
-                showLineChart(result);
+                await showLineChart(result);
             } else if ($('#type').val() === 'number') {
                 $('.card-body').html('');
                 $('.card-body').css('height', '0px');
                 $('.card-number').css('height', '400px');
-                showNumber(result);
+                await showNumber(result);
             }
+            Swal.fire({
+                title: 'Loading ...',
+                timer: 10,
+                showCancelButton: false,
+                showConfirmButton: false,
+            });
         },
     });
 }
-function showLineChart(data) {
+async function showLineChart(data) {
     const value = [];
     const time = [];
     for (let i = 0; i < data.length; i++) {
@@ -548,7 +567,7 @@ function showLineChart(data) {
         }
     });
 }
-function showNumber(data) {
+async function showNumber(data) {
     const lastNum = data.pop();
     console.log(lastNum._value);
     $('.card-number').text(lastNum._value.toFixed(2)).attr('class', 'card-number');
@@ -617,7 +636,7 @@ async function saveChart() {
                 showConfirmButton: false,
                 timer: 1500,
             });
-            window.location.href = `/api/1.0/dashboards/${dashboardData.dashboardId}`;
+            window.location.href = `/dashboards/${dashboardData.dashboardId}`;
         },
     });
 }

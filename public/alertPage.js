@@ -27,6 +27,7 @@ let measurementValue = [];
 let fieldValue = [];
 let infoValue = [];
 let thresholdValue;
+const maxText = 40;
 if (alertData.alertId !== undefined) {
     console.log('it is not new');
     resetAlert(alertData.alertId);
@@ -56,7 +57,7 @@ async function resetAlert(alertId) {
             console.log(result.host);
             const layer = setData.layer;
             const measurement = setData.measurement;
-            resetHost(layer);
+            await resetHost(layer);
             measurementValue = setData.measurement;
             fieldValue = setData.field;
             infoValue = setData.info;
@@ -64,18 +65,17 @@ async function resetAlert(alertId) {
             thresholdValue = setData.threshold;
             if (layer === 'system') {
                 $('.button-container').html(``);
-                resetMeasurement(Object.keys(systemMap), layer);
+                await resetMeasurement(Object.keys(systemMap), layer);
             } else if (layer === 'container') {
                 $('.field').html(``);
-                resetContainer(setData.host);
-                resetMeasurement(Object.keys(containerMap), layer);
+                await resetContainer(setData.host);
+                await resetMeasurement(Object.keys(containerMap), layer);
             } else if (layer === 'application') {
                 $('.button-container').html(``);
-                resetMeasurement(Object.keys(applicationMap), layer);
+                await resetMeasurement(Object.keys(applicationMap), layer);
                 resetInfo();
             }
 
-            resetField(measurement, layer);
             $('.alert-title').text(setData.title);
             $('.alert-description').text(setData.description);
             $(`select option[value=${layer}]`).attr('selected', true);
@@ -85,50 +85,51 @@ async function resetAlert(alertId) {
             $(`select option[value=${setData.aggregate}]`).attr('selected', true);
             $(`select option[value=${setData.schedule}]`).attr('selected', true);
             $(`select option[value=${setData.checkType}]`).attr('selected', true);
+            await resetField(measurement, layer).then(async () => {
+                if (setData.container !== undefined) {
+                    containerValue = setData.container;
+                    $(`input[data-value="${setData.container[0]}"]`).attr('checked', true);
+                }
+                $(`input[data-value="${setData.host[0]}"]`).attr('checked', true);
+                $(`input[data-value="${setData.field[0]}"]`).attr('checked', true);
+                $(`input[data-value="${setData.measurement[0]}"]`).attr('checked', true);
+                $(`input[data-value="${setData.info[0]}"]`).attr('checked', true);
+                // if(setData.)
+                if (setData.thresholdType !== undefined) {
+                    $('.check-text').html(`<p class='text'>When value is</p>
+                                <select class="form-select form-select-sm" id='thresholdType'>
+                                  <option value='above' selected>above</option>
+                                  <option value='below'>below</option>        
+                                </select>
+                                <input id='threshold' placeholder='value'>`);
+                    $(`select option[value=${setData.thresholdType}]`).attr('selected', true);
+                    $('#threshold').on('input', async () => {
+                        console.log('threshold change');
+                        thresholdValue = $('#threshold').val();
+                        await showPreview();
+                    });
+                    $('#threshold').attr('value', setData.threshold);
+                }
+
+                console.log(setData.host[0]);
+                await showPreview();
+            });
         },
     });
-    if (setData.container !== undefined) {
-        containerValue = setData.container;
-        $(`input[data-value="${setData.container[0]}"]`).attr('checked', true);
-    }
-    if (setData.thresholdType !== undefined) {
-        $(`select option[value=${setData.thresholdType}]`).attr('selected', true);
-        $('.check-text').html(`<p class='text'>When value is</p>
-                    <select class="form-select form-select-sm" id='thresholdType'>
-                      <option value='above' selected>above</option>
-                      <option value='below'>below</option>        
-                    </select>
-                    <input id='threshold' placeholder='value'>`);
-        $('#threshold').on('input', () => {
-            console.log('threshold change');
-            thresholdValue = $('#threshold').val();
-            showPreview();
-        });
-        $('#threshold').attr('value', setData.threshold);
-    }
-
-    console.log(setData.host[0]);
-    showPreview();
-    setTimeout(() => {
-        $(`input[data-value="${setData.host[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData.field[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData.measurement[0]}"]`).attr('checked', true);
-        $(`input[data-value="${setData.info[0]}"]`).attr('checked', true);
-    }, 2000);
 }
-$('#layer').on('change', () => {
+$('#layer').on('change', async () => {
     const layer = $('#layer').val();
     layerValue = layer;
-    resetHost(layer);
+    await resetHost(layer);
     if (layer === 'system') {
         $('.button-container').html(``);
         $('.field').html(``);
         $('.button-info').html('');
-        resetMeasurement(Object.keys(systemMap), layer);
+        await resetMeasurement(Object.keys(systemMap), layer);
     } else if (layer === 'container') {
         $('.field').html(``);
         $('.button-info').html('');
-        resetMeasurement(Object.keys(containerMap), layer);
+        await resetMeasurement(Object.keys(containerMap), layer);
     } else if (layer === 'application') {
         $('.button-container').html(``);
         $('.field').html(``);
@@ -139,6 +140,20 @@ $('#layer').on('change', () => {
 async function resetHost(layer) {
     hostValue = [];
     let host = [];
+    Swal.fire({
+        title: 'Loading ...',
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/nyan-cat-nyan.gif")
+          left top
+          no-repeat
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
     await $.ajax({
         method: 'get',
         headers: {
@@ -171,10 +186,16 @@ async function resetHost(layer) {
                 );
             }
             console.log('reset host');
+            Swal.fire({
+                title: 'Loading ...',
+                timer: 10,
+                showCancelButton: false,
+                showConfirmButton: false,
+            });
         },
     });
 }
-function hostCheck(num) {
+async function hostCheck(num) {
     const hostList = [];
     for (let i = 0; i < num; i++) {
         if ($(`.form-check-input.host${i}`).is(':checked')) {
@@ -183,17 +204,37 @@ function hostCheck(num) {
     }
     console.log(hostList);
     hostValue = hostList;
+    const hostHint = hostList.map((item) => item.split('.')[0]);
+
     if (layerValue === 'container') {
-        resetContainer(hostList);
+        await resetContainer(hostList);
+        $('.select-host').text(`host: ${hostHint}`);
     } else if (layerValue === 'application') {
         $('.field').html(``);
-        resetMeasurement(Object.keys(applicationMap), layerValue);
+        $('.select-host').text(`host: ${hostList}`);
+        await resetMeasurement(Object.keys(applicationMap), layerValue);
+    } else {
+        $('.select-host').text(`host: ${hostHint}`);
     }
 }
 async function resetContainer(host) {
     containerValue = [];
     let container = [];
     console.log('reset container');
+    Swal.fire({
+        title: 'Loading ...',
+        width: 600,
+        padding: '3em',
+        color: '#716add',
+        backdrop: `
+          rgba(0,0,123,0.4)
+          url("/images/nyan-cat-nyan.gif")
+          left top
+          no-repeat
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+    });
     await $.ajax({
         method: 'get',
         headers: {
@@ -232,6 +273,12 @@ async function resetContainer(host) {
               </li>`
                 );
             }
+            Swal.fire({
+                title: 'Loading ...',
+                timer: 10,
+                showCancelButton: false,
+                showConfirmButton: false,
+            });
         },
     });
 }
@@ -244,6 +291,8 @@ function containerCheck(num) {
     }
     console.log(containerList);
     containerValue = containerList;
+    $('.select-container').show();
+    $('.select-container').text(`container: ${containerList}`);
 }
 
 function resetMeasurement(measurement, layer) {
@@ -275,17 +324,13 @@ function measurementCheck(num, layer) {
     }
     console.log(measurementList);
     measurementValue = measurementList;
+    $('.select-measurement').text(`measurement: ${measurementList}`);
     resetField(measurementList, layer);
     if (layer === 'application') {
         resetInfo();
     }
 }
 async function resetField(measurement, layer) {
-    console.log('hi', measurement, layer);
-    // if (measurement.length === 0) {
-    // $('.field').html(``);
-    //     return;
-    // }
     let field;
     let setData = { measurement: measurement[0], host: hostValue[0] };
     if (layer === 'system') {
@@ -383,6 +428,8 @@ function infoCheck(num) {
     }
     infoValue = infoList;
     console.log(infoList);
+    $('.select-info').show();
+    $('.select-info').text(`info: ${infoList}`);
 }
 
 function fieldCheck(num) {
@@ -394,12 +441,17 @@ function fieldCheck(num) {
     }
     fieldValue = fieldList;
     console.log(fieldList);
+    $('.select-field').text(`field: ${fieldList}`);
 }
 
-$('#preview').on('click', () => {
+$('#preview').on('click', async () => {
     console.log('preview');
-    showPreview();
+    const check = await checkSelect();
+    if (check) {
+        showPreview();
+    }
 });
+
 async function showPreview() {
     const setData = {
         layer: $('#layer').val(),
@@ -538,6 +590,47 @@ $('#check').on('change', () => {
 });
 
 $('#save').on('click', async () => {
+    $('#save').prop('disabled', true);
+    const check = await checkSelect('save');
+    const title = $('.alert-title').text();
+    const description = $('.alert-description').text();
+    if (title.length > maxText) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Alert title is too long!`,
+        }).then(() => {
+            $('.alert-title').focus();
+        });
+    } else if (title.includes('<') || title.includes('>')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Alert title includes invalid symbol!`,
+        }).then(() => {
+            $('.alert-title').focus();
+        });
+    } else if (description.length > maxText) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Alert description is too long!`,
+        }).then(() => {
+            $('.alert-description').focus();
+        });
+    } else if (description.includes('<') || description.includes('>')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Alert description includes invalid symbol!`,
+        }).then(() => {
+            $('.alert-description').focus();
+        });
+    } else if (check) {
+        saveAlert();
+    }
+});
+async function saveAlert() {
     const data = {
         alertId: alertData.alertId,
         title: $('.alert-title').text(),
@@ -578,10 +671,78 @@ $('#save').on('click', async () => {
                 schedule: result.schedule,
             };
             setAlert(sendData);
-            window.location.href = `/api/1.0/alert-list`;
+            window.location.href = `/alert-list`;
         },
     });
-});
+}
+async function checkSelect(type) {
+    let selectData = [$('#layer').val(), $('#range').val(), $('#interval').val(), $('#aggregate').val()];
+    if (type === 'save') {
+        selectData = [
+            $('#layer').val(),
+            $('#range').val(),
+            $('#interval').val(),
+            $('#aggregate').val(),
+            $('#schedule').val(),
+            $('#check').val(),
+        ];
+    }
+    if ($('#check').val() === 'threshold') {
+        selectData.push($('#thresholdType').val());
+        if (!validator.isNumeric($('#threshold').val())) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Threshold value should be number!',
+            });
+            return 0;
+        }
+    } else if ($('#check').val() === 'alive') {
+        if (!validator.isNumeric($('#deadTime').val())) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Dead time value should be number!',
+            });
+            return 0;
+        }
+        if (+$('#deadTime').val() < 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Dead time value should a positive number!',
+            });
+            return 0;
+        }
+    }
+    let dropdownData = [];
+    if ($('#layer').val() === 'system') {
+        dropdownData = [hostValue, measurementValue, fieldValue];
+    } else if ($('#layer').val() === 'container') {
+        dropdownData = [hostValue, containerValue, measurementValue, fieldValue];
+    } else if ($('#layer').val() === 'application') {
+        dropdownData = [hostValue, measurementValue, fieldValue, infoValue];
+    }
+    const checkDrop = dropdownData.map((item) => item.length);
+    console.log('check', checkDrop);
+    if (selectData.includes('0')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something else should be selected!',
+        });
+        return 0;
+    } else if (checkDrop.includes(0)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something else should be selected!',
+        });
+        return 0;
+    } else {
+        return 1;
+    }
+}
 async function setAlert(sendData) {
     console.log(sendData);
     await $.ajax({

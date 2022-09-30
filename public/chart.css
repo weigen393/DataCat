@@ -173,9 +173,6 @@ option {
   align-items: center;
   height: 0px;
 }
-/* #host {
-  width:200px;
-} */
 .content-parameter{
   margin-top: -350px;
   margin-left:10px;
@@ -201,12 +198,7 @@ option {
   width:auto;
   color:white; 
 }
-/* .select-container{
-  display:none;
-}
-.select-info{
-  display:none;
-} */
+
 p {
   margin:0px;
 }

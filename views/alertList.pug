@@ -27,7 +27,7 @@ block content
                 td.align-middle #{item.description}
                 td.align-middle
                   .button
-                    a.enter(href=`/api/1.0/alerts/${item._id.valueOf()}`) Edit
+                    a.enter(href=`/alerts/${item._id.valueOf()}`) Edit
                     p / 
                     a.delete(href='#', value=`${item._id.valueOf()}`) Delete
             -num=num+1

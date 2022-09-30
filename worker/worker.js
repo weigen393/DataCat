@@ -26,32 +26,24 @@ async function checkAlert() {
                 newTime = nowTime + +settings.schedule * 1000;
                 console.log('new', newTime);
                 if (await redis.zadd('alert', 'CH', newTime.toString(), alertId)) {
-                    console.log('run job 1', alertId);
+                    // console.log('run job 1', alertId);
                     const value = await getData(settings);
                     console.log(value, +settings.threshold);
-                    if (value >= +settings.threshold && settings.status === 'off') {
-                        await changeStatus(alertId, 'on');
-                        await sendAlert(settings, 'alert');
-                    } else if (value <= +settings.threshold && settings.status === 'on') {
-                        await changeStatus(alertId, 'off');
-                        await sendAlert(settings, 'ok');
-                    } else {
-                        console.log('pass');
+                    if (settings.checkType === 'threshold') {
+                        await thresholdCheck(value, settings, alertId);
+                    } else if (settings.checkType === 'alive') {
+                        await aliveCheck(value, settings, alertId);
                     }
                 }
             } else {
                 if (await redis.zadd('alert', 'CH', newTime.toString(), alertId)) {
-                    console.log('run job 1 now');
+                    // console.log('run job 1 now');
                     const value = await getData(settings);
                     console.log(value, +settings.threshold);
-                    if (value >= +settings.threshold && settings.status === 'off') {
-                        await changeStatus(alertId, 'on');
-                        await sendAlert(settings, 'alert');
-                    } else if (value <= +settings.threshold && settings.status === 'on') {
-                        await changeStatus(alertId, 'off');
-                        await sendAlert(settings, 'ok');
-                    } else {
-                        console.log('pass');
+                    if (settings.checkType === 'threshold') {
+                        await thresholdCheck(value, settings, alertId);
+                    } else if (settings.checkType === 'alive') {
+                        await aliveCheck(value, settings, alertId);
                     }
                 }
             }
@@ -70,7 +62,34 @@ async function checkAlert() {
         }
     }
 }
-
+const thresholdCheck = async (value, settings, alertId) => {
+    if (settings.thresholdType === 'above') {
+        if (value >= +settings.threshold && settings.status === 'off') {
+            await changeStatus(alertId, 'on');
+            await sendAlert(settings, 'threshold');
+        } else if (value <= +settings.threshold && settings.status === 'on') {
+            await changeStatus(alertId, 'off');
+            await sendAlert(settings, 'ok');
+        }
+    } else if (settings.thresholdType === 'below') {
+        if (value <= +settings.threshold && settings.status === 'off') {
+            await changeStatus(alertId, 'on');
+            await sendAlert(settings, 'threshold');
+        } else if (value >= +settings.threshold && settings.status === 'on') {
+            await changeStatus(alertId, 'off');
+            await sendAlert(settings, 'ok');
+        }
+    }
+};
+const aliveCheck = async (value, settings, alertId) => {
+    if (value === 0 && settings.status === 'off') {
+        await changeStatus(alertId, 'on');
+        await sendAlert(settings, 'alive');
+    } else if (value === 0 && settings.status === 'on') {
+        await changeStatus(alertId, 'off');
+        await sendAlert(settings, 'ok');
+    }
+};
 checkAlert();
 // mongoDisconnect();
 const getData = async (data) => {
@@ -92,8 +111,9 @@ const getData = async (data) => {
                 } else if (data.thresholdType === 'below') {
                     minmaxFilter = '|> min()';
                 }
-            } else if (data.checkType === 'deadtime') {
+            } else if (data.checkType === 'alive') {
                 console.log('deadtime');
+                data.schedule = data.deadTime;
             }
             const chartData = [];
             let query;
@@ -194,7 +214,13 @@ const changeStatus = async (alertId, data) => {
 const sendAlert = async (data, text) => {
     console.log('send alert here');
     // const message = 'test';
-    let message = `${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
+    let message = '';
+    if (text === 'threshold') {
+        message = `${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
+    }
+    if (text === 'alive') {
+        message = `${data.host[0]} ${data.measurement[0]} haven't response for ${data.deadTime} seconds`;
+    }
     if (text === 'ok') {
         message = `${data.host[0]} ${data.measurement[0]} is ok right now`;
     }
@@ -207,8 +233,6 @@ const sendAlert = async (data, text) => {
     // } catch (e) {
     //     console.log(e);
     // }
-    const id = id;
-    const token = token;
 
     sendDiscord(id, token, message);
 };

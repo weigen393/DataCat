@@ -69,7 +69,7 @@ app.use('/api/' + API_VERSION, [
     require('./server/routes/dashboard_route'),
     require('./server/routes/alert_route'),
     require('./server/routes/notify_route'),
-    require('./server/routes/main_route'),
+    // require('./server/routes/main_route'),
 ]);
 
 // Handle 404

@@ -5,12 +5,12 @@ const maxText = 40;
 Swal.fire({
     title: 'Loading ...',
     width: 600,
-    padding: '3em',
+    padding: '1.5em 3em 3em 3em',
     color: '#716add',
     backdrop: `
       rgba(0,0,123,0.4)
       url("/images/nyan-cat-nyan.gif")
-      left top
+      left bottom
       no-repeat
     `,
     showConfirmButton: false,
@@ -194,7 +194,7 @@ function showNumber(data, num) {
     $(`#number-${num}`).text(lastNum._value.toFixed(2)).attr('class', 'card-number');
 }
 $('.create-chart').on('click', () => {
-    window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/new`;
+    window.location.href = `/dashboards/${dashboardData._id}/charts/new`;
 });
 $('h1').on('blur', async () => {
     console.log('change');
@@ -253,7 +253,7 @@ jQuery(function ($) {
         const method = $(this).attr('name');
         const chartId = $(this).attr('value');
         if (method === 'edit') {
-            window.location.href = `/api/1.0/dashboards/${dashboardData._id}/charts/${chartId}`;
+            window.location.href = `/dashboards/${dashboardData._id}/charts/${chartId}`;
         } else if (method === 'delete') {
             delChart(chartId);
         }
@@ -290,7 +290,7 @@ async function delChart(chartId) {
                     }
                     console.log('result', result);
                     await Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-                    window.location.href = `/api/1.0/dashboards/${dashboardData._id}`;
+                    window.location.href = `/dashboards/${dashboardData._id}`;
                 },
             });
         }

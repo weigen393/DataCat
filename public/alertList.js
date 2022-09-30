@@ -1,5 +1,5 @@
 $('.create-alert').on('click', () => {
-    window.location.href = `/api/1.0/alerts/new`;
+    window.location.href = `/alerts/new`;
 });
 
 jQuery(function ($) {
@@ -33,7 +33,7 @@ jQuery(function ($) {
                             console.log('delete alert success');
                         }
                         await Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-                        window.location.href = `/api/1.0/alert-list`;
+                        window.location.href = `/alert-list`;
                     },
                 });
             }
