@@ -7,8 +7,7 @@ const { mongoConnect, mongoDisconnect } = require('./util/mongodb');
 const { alerts, notifies } = require('./util/mongodb_model');
 const { sendEmail, sendDiscord } = require('./util/notify');
 const axios = require('axios');
-
-let count = 0;
+const setCount = 2;
 async function checkAlert() {
     mongoConnect();
     while (true) {
@@ -20,7 +19,7 @@ async function checkAlert() {
         if (parseInt(timestamp) < nowTime) {
             const set = await getSettings(alertId);
             const settings = set.alerts[0];
-            const userId = set._id;
+            const userId = set.userId;
             console.log(settings);
             let newTime = +timestamp + +settings.schedule * 1000;
             console.log('new', newTime);
@@ -28,7 +27,6 @@ async function checkAlert() {
                 newTime = nowTime + +settings.schedule * 1000;
                 console.log('new', newTime);
                 if (await redis.zadd('alert', 'CH', newTime.toString(), alertId)) {
-                    // console.log('run job 1', alertId);
                     const value = await getData(settings);
                     console.log(value, +settings.threshold);
                     if (settings.checkType === 'threshold') {
@@ -39,7 +37,6 @@ async function checkAlert() {
                 }
             } else {
                 if (await redis.zadd('alert', 'CH', newTime.toString(), alertId)) {
-                    // console.log('run job 1 now');
                     const value = await getData(settings);
                     console.log(value, +settings.threshold);
                     if (settings.checkType === 'threshold') {
@@ -53,19 +50,26 @@ async function checkAlert() {
             if (+timestamp - nowTime < 10 * 1000) {
                 console.log(+timestamp - nowTime);
                 await delay(+timestamp - nowTime);
-                count += 1;
-                console.log('c', count);
             } else {
                 console.log(+timestamp - nowTime);
                 await delay(10 * 1000);
-                count += 1;
-                console.log('c', count);
             }
         }
     }
 }
 const thresholdCheck = async (value, settings, alertId, userId) => {
     if (settings.thresholdType === 'above') {
+        // if (value >= +settings.threshold){
+        //     const getCount = await addCount(alertId,1);
+        //     if(settings.status === 'off' && getCount>=setCount){
+        //         await addCount(alertId,-setCount);
+        //         await changeStatus(alertId, 'on');
+        //         await sendAlert(settings, 'threshold', userId);
+        //     }
+        // } else if (value <= +settings.threshold) && settings.status === 'on') {
+        //     await changeStatus(alertId, 'off');
+        //     await sendAlert(settings, 'ok', userId);
+        // }
         if (value >= +settings.threshold && settings.status === 'off') {
             await changeStatus(alertId, 'on');
             await sendAlert(settings, 'threshold', userId);
@@ -84,6 +88,7 @@ const thresholdCheck = async (value, settings, alertId, userId) => {
     }
 };
 const aliveCheck = async (value, settings, alertId, userId) => {
+    console.log('here', value);
     if (value === 0 && settings.status === 'off') {
         await changeStatus(alertId, 'on');
         await sendAlert(settings, 'alive', userId);
@@ -115,7 +120,7 @@ const getData = async (data) => {
                 }
             } else if (data.checkType === 'alive') {
                 console.log('deadtime');
-                data.schedule = data.deadTime;
+                data.schedule = +data.deadTime - 5;
             }
             const chartData = [];
             let query;
@@ -215,7 +220,6 @@ const changeStatus = async (alertId, data) => {
 };
 const sendAlert = async (data, text, userId) => {
     console.log('send alert here');
-    // const message = 'test';
     let message = '';
     if (text === 'threshold') {
         message = `${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
@@ -227,11 +231,16 @@ const sendAlert = async (data, text, userId) => {
         message = `${data.host[0]} ${data.measurement[0]} is ok right now`;
     }
     console.log(message);
+    console.log('user', userId);
+    const userNotify = await getNotifyList(userId.toString());
 
-    const userNotify = await getNotifyList(userId);
-    console.log('non', userNotify);
-
-    // sendDiscord(id, token, message);
+    for (let i = 0; i < userNotify.length; i++) {
+        if (userNotify[i].sendType === 'email') {
+            sendEmail(userNotify[i].email, message);
+        } else if (userNotify[i].sendType === 'discord') {
+            sendDiscord(userNotify[i].id, userNotify[i].token, message);
+        }
+    }
 };
 const getNotifyList = async (id) => {
     try {
@@ -258,6 +267,7 @@ async function getSettings(alertId) {
                 'alerts._id': alertId,
             },
             {
+                userId: 1,
                 alerts: { $elemMatch: { _id: alertId } },
             }
         );

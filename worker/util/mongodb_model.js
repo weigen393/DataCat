@@ -20,6 +20,7 @@ const alertSchema = new mongoose.Schema({
             threshold: String,
             deadTime: String,
             status: String,
+            // count: Number,
         },
     ],
 });
