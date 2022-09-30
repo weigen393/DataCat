@@ -58,10 +58,24 @@ const alertSchema = new mongoose.Schema({
         },
     ],
 });
+const notifySchema = new mongoose.Schema({
+    userId: String,
+    notify: [
+        {
+            title: String,
+            description: String,
+            sendType: String,
+            email: String,
+            id: String,
+            token: String,
+        },
+    ],
+});
 
 module.exports = {
     users: mongoose.model('users', userSchema),
     roles: mongoose.model('roles', roleSchema),
     dashboards: mongoose.model('dashboards', dashboardSchema),
     alerts: mongoose.model('alerts', alertSchema),
+    notifies: mongoose.model('notifies', notifySchema),
 };

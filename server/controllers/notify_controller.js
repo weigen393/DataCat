@@ -1,26 +1,26 @@
 require('dotenv').config();
 const notify = require('../models/notify_model');
 const saveNotify = async (req, res) => {
-    console.log('saveAlert');
+    console.log('saveNotify');
     console.log(req.body);
-    const data = await alert.saveAlert(req.session.user.id, req.body);
+    const data = await notify.saveNotify(req.session.user.id, req.body);
     res.status(200).send(data);
 };
-const delAlert = async (req, res) => {
-    console.log('deleteAlert');
+const delNotify = async (req, res) => {
+    console.log('deleteNotify');
     console.log(req.body);
-    const data = await alert.delAlert(req.session.user.id, req.body);
+    const data = await notify.delNotify(req.session.user.id, req.body);
     res.status(200).send('delete');
 };
-const editAlert = async (req, res) => {
-    console.log('editAlert');
+const editNotify = async (req, res) => {
+    console.log('editNotify');
     console.log(req.query);
-    const data = await alert.getAlertSettings(req.session.user.id, req.query);
+    const data = await notify.getNotifySettings(req.session.user.id, req.query);
     res.status(200).send(data);
 };
 
 module.exports = {
-    saveAlert,
-    delAlert,
-    editAlert,
+    saveNotify,
+    delNotify,
+    editNotify,
 };

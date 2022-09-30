@@ -40,7 +40,7 @@ $('.signUp').on('click', async () => {
                 if (result.status === 200) {
                     console.log('success');
                 }
-                window.location.href = `/api/1.0/dashboard-list`;
+                window.location.href = `/dashboard-list`;
             },
         });
     }
@@ -72,7 +72,7 @@ $('.signIn').on('click', async () => {
                 if (result.status === 200) {
                     console.log('success');
                 }
-                window.location.href = `/api/1.0/dashboard-list`;
+                window.location.href = `/dashboard-list`;
             },
         });
     }

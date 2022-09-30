@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { users, roles, alerts } = require('./mongodb_model');
+const { users, roles, alerts, notifies } = require('./mongodb_model');
 const bcrypt = require('bcrypt');
 
 const emailCheck = async (email) => {
@@ -31,9 +31,13 @@ const signUp = async (data) => {
             email: data.email,
             roleId: roleId,
         };
-        const query = await alerts.create({
+        const queryAlerts = await alerts.create({
             userId: id,
             alerts: [],
+        });
+        const queryNotify = await notifies.create({
+            userId: id,
+            notify: [],
         });
         return sendData;
     } catch (e) {

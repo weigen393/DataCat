@@ -4,7 +4,7 @@ const bucketData = process.env.INFLUX_BUCKET_DATA;
 const bucketApp = process.env.INFLUX_BUCKET_APP;
 const redis = require('./util/redis');
 const { mongoConnect, mongoDisconnect } = require('./util/mongodb');
-const { alerts } = require('./util/mongodb_model');
+const { alerts, notifies } = require('./util/mongodb_model');
 const { sendEmail, sendDiscord } = require('./util/notify');
 const axios = require('axios');
 
@@ -18,7 +18,9 @@ async function checkAlert() {
         console.log(alertId);
         console.log(timestamp);
         if (parseInt(timestamp) < nowTime) {
-            const settings = await getSettings(alertId);
+            const set = await getSettings(alertId);
+            const settings = set.alerts[0];
+            const userId = set._id;
             console.log(settings);
             let newTime = +timestamp + +settings.schedule * 1000;
             console.log('new', newTime);
@@ -30,9 +32,9 @@ async function checkAlert() {
                     const value = await getData(settings);
                     console.log(value, +settings.threshold);
                     if (settings.checkType === 'threshold') {
-                        await thresholdCheck(value, settings, alertId);
+                        await thresholdCheck(value, settings, alertId, userId);
                     } else if (settings.checkType === 'alive') {
-                        await aliveCheck(value, settings, alertId);
+                        await aliveCheck(value, settings, alertId, userId);
                     }
                 }
             } else {
@@ -41,9 +43,9 @@ async function checkAlert() {
                     const value = await getData(settings);
                     console.log(value, +settings.threshold);
                     if (settings.checkType === 'threshold') {
-                        await thresholdCheck(value, settings, alertId);
+                        await thresholdCheck(value, settings, alertId, userId);
                     } else if (settings.checkType === 'alive') {
-                        await aliveCheck(value, settings, alertId);
+                        await aliveCheck(value, settings, alertId, userId);
                     }
                 }
             }
@@ -62,32 +64,32 @@ async function checkAlert() {
         }
     }
 }
-const thresholdCheck = async (value, settings, alertId) => {
+const thresholdCheck = async (value, settings, alertId, userId) => {
     if (settings.thresholdType === 'above') {
         if (value >= +settings.threshold && settings.status === 'off') {
             await changeStatus(alertId, 'on');
-            await sendAlert(settings, 'threshold');
+            await sendAlert(settings, 'threshold', userId);
         } else if (value <= +settings.threshold && settings.status === 'on') {
             await changeStatus(alertId, 'off');
-            await sendAlert(settings, 'ok');
+            await sendAlert(settings, 'ok', userId);
         }
     } else if (settings.thresholdType === 'below') {
         if (value <= +settings.threshold && settings.status === 'off') {
             await changeStatus(alertId, 'on');
-            await sendAlert(settings, 'threshold');
+            await sendAlert(settings, 'threshold', userId);
         } else if (value >= +settings.threshold && settings.status === 'on') {
             await changeStatus(alertId, 'off');
-            await sendAlert(settings, 'ok');
+            await sendAlert(settings, 'ok', userId);
         }
     }
 };
-const aliveCheck = async (value, settings, alertId) => {
+const aliveCheck = async (value, settings, alertId, userId) => {
     if (value === 0 && settings.status === 'off') {
         await changeStatus(alertId, 'on');
-        await sendAlert(settings, 'alive');
+        await sendAlert(settings, 'alive', userId);
     } else if (value === 0 && settings.status === 'on') {
         await changeStatus(alertId, 'off');
-        await sendAlert(settings, 'ok');
+        await sendAlert(settings, 'ok', userId);
     }
 };
 checkAlert();
@@ -211,7 +213,7 @@ const changeStatus = async (alertId, data) => {
         return e;
     }
 };
-const sendAlert = async (data, text) => {
+const sendAlert = async (data, text, userId) => {
     console.log('send alert here');
     // const message = 'test';
     let message = '';
@@ -225,16 +227,23 @@ const sendAlert = async (data, text) => {
         message = `${data.host[0]} ${data.measurement[0]} is ok right now`;
     }
     console.log(message);
-    // const msg = { id: 1, name: 'datacat', content: message };
-    // redis.publish('mychannel', JSON.stringify(msg));
-    // const sendUrl = 'http://localhost:3000/streaming';
-    // try {
-    //     const send = await axios.get(sendUrl, { params: { data: message } });
-    // } catch (e) {
-    //     console.log(e);
-    // }
 
-    sendDiscord(id, token, message);
+    const userNotify = await getNotifyList(userId);
+    console.log('non', userNotify);
+
+    // sendDiscord(id, token, message);
+};
+const getNotifyList = async (id) => {
+    try {
+        const query = await notifies.find({ userId: id }, 'notify');
+        if (!query[0]) {
+            return '';
+        }
+        return query[0].notify;
+    } catch (e) {
+        console.log(e.message);
+        return e;
+    }
 };
 function delay(n) {
     return new Promise(function (resolve) {
@@ -253,7 +262,7 @@ async function getSettings(alertId) {
             }
         );
         console.log(query);
-        return query[0].alerts[0];
+        return query[0];
     } catch (e) {
         console.log(e);
         return e;

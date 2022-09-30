@@ -1,7 +1,7 @@
 const alertData = data;
 const systemMap = {
     cpu: ['usage_system'],
-    disk: ['used', 'used_percent'],
+    // disk: ['used', 'used_percent'],
     mem: ['used', 'used_percent', 'available', 'available_percent', 'total'],
     net: ['bytes_recv', 'bytes_sent', 'err_in', 'err_out'],
     processes: ['running', 'sleeping', 'stopped', 'idle', 'total'],

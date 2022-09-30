@@ -7,41 +7,25 @@ block content
       .container-fluid
         .row.mb-2
           //- .col-sm-6
-          h1.dashboard-title Dashboard
+          h1.alert-title(contenteditable='true') Notify title
+            
+          h1.alert-description(contenteditable='true') Description
           //- a.nav-link(data-widget='pushmenu' href='#' role='button' )  expand 
     .content
-      a.create-dashboard(href="#") + Create Dashboard
-      .dashboard-list
-        table.table.table-dark
-          thead.list-title.table-dark
-            tr
-              th(scope='col' style='background-color: #0c218a') #
-              th(scope='col' style='background-color: #0c218a;width: 25vw') Title
-              th(scope='col' style='background-color: #0c218a;width: 35vw') Description
-              th(scope='col' style='background-color: #0c218a;width: 25vw') Enter / Delete
-          -var num =1;
-          each item in list
-            tbody
-              tr
-                td.align-middle(scope='row') #{num}
-                td.align-middle #{item.title}
-                td.align-middle #{item.description}
-                td.align-middle
-                  .button
-                    a.enter(href=`/api/1.0/dashboards/${item._id.valueOf()}`) Enter
-                    p / 
-                    a.delete(href='#', value=`${item._id.valueOf()}`) Delete
-            -num=num+1
-      //- .dashboard-list
-      //-   each item in list
-      //-     li.dashboard         
-      //-       p.title #{item.title}
-      //-       p.description #{item.description}
-      //-       a.enter(href=`/api/1.0/dashboards/${item._id.valueOf()}`) Enter
-      //-       br
-      //-       a.delete(href='#', value=`${item._id.valueOf()}`) Delete
+      .line-wrap
+        p.text Notify Type:
+        select.form-select.form-select-sm(id='notifyType')
+            option(selected value='0') Select Notify Type
+            option(value='email') email
+            option(value='discord') discord
+      .notify-text
+    .alert-button
+      a.back-chart(href="/notify-list",id='back') BACK      
+      a.save-chart(href="#",id='save') SAVE
 
 block js
   //- script(src="sweetalert2.all.min.js")
   //- script(src="sweetalert2.min.js")
+  script(type='text/javascript').
+    let data = !{JSON.stringify(notify)}
   script(src="/public/notifyPage.js") 

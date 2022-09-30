@@ -1,6 +1,7 @@
 require('dotenv').config();
 const dashboard = require('../models/dashboard_model');
 const alert = require('../models/alert_model');
+const notify = require('../models/notify_model');
 
 const getHomePage = async (req, res) => {
     return res.render('index');
@@ -61,22 +62,22 @@ const getAlertPage = async (req, res) => {
 };
 const getNotifyList = async (req, res) => {
     console.log('id', req.session.user.id);
-    // const list = await alert.getNotifyList(req.session.user.id);
-    // console.log(list);
-    return res.render('notifyList', { userId: req.session.user.id, userName: req.session.user.name });
+    const list = await notify.getNotifyList(req.session.user.id);
+    console.log(list);
+    return res.render('notifyList', { list: list, userId: req.session.user.id, userName: req.session.user.name });
 };
 const getNotifyPage = async (req, res) => {
-    if (req.params.alertId === 'new') {
+    if (req.params.notifyId === 'new') {
         return res.render('notifyPage', {
             userName: req.session.user.name,
             userId: req.session.user.id,
-            alerts: {},
+            notify: {},
         });
     } else {
         return res.render('notifyPage', {
             userName: req.session.user.name,
             userId: req.session.user.id,
-            alerts: { alertId: req.params.alertId },
+            notify: { notifyId: req.params.notifyId },
         });
     }
 };
