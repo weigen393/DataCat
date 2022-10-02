@@ -298,3 +298,16 @@ async function delChart(chartId) {
 }
 $('.sidebar-dashboard').css('background-color', 'rgba(255, 255, 255, 0.1)');
 $('.sidebar-dashboard').css('color', '#fff');
+
+let sse = new EventSource('/stream');
+sse.onmessage = function (e) {
+    const msg = e.data.slice(1, -1);
+    if (msg.split(',')[0] === 'Warning') {
+        Swal.fire({ title: 'Warning', text: `${msg.split(',')[1]}`, icon: 'warning' });
+    } else if (msg.split(',')[0] === 'Notice') {
+        Swal.fire({ title: 'Notice', text: `${msg.split(',')[1]}`, icon: 'success' });
+    } else {
+        Swal.fire(`${msg.split(',')[0]}`);
+    }
+    console.log(e.data);
+};

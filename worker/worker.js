@@ -211,13 +211,13 @@ const sendAlert = async (data, text, userId) => {
     console.log('send alert here');
     let message = '';
     if (text === 'threshold') {
-        message = `${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
+        message = `Warning,${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
     }
     if (text === 'alive') {
-        message = `${data.host[0]} ${data.measurement[0]} haven't response for ${data.deadTime} seconds`;
+        message = `Warning,${data.host[0]} ${data.measurement[0]} haven't response for ${data.deadTime} seconds`;
     }
     if (text === 'ok') {
-        message = `${data.host[0]} ${data.measurement[0]} is ok right now`;
+        message = `Notice,${data.host[0]} ${data.measurement[0]} is ok right now`;
     }
     console.log(message);
     console.log('user', userId);
@@ -230,6 +230,7 @@ const sendAlert = async (data, text, userId) => {
             sendDiscord(userNotify[i].id, userNotify[i].token, message);
         }
     }
+    redis.publish('mychannel', JSON.stringify(message));
 };
 const getNotifyList = async (id) => {
     try {
