@@ -78,8 +78,13 @@ const signIn = async (req, res) => {
     req.session.user = data;
     res.status(200).send(data);
 };
-
+const logout = async (req, res) => {
+    console.log('logout');
+    req.session.destroy();
+    res.redirect('/');
+};
 module.exports = {
     signUp,
     signIn,
+    logout,
 };

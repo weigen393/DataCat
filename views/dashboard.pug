@@ -10,7 +10,7 @@ block content
           .title-1
             h1.dashboard-title(contenteditable='true') #{dashboards.title}
             button.btn.btn-tool(type="button")
-              span.material-icons.md-light(href="#") edit
+              //- span.material-icons.md-light(href="#") edit
           //- a.nav-link(data-widget='pushmenu' href='#' role='button' )  expand                     
           br
           h1.dashboard-description(contenteditable='true') #{dashboards.description}            
@@ -28,10 +28,10 @@ block content
                 //- p % 
                 .btn-group           
                   button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='edit')
-                    span.material-icons settings
+                    img(src='../images/settings.png', style='width:24px;height:24px;')
                         
                   button.btn.btn-tool(type="button",value=`${item._id.valueOf()}`,name='delete')
-                    span.material-icons delete
+                    img(src='../images/trash-bin.png', style='width:30px;height:30px;')
               .icon
                 i.ion.ion-bag
               a.small-box-footer #{item.title}
@@ -56,10 +56,12 @@ block content
 
                       .card-tools
                         button.btn.btn-tool(type="button",value=`${dashboards.charts[i]._id.valueOf()}`,name='edit')
-                          span.material-icons settings
+                          img(src='../images/settings.png', style='width:24px;height:24px;')
+                          //- span.material-icons settings
                         
                         button.btn.btn-tool(type="button",value=`${dashboards.charts[i]._id.valueOf()}`,name='delete')
-                          span.material-icons delete
+                          img(src='../images/trash-bin.png', style='width:30px;height:30px;')
+                          //- span.material-icons delete
                     
                     .card-body(id=`line-chart-${i}`, style="height: 300px")
                   -count= count+1              
@@ -78,10 +80,12 @@ block content
 
                       .card-tools
                         button.btn.btn-tool(type="button",value=`${dashboards.charts[i]._id.valueOf()}`,name='edit')
-                          span.material-icons settings
+                          img(src='../images/settings.png', style='width:24px;height:24px;')
+                          //- span.material-icons settings
                         
                         button.btn.btn-tool(type="button",value=`${dashboards.charts[i]._id.valueOf()}`,name='delete')
-                          span.material-icons delete
+                          img(src='../images/trash-bin.png', style='width:30px;height:30px;')
+                          //- span.material-icons delete
                     
                     .card-body(id=`line-chart-${i}`, style="height: 300px")
                   -count= count+1              

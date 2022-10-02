@@ -144,9 +144,9 @@ async function validation(data) {
 // import * as datGui from 'https://cdn.skypack.dev/dat.gui@0.7.7';
 
 const state = {
-    fps: 40,
+    fps: 20,
     color: '#00d6ff',
-    charset: '0123456789ABCDEF',
+    charset: '000001111123456789ABCDEF',
 };
 
 // const gui = new datGui.GUI();
@@ -176,8 +176,9 @@ const draw = () => {
 
     for (let i = 0; i < p.length; i++) {
         let v = p[i];
-        ctx.fillText(random(state.charset), i * 10, v);
-        p[i] = v >= h || v >= 10000 * Math.random() ? 0 : v + 10;
+        ctx.font = '20px  Arial';
+        ctx.fillText(random(state.charset), i * 20, v);
+        p[i] = v >= h || v >= 20000 * Math.random() ? 0 : v + 20;
     }
 };
 

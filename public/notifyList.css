@@ -42,6 +42,7 @@ body {
   border-width: 2px;
   border-color: white;
   width: 400px;
+  margin-right:10px;
 }
 
 .list-title {  
@@ -64,4 +65,11 @@ p {
 }
 .button{
   display: flex;
+}
+.content {
+  display:flex;
+  justify-content: right;
+}
+.alert-list {
+  padding:0px 15px;
 }

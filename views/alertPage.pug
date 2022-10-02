@@ -68,7 +68,11 @@ block content
           option(value='max') max
           option(value='mean') mean
           option(value='sum') sum
-      br    
+      br  
+    .alert-button
+      a.back-chart(href="/alert-list",id='back') BACK
+      a.preview-chart(href="#",id='preview') PREVIEW
+      a.save-chart(href="#",id='save') SAVE
     block chart   
         include chart    
 
@@ -89,10 +93,7 @@ block content
           option(value='threshold') threshold check
           option(value='alive') alive check
     .check-text
-    .alert-button
-      a.back-chart(href="/alert-list",id='back') BACK
-      a.preview-chart(href="#",id='preview') PREVIEW
-      a.save-chart(href="#",id='save') SAVE
+    
       
 
     //- a.create-chart(href="#",id='save') SAVE

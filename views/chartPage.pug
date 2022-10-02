@@ -77,13 +77,13 @@ block content
           option(value='sum') sum
       br
       
-
-    block chart   
-        include chart    
     .chart-button
       a.back-chart(href=`/dashboards/${dashboards.dashboardId}`,id='back') BACK
       a.preview-chart(href="#",id='preview') PREVIEW
       a.save-chart(href="#",id='save') SAVE
+    block chart   
+        include chart    
+    
 
 block js
   script(type='text/javascript').

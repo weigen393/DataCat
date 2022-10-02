@@ -11,35 +11,35 @@ block content
           //- a.nav-link(data-widget='pushmenu' href='#' role='button' )  expand 
     .content
       a.create-dashboard(href="#") + Create Dashboard
-      .dashboard-list
-        table.table.table-dark
-          thead.list-title.table-dark
+    .dashboard-list
+      table.table.table-dark
+        thead.list-title.table-dark
+          tr
+            th(scope='col' style='background-color: #0c218a') #
+            th(scope='col' style='background-color: #0c218a;width: 25vw') Title
+            th(scope='col' style='background-color: #0c218a;width: 35vw') Description
+            th(scope='col' style='background-color: #0c218a;width: 25vw') Enter / Delete
+        -var num =1;
+        each item in list
+          tbody
             tr
-              th(scope='col' style='background-color: #0c218a') #
-              th(scope='col' style='background-color: #0c218a;width: 25vw') Title
-              th(scope='col' style='background-color: #0c218a;width: 35vw') Description
-              th(scope='col' style='background-color: #0c218a;width: 25vw') Enter / Delete
-          -var num =1;
-          each item in list
-            tbody
-              tr
-                td.align-middle(scope='row') #{num}
-                td.align-middle #{item.title}
-                td.align-middle #{item.description}
-                td.align-middle
-                  .button
-                    a.enter(href=`/dashboards/${item._id.valueOf()}`) Enter
-                    p / 
-                    a.delete(href='#', value=`${item._id.valueOf()}`) Delete
-            -num=num+1
-      //- .dashboard-list
-      //-   each item in list
-      //-     li.dashboard         
-      //-       p.title #{item.title}
-      //-       p.description #{item.description}
-      //-       a.enter(href=`/api/1.0/dashboards/${item._id.valueOf()}`) Enter
-      //-       br
-      //-       a.delete(href='#', value=`${item._id.valueOf()}`) Delete
+              td.align-middle(scope='row') #{num}
+              td.align-middle #{item.title}
+              td.align-middle #{item.description}
+              td.align-middle
+                .button
+                  a.enter(href=`/dashboards/${item._id.valueOf()}`) Enter
+                  p / 
+                  a.delete(href='#', value=`${item._id.valueOf()}`) Delete
+          -num=num+1
+    //- .dashboard-list
+    //-   each item in list
+    //-     li.dashboard         
+    //-       p.title #{item.title}
+    //-       p.description #{item.description}
+    //-       a.enter(href=`/api/1.0/dashboards/${item._id.valueOf()}`) Enter
+    //-       br
+    //-       a.delete(href='#', value=`${item._id.valueOf()}`) Delete
 
 block js
   //- script(src="sweetalert2.all.min.js")

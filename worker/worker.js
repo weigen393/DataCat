@@ -59,17 +59,6 @@ async function checkAlert() {
 }
 const thresholdCheck = async (value, settings, alertId, userId) => {
     if (settings.thresholdType === 'above') {
-        // if (value >= +settings.threshold){
-        //     const getCount = await addCount(alertId,1);
-        //     if(settings.status === 'off' && getCount>=setCount){
-        //         await addCount(alertId,-setCount);
-        //         await changeStatus(alertId, 'on');
-        //         await sendAlert(settings, 'threshold', userId);
-        //     }
-        // } else if (value <= +settings.threshold) && settings.status === 'on') {
-        //     await changeStatus(alertId, 'off');
-        //     await sendAlert(settings, 'ok', userId);
-        // }
         if (value >= +settings.threshold && settings.status === 'off') {
             await changeStatus(alertId, 'on');
             await sendAlert(settings, 'threshold', userId);
