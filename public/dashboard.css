@@ -79,14 +79,16 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 45vw;
+  width: 40vw;
+  margin-right:0.5vw;
 }
 .graph-wrapper-right {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 45vw;
+  width: 40vw;
+  margin-left:0.5vw;
 }
 .card {
   height: 40vh;
@@ -95,7 +97,7 @@ body {
   background-color: #130d40;
   /* justify-content: center;
   align-items: center; */
-  margin:20px;
+  margin:20px 0px;
   /* display: flex; */
   border: 3px solid #007bff;
 }
