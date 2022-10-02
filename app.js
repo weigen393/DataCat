@@ -24,6 +24,9 @@ app.use(
 
 app.get('/stream', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('X-Accel-Buffering', 'no');
     test = res;
 });
 
