@@ -22,6 +22,11 @@ app.use(
     })
 );
 
+app.get('/stream', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    test = res;
+});
+
 redis.subscribe('mychannel', (e) => {
     console.log('subscribe channel: mychannel');
 });
@@ -33,11 +38,6 @@ redis.on('message', (channel, message) => {
 
 redis.on('error', (err) => {
     console.log('response err:' + err);
-});
-
-app.get('/stream', (req, res) => {
-    res.setHeader('Content-Type', 'text/event-stream');
-    test = res;
 });
 
 //API routes
