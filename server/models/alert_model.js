@@ -1,7 +1,15 @@
 require('dotenv').config();
 const { alerts, dashboards, roles } = require('./mongodb_model');
 const { queryApi } = require('../../util/influxdb');
-const redis = require('../../util/redis');
+// const redis = require('../../util/redis');
+const Redis = require('ioredis');
+const { REDIS_HOST, REDIS_PORT, REDIS_USER, REDIS_PASSWORD } = process.env;
+const redis = new Redis({
+    port: REDIS_PORT,
+    host: REDIS_HOST,
+    username: REDIS_USER,
+    password: REDIS_PASSWORD,
+});
 
 const getAlertList = async (id) => {
     try {

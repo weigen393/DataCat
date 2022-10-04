@@ -211,7 +211,7 @@ const sendAlert = async (data, text, userId) => {
     console.log('send alert here');
     let message = '';
     if (text === 'threshold') {
-        message = `Warning,${data.host[0]} ${data.measurement[0]} is ${data.thresholdType} ${data.threshold}`;
+        message = `Warning,${data.host[0]} ${data.measurement[0]} ${data.field[0]} is ${data.thresholdType} ${data.threshold}`;
     }
     if (text === 'alive') {
         message = `Warning,${data.host[0]} ${data.measurement[0]} haven't response for ${data.deadTime} seconds`;

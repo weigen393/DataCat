@@ -36,7 +36,10 @@ redis.subscribe('mychannel', (e) => {
 
 redis.on('message', (channel, message) => {
     console.log(`channel: ${channel},message: ${message}`);
-    test.write('data: ' + `${message}\n\n`);
+    console.log('test', test);
+    if (test) {
+        test.write('data: ' + `${message}\n\n`);
+    }
 });
 
 redis.on('error', (err) => {
