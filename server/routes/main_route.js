@@ -10,13 +10,13 @@ const {
     getNotifyList,
     getNotifyPage,
 } = require('../controllers/page');
-
+const { authSession } = require('../../util/auth');
 router.get('/', getHomePage);
-router.get('/dashboard-list', getListPage);
-router.get('/dashboards/:dashboardId', getDashboardPage);
-router.get('/dashboards/:dashboardId/charts/:chartId', getChartPage);
-router.get('/alert-list', getAlertList);
-router.get('/alerts/:alertId', getAlertPage);
-router.get('/notify-list', getNotifyList);
-router.get('/notify/:notifyId', getNotifyPage);
+router.get('/dashboard-list', authSession, getListPage);
+router.get('/dashboards/:dashboardId', authSession, getDashboardPage);
+router.get('/dashboards/:dashboardId/charts/:chartId', authSession, getChartPage);
+router.get('/alert-list', authSession, getAlertList);
+router.get('/alerts/:alertId', authSession, getAlertPage);
+router.get('/notify-list', authSession, getNotifyList);
+router.get('/notify/:notifyId', authSession, getNotifyPage);
 module.exports = router;

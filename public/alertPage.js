@@ -94,12 +94,17 @@ async function resetAlert(alertId) {
                 $(`input[data-value="${setData.field[0]}"]`).attr('checked', true);
                 $(`input[data-value="${setData.measurement[0]}"]`).attr('checked', true);
                 $(`input[data-value="${setData.info[0]}"]`).attr('checked', true);
-                // if(setData.)
-                if (setData.thresholdType !== undefined) {
+                if (setData.checkType === 'alive') {
+                    $('.check-text').html(`<p class='text'>When not reporting for</p>
+                                <input id='deadTime'>s
+                    `);
+                    $('#deadTime').attr('value', setData.deadTime);
+                }
+                if (setData.checkType === 'threshold') {
                     $('.check-text').html(`<p class='text'>When value is</p>
                                 <select class="form-select form-select-sm" id='thresholdType'>
                                   <option value='above' selected>above</option>
-                                  <option value='below'>below</option>        
+                                  <option value='below'>below</option>
                                 </select>
                                 <input id='threshold' placeholder='value'>`);
                     $(`select option[value=${setData.thresholdType}]`).attr('selected', true);

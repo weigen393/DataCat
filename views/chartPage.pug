@@ -10,7 +10,11 @@ block content
             //- .col-sm-6
             h1.dashboard-title #{dashboards.title} 
             //- a.nav-link(data-widget='pushmenu' href='#' role='button' )  expand
-            h1.chart-title(contenteditable='true') Chart title
+            .title-1
+              input.title-input
+              h1.chart-title Chart title
+              button.btn.btn-tool.edit-title-btn(type="button")
+                img(src='/images/edit.png', style='width:30px;height:30px;')
       .content-show
         p.select-host  
         p.select-container 

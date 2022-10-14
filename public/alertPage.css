@@ -14,7 +14,7 @@ body {
   /* display: flex;
   flex-direction: column; */
   
-  background-color: #01175e;
+  background-color: #0c062b;
   /* font-family: 'ArcadeClassic', sans-serif; */
   font-family: 'Joystix', sans-serif;
   /* min-height: 100%; */
@@ -175,7 +175,7 @@ option {
 }
 .line-wrap {
   display: flex;
-  height: 5vh;
+  /* height: 5vh; */
   padding: 10px;
 }
 #schedule {
@@ -192,7 +192,7 @@ option {
 }
 .check-text {
   display: flex;
-  height: 5vh;
+  /* height: 5vh; */
   padding: 10px 0px;
   color: white;
   font-size: large;

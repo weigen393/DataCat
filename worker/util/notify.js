@@ -5,7 +5,8 @@ const mg = mailgun({ apiKey: process.env.API_KEY, domain: DOMAIN });
 
 const { WebhookClient } = require('discord.js');
 
-const sendEmail = async (email, message) => {
+const sendEmail = async (notify, message) => {
+    const email = notify.email;
     const data = {
         from: 'dataCat <meow@datacat.cloud>',
         to: email,
@@ -13,7 +14,7 @@ const sendEmail = async (email, message) => {
         html: `<h1>${message}</h1>`,
     };
     try {
-        // await mg.messages().send(data);
+        // mg.messages().send(data);
         console.log(email);
         console.log('send to mail');
     } catch (e) {
@@ -21,13 +22,15 @@ const sendEmail = async (email, message) => {
         return e;
     }
 };
-const sendDiscord = async (id, token, message) => {
+const sendDiscord = async (notify, message) => {
+    const id = notify.id;
+    const token = notify.token;
     const webhookClient = new WebhookClient({
         id: id,
         token: token,
     });
     try {
-        await webhookClient.send({
+        webhookClient.send({
             content: message,
             username: 'datacat',
         });

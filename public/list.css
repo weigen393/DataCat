@@ -13,7 +13,7 @@ body {
   height: 100%; */
   /* display: flex;
   flex-direction: column; */
-  background-color: #01175e;
+  background-color: #0c062b;
   /* font-family: 'ArcadeClassic', sans-serif; */
   font-family: 'Joystix', sans-serif;
   /* min-height: 100%; */
@@ -57,6 +57,7 @@ body {
 tbody {
   font-size: 1.3rem;
   height: 100px;
+  /* width:75vw; */
   padding: auto;
   vertical-align: center;  
 }
@@ -72,4 +73,9 @@ p {
 }
 .dashboard-list {
   padding:0px 15px;
+}
+.table {
+  /* width:70vw; */
+  table-layout:fixed; 
+  word-break:break-all; word-wrap:break-all;
 }

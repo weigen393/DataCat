@@ -14,7 +14,7 @@ body {
   /* display: flex;
   flex-direction: column; */
   
-  background-color: #01175e;
+  background-color: #0c062b;
   /* font-family: 'ArcadeClassic', sans-serif; */
   font-family: 'Joystix', sans-serif;
   /* min-height: 100%; */
@@ -201,4 +201,18 @@ option {
 
 p {
   margin:0px;
+}
+.edit-title-btn {
+  margin: 0.4rem 0 0 1.5rem;
+}
+.title-input {
+  display: none;
+  font-size: 1.8rem;
+  height:2rem;
+  margin-top: 10px;
+  width:650px;
+  /* z-index:2; */
+}
+.title-1 {
+  display: flex;
 }

@@ -141,6 +141,35 @@ async function validation(data) {
     }
     return 1;
 }
+const pictureMap = [
+    '/images/dataCat_laptop.png',
+    '/images/dataCat.png',
+    '/images/dataCat_1.png',
+    '/images/dataCat_2.png',
+    '/images/dataCat_hat.png',
+    '/images/dataCat_painter.png',
+    '/images/dataCat_sherlock.png',
+    '/images/dataCat_original.png',
+    '/images/dataCat_book.png',
+];
+let picturePointer = 0;
+$('.set-picture-left').on('click', () => {
+    console.log($('.set-picture-left').val());
+    picturePointer -= 1;
+    if (picturePointer < 0) {
+        picturePointer = pictureMap.length - 1;
+    }
+    $('.dataCat').attr('src', pictureMap[picturePointer]);
+});
+$('.set-picture-right').on('click', () => {
+    console.log($('.set-picture-right').val());
+    picturePointer += 1;
+    if (picturePointer > pictureMap.length - 1) {
+        picturePointer = 0;
+    }
+    $('.dataCat').attr('src', pictureMap[picturePointer]);
+});
+
 // import * as datGui from 'https://cdn.skypack.dev/dat.gui@0.7.7';
 
 const state = {

@@ -96,6 +96,7 @@ const getDashboardTitle = async (userId, dashboardId) => {
 };
 const updateDashboardText = async (dashboardId, text) => {
     try {
+        console.log('here');
         const query = await dashboards.findOneAndUpdate(
             {
                 'dashboards._id': dashboardId,
@@ -105,6 +106,7 @@ const updateDashboardText = async (dashboardId, text) => {
                 'dashboards.$.description': text.description,
             }
         );
+        console.log('q', query);
         return query;
     } catch (e) {
         console.log(e.message);

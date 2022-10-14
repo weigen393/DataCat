@@ -8,14 +8,20 @@ block content
         .row.mb-2
           //- .col-sm-6
           .title-1
-            h1.dashboard-title(contenteditable='true') #{dashboards.title}
-            button.btn.btn-tool(type="button")
+            input.title-input
+            h1.dashboard-title #{dashboards.title}
+            button.btn.btn-tool.edit-title-btn(type="button")
+              img(src='/images/edit.png', style='width:30px;height:30px;')
               //- span.material-icons.md-light(href="#") edit
-          //- a.nav-link(data-widget='pushmenu' href='#' role='button' )  expand                     
+          //- a.nav-link(data-widget='pushmenu' href='#' role='button' )  expand                  
           br
-          h1.dashboard-description(contenteditable='true') #{dashboards.description}            
+          .description
+            input.description-input
+            h1.dashboard-description #{dashboards.description}
+            button.btn.btn-tool.edit-description-btn(type="button")
+                img(src='/images/edit.png', style='width:30px;height:30px;')        
     .content
-      a.create-chart(href="#") + Add Chart   
+      a.create-chart(href="#") + Add Chart
 
     if dashboards.charts.length!==0
       -var num =0;

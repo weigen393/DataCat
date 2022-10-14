@@ -14,7 +14,7 @@ body {
   /* display: flex;
   flex-direction: column; */
   
-  background-color: #01175e;
+  background-color: #0c062b;
   /* font-family: 'ArcadeClassic', sans-serif; */
   font-family: 'Joystix', sans-serif;
   /* min-height: 100%; */
@@ -31,7 +31,7 @@ body {
 .dashboard-title {
   color: white;
   font-size: xxx-large;
-  
+  /* z-index:1; */
   /* width: 50%; */
 
 }
@@ -147,3 +147,28 @@ body {
   background:url('../images/settings-modified.png');
   
 } */
+.edit-title-btn {
+  margin: -0.6rem 0 0 0;
+}
+.title-input {
+  display: none;
+  font-size: 1.8rem;
+  height:2rem;
+  margin-bottom: 12.5px;
+  width:530px;
+  /* z-index:2; */
+}
+.description{
+  display: flex;
+}
+.edit-description-btn {
+  margin: -0.6rem 0 0 0;
+}
+.description-input {
+  display: none;
+  font-size: 1.8rem;
+  height:2rem;
+  margin-bottom: 12.5px;
+  width:1000px;
+  /* z-index:2; */
+}

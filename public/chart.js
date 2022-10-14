@@ -678,3 +678,20 @@ async function checkSelect() {
 }
 $('.sidebar-dashboard').css('background-color', 'rgba(255, 255, 255, 0.1)');
 $('.sidebar-dashboard').css('color', '#fff');
+
+$('.edit-title-btn').on('click', () => {
+    console.log('edit');
+    $('.chart-title').css('display', 'none');
+    $('.title-input').css('display', 'block');
+    $('.title-input').attr('value', $('.chart-title').text());
+    $('.edit-title-btn').css('visibility', 'hidden');
+    $('.title-input').trigger('focus');
+    $('.title-input').on('blur', async () => {
+        console.log('change');
+        $('.title-input').css('display', 'none');
+        $('.chart-title').css('display', 'block');
+
+        $('.edit-title-btn').css('visibility', 'visible');
+        $('.chart-title').text($('.title-input').val());
+    });
+});

@@ -8,12 +8,12 @@ const {
     editChart,
     getAppField,
 } = require('../controllers/chart_controller');
-
-router.get('/chart/host', getHost);
-router.get('/chart/container', getContainer);
-router.get('/chart/show', getChart);
-router.get('/chart/appField', getAppField);
-router.post('/chart/save', saveChart);
-router.post('/chart/delete', delChart);
-router.get('/chart/edit', editChart);
+const { authSession } = require('../../util/auth');
+router.get('/chart/host', authSession, getHost);
+router.get('/chart/container', authSession, getContainer);
+router.get('/chart/show', authSession, getChart);
+router.get('/chart/appField', authSession, getAppField);
+router.post('/chart/save', authSession, saveChart);
+router.post('/chart/delete', authSession, delChart);
+router.get('/chart/edit', authSession, editChart);
 module.exports = router;

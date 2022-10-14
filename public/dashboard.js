@@ -1,7 +1,7 @@
 const dashboardData = data;
 const chartId = [];
 const interval = [];
-const maxText = 40;
+const maxText = 20;
 Swal.fire({
     title: 'Loading ...',
     width: 600,
@@ -196,15 +196,63 @@ function showNumber(data, num) {
 $('.create-chart').on('click', () => {
     window.location.href = `/dashboards/${dashboardData._id}/charts/new`;
 });
-$('h1').on('blur', async () => {
-    console.log('change');
-    const text = {
-        title: $('.dashboard-title').text(),
-        description: $('.dashboard-description').text(),
-    };
-    const checkTitle = await checkText(text.title, '.dashboard-title', 'title');
-    const checkDescription = await checkText(text.description, '.dashboard-description', 'description');
-    if (checkTitle && checkDescription) {
+$('.edit-title-btn').on('click', () => {
+    console.log('edit');
+    $('.dashboard-title').css('display', 'none');
+    $('.title-input').css('display', 'block');
+    $('.title-input').attr('value', $('.dashboard-title').text());
+    $('.edit-title-btn').css('visibility', 'hidden');
+    $('.title-input').trigger('focus');
+    $('.title-input').on('blur', async () => {
+        console.log('change');
+        $('.title-input').css('display', 'none');
+        $('.dashboard-title').css('display', 'block');
+        const text = {
+            title: $('.title-input').val(),
+            description: $('.dashboard-description').text(),
+        };
+        console.log('text', text);
+        const checkTitle = await checkText(text.title, '.title-input', 'title');
+        if (checkTitle) {
+            await $.ajax({
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                url: `/api/1.0/dashboards/${dashboardData._id}/text`,
+                data: JSON.stringify(text),
+                error: (err) => {
+                    console.log(err);
+                },
+                success: (result) => {
+                    if (result.status === 200) {
+                        console.log('success');
+                    }
+                    // console.log('r', result);
+                    $('.edit-title-btn').css('visibility', 'visible');
+                    $('.dashboard-title').text($('.title-input').val());
+                    // $('.dashboard-description').text();
+                },
+            });
+        }
+    });
+});
+$('.edit-description-btn').on('click', () => {
+    console.log('edit');
+    $('.dashboard-description').css('display', 'none');
+    $('.description-input').css('display', 'block');
+    $('.description-input').attr('value', $('.dashboard-description').text());
+    $('.edit-description-btn').css('visibility', 'hidden');
+    $('.description-input').trigger('focus');
+    $('.description-input').on('blur', async () => {
+        console.log('change');
+        $('.description-input').css('display', 'none');
+        $('.dashboard-description').css('display', 'block');
+        const text = {
+            title: $('.dashboard-title').text(),
+            description: $('.description-input').val(),
+        };
+        console.log('text', text);
         await $.ajax({
             method: 'post',
             headers: {
@@ -219,18 +267,28 @@ $('h1').on('blur', async () => {
                 if (result.status === 200) {
                     console.log('success');
                 }
+                // console.log('r', result);
+                $('.edit-description-btn').css('visibility', 'visible');
+                $('.dashboard-description').text($('.description-input').val());
+                // $('.dashboard-description').text();
             },
         });
-    }
+        // }
+    });
 });
+
 async function checkText(text, element, name) {
+    console.log(text);
     if (text.length > maxText) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: `Dashboard ${name} is too long!`,
         }).then(() => {
-            $(element).focus();
+            $('.dashboard-title').css('display', 'none');
+            $('.title-input').css('display', 'block');
+            $('.title-input').trigger('focus');
+            console.log('hello');
         });
         return 0;
     } else if (text.includes('<') || text.includes('>')) {

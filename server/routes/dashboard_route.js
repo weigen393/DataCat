@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { addDashboard, delDashboard, updateDashboardText } = require('../controllers/dashboard_controller');
-
-router.post('/dashboard-list/add', addDashboard);
-router.post('/dashboard-list/delete', delDashboard);
-router.post('/dashboards/:dashboardId/text', updateDashboardText);
+const { authSession } = require('../../util/auth');
+router.post('/dashboard-list/add', authSession, addDashboard);
+router.post('/dashboard-list/delete', authSession, delDashboard);
+router.post('/dashboards/:dashboardId/text', authSession, updateDashboardText);
 module.exports = router;

@@ -123,7 +123,7 @@ const getChart = async (data) => {
                 } else if (data.measurement[0] === 'customize') {
                     query = `from(bucket: "${bucketApp}")
                         |> range(start: ${data.timeRange})
-                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")                        
+                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")
                         |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
                         |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: true)
                         |> yield(name: "mean")
@@ -131,13 +131,13 @@ const getChart = async (data) => {
                 } else {
                     if (data.info[0] === 'duration') {
                         query = `from(bucket: "${bucketApp}")
-                          |> range(start: ${data.timeRange})                      
-                          |> filter(fn: (r) => r["host"] == "${data.host[0]}")
-                          |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
-                          |> filter(fn: (r) => r["_field"] == "${data.info[0]}") 
-                          |> group(columns: ["_field"])                     
-                          |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: true)
-                          |> yield(name: "${data.aggregate}")`;
+                        |> range(start: ${data.timeRange})                      
+                        |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                        |> filter(fn: (r) => r["${data.measurement[0]}"] == "${data.field[0]}")
+                        |> filter(fn: (r) => r["_field"] == "${data.info[0]}")
+                        |> group(columns: ["_field"])
+                        |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: true)
+                        |> yield(name: "${data.aggregate}")`;
                     } else if (data.info[0] === 'count') {
                         query = `from(bucket: "${bucketApp}")
                         |> range(start: ${data.timeRange})
@@ -160,14 +160,14 @@ const getChart = async (data) => {
                 }
             } else {
                 query = `from(bucket: "${bucketData}")
-                      |> range(start: ${data.timeRange})                      
-                      |> filter(fn: (r) => r["host"] == "${data.host[0]}")
-                      ${containerFilter}
-                      |> filter(fn: (r) => r["_measurement"] == "${data.measurement[0]}")
-                      |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
-                      ${cpuFilter}
-                      |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: false)
-                      |> yield(name: "${data.aggregate}")`;
+                    |> range(start: ${data.timeRange})                      
+                    |> filter(fn: (r) => r["host"] == "${data.host[0]}")
+                    ${containerFilter}
+                    |> filter(fn: (r) => r["_measurement"] == "${data.measurement[0]}")
+                    |> filter(fn: (r) => r["_field"] == "${data.field[0]}")
+                    ${cpuFilter}
+                    |> aggregateWindow(every: ${data.timeInterval}, fn: ${data.aggregate}, createEmpty: false)
+                    |> yield(name: "${data.aggregate}")`;
             }
 
             console.log(query);

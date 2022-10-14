@@ -116,4 +116,10 @@ body {
 .signIn {  
   display: flex;
 }
-
+.set-picture-left{
+  opacity: 0;
+}
+.set-picture-right{
+  /* margin-left:auto; */
+  opacity: 0;
+}
