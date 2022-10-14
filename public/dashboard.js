@@ -1,7 +1,8 @@
 const dashboardData = data;
 const chartId = [];
 const interval = [];
-const maxText = 20;
+const maxText = 40;
+const maxTitleText = 30;
 Swal.fire({
     title: 'Loading ...',
     width: 600,
@@ -253,41 +254,50 @@ $('.edit-description-btn').on('click', () => {
             description: $('.description-input').val(),
         };
         console.log('text', text);
-        await $.ajax({
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            url: `/api/1.0/dashboards/${dashboardData._id}/text`,
-            data: JSON.stringify(text),
-            error: (err) => {
-                console.log(err);
-            },
-            success: (result) => {
-                if (result.status === 200) {
-                    console.log('success');
-                }
-                // console.log('r', result);
-                $('.edit-description-btn').css('visibility', 'visible');
-                $('.dashboard-description').text($('.description-input').val());
-                // $('.dashboard-description').text();
-            },
-        });
-        // }
+        const checkTitle = await checkText(text.description, '.description-input', 'description');
+        if (checkTitle) {
+            await $.ajax({
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                url: `/api/1.0/dashboards/${dashboardData._id}/text`,
+                data: JSON.stringify(text),
+                error: (err) => {
+                    console.log(err);
+                },
+                success: (result) => {
+                    if (result.status === 200) {
+                        console.log('success');
+                    }
+                    // console.log('r', result);
+                    $('.edit-description-btn').css('visibility', 'visible');
+                    $('.dashboard-description').text($('.description-input').val());
+                    // $('.dashboard-description').text();
+                },
+            });
+        }
     });
 });
 
 async function checkText(text, element, name) {
     console.log(text);
-    if (text.length > maxText) {
+    let textLimit;
+    if (name === 'title') {
+        textLimit = maxTitleText;
+    } else if (name === 'description') {
+        textLimit = maxText;
+    }
+
+    if (text.length > textLimit) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: `Dashboard ${name} is too long!`,
         }).then(() => {
-            $('.dashboard-title').css('display', 'none');
-            $('.title-input').css('display', 'block');
-            $('.title-input').trigger('focus');
+            $(`.dashboard-${name}`).css('display', 'none');
+            $(element).css('display', 'block');
+            $(element).trigger('focus');
             console.log('hello');
         });
         return 0;

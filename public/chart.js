@@ -26,7 +26,7 @@ let containerValue = [];
 let measurementValue = [];
 let fieldValue = [];
 let infoValue = [];
-const maxText = 40;
+const maxText = 30;
 if (dashboardData.chartId !== undefined) {
     console.log('it is not new');
     setChart(dashboardData.dashboardId, dashboardData.chartId);
@@ -688,10 +688,40 @@ $('.edit-title-btn').on('click', () => {
     $('.title-input').trigger('focus');
     $('.title-input').on('blur', async () => {
         console.log('change');
-        $('.title-input').css('display', 'none');
-        $('.chart-title').css('display', 'block');
+        const checkTitle = await checkText($('.title-input').val(), '.title-input');
+        if (checkTitle) {
+            $('.title-input').css('display', 'none');
+            $('.chart-title').css('display', 'block');
 
-        $('.edit-title-btn').css('visibility', 'visible');
-        $('.chart-title').text($('.title-input').val());
+            $('.edit-title-btn').css('visibility', 'visible');
+            $('.chart-title').text($('.title-input').val());
+        }
     });
 });
+async function checkText(text, element) {
+    console.log(text);
+    if (text.length > maxText) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Chart title is too long!`,
+        }).then(() => {
+            $(`.chart-title`).css('display', 'none');
+            $(element).css('display', 'block');
+            $(element).trigger('focus');
+            console.log('hello');
+        });
+        return 0;
+    } else if (text.includes('<') || text.includes('>')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Dashboard ${name} includes invalid symbol!`,
+        }).then(() => {
+            $(element).focus();
+        });
+        return 0;
+    } else {
+        return 1;
+    }
+}
