@@ -27,7 +27,8 @@ let measurementValue = [];
 let fieldValue = [];
 let infoValue = [];
 let thresholdValue;
-const maxText = 40;
+const maxText = 30;
+const maxTitleText = 30;
 if (alertData.alertId !== undefined) {
     console.log('it is not new');
     resetAlert(alertData.alertId);
@@ -776,3 +777,85 @@ async function alertLine(value) {
 }
 $('.sidebar-alert').css('background-color', 'rgba(255, 255, 255, 0.1)');
 $('.sidebar-alert').css('color', '#fff');
+
+$('.edit-title-btn').on('click', () => {
+    console.log('edit');
+    $('.alert-title').css('display', 'none');
+    $('.title-input').css('display', 'block');
+    $('.title-input').attr('value', $('.alert-title').text());
+    $('.edit-title-btn').css('visibility', 'hidden');
+    $('.title-input').trigger('focus');
+    $('.title-input').on('blur', async () => {
+        console.log('change');
+        $('.title-input').css('display', 'none');
+        $('.alert-title').css('display', 'block');
+        const text = {
+            title: $('.title-input').val(),
+            description: $('.alert-description').text(),
+        };
+        console.log('text', text);
+        const checkTitle = await checkText(text.title, '.title-input', 'title');
+        if (checkTitle) {
+            $('.edit-title-btn').css('visibility', 'visible');
+            $('.alert-title').text($('.title-input').val());
+        }
+    });
+});
+$('.edit-description-btn').on('click', () => {
+    console.log('edit');
+    $('.alert-description').css('display', 'none');
+    $('.description-input').css('display', 'block');
+    $('.description-input').attr('value', $('.alert-description').text());
+    $('.edit-description-btn').css('visibility', 'hidden');
+    $('.description-input').trigger('focus');
+    $('.description-input').on('blur', async () => {
+        console.log('change');
+        $('.description-input').css('display', 'none');
+        $('.alert-description').css('display', 'block');
+        const text = {
+            title: $('.alert-title').text(),
+            description: $('.description-input').val(),
+        };
+        console.log('text', text);
+        const checkTitle = await checkText(text.description, '.description-input', 'description');
+        if (checkTitle) {
+            $('.edit-description-btn').css('visibility', 'visible');
+            $('.alert-description').text($('.description-input').val());
+        }
+    });
+});
+
+async function checkText(text, element, name) {
+    console.log(text);
+    let textLimit;
+    if (name === 'title') {
+        textLimit = maxTitleText;
+    } else if (name === 'description') {
+        textLimit = maxText;
+    }
+
+    if (text.length > textLimit) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Dashboard ${name} is too long!`,
+        }).then(() => {
+            $(`.alert-${name}`).css('display', 'none');
+            $(element).css('display', 'block');
+            $(element).trigger('focus');
+            console.log('hello');
+        });
+        return 0;
+    } else if (text.includes('<') || text.includes('>')) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `Dashboard ${name} includes invalid symbol!`,
+        }).then(() => {
+            $(element).focus();
+        });
+        return 0;
+    } else {
+        return 1;
+    }
+}

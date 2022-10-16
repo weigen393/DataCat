@@ -7,10 +7,17 @@ block content
       .content-header
         .container-fluid
           .row.mb-2
-            //- .col-sm-6             
-            h1.alert-title(contenteditable='true') Alert title
-            
-            h1.alert-description(contenteditable='true') Description
+            //- .col-sm-6
+            .title-1
+              input.title-input            
+              h1.alert-title Alert title
+              button.btn.btn-tool.edit-title-btn(type="button")
+                img(src='/images/edit.png', style='width:30px;height:30px;')
+            .description
+              input.description-input
+              h1.alert-description Description
+              button.btn.btn-tool.edit-description-btn(type="button")
+                img(src='/images/edit.png', style='width:30px;height:30px;')
       .content-show
           p.select-host  
           p.select-container 
