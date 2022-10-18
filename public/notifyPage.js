@@ -122,16 +122,18 @@ async function saveNotify() {
         error: (err) => {
             console.log(err);
         },
-        success: (result) => {
+        success: async (result) => {
             if (result.status === 200) {
                 console.log('success');
             }
             console.log('result', result);
-            // const sendData = {
-            //     alertId: result.alertId,
-            //     schedule: result.schedule,
-            // };
-            // setAlert(sendData);
+            await Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Notify has been saved',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             window.location.href = `/notify-list`;
         },
     });
