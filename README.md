@@ -26,15 +26,15 @@ Password: Test123
 
 -   [Features](#Features)
 
--   [How to Install](#HowtoInstall)
+-   [How to Install](#How-to-Install)
 
--   [How to Use](#HowtoUse)
+-   [How to Use](#How-to-Use)
 
 -   [Architecture](#Architecture)
 
--   [Tech Stack](#TechStack)
+-   [Tech Stack](#Tech-Stack)
 
--   [Future Features](#FutureFeatures)
+-   [Future Features](#Future-Features)
 
 -   [Contact](#Contact)
 
@@ -55,12 +55,23 @@ Comming soon
 ## How to Use
 
 -   Create a dashboard
+    ![create_dashboard](https://user-images.githubusercontent.com/104906155/196384670-b6dc2661-55db-4570-87ee-d247ec2803df.gif)
 
 -   Create a chart
+    ![create_chart](https://user-images.githubusercontent.com/104906155/196384780-69447bc2-b55a-42ce-9a17-a4b2f6db205c.gif)
 
 -   Create an alert
+    ![create_alert](https://user-images.githubusercontent.com/104906155/196384882-4664356c-a822-4c61-a18c-6d91deb45414.gif)
 
 -   Create a notification
+    ![create_notify](https://user-images.githubusercontent.com/104906155/196384958-fc640dbd-4b4f-4022-ab34-180783e722b9.gif)
+
+-   Dashboards
+    ![dashboards](https://user-images.githubusercontent.com/104906155/196385075-01bce12f-d448-43c0-999c-14ced99414de.gif)
+
+-   Alert
+    ![show_alert](https://user-images.githubusercontent.com/104906155/196385355-6917a8dc-f6fb-4a9e-8fb2-73050ae9588b.gif)
+    ![show_ok](https://user-images.githubusercontent.com/104906155/196385453-9fbaa8dc-e53b-42d1-a4aa-aac511ce5f70.gif)
 
 ## Architecture
 
