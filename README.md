@@ -55,15 +55,7 @@ Comming soon
 ## How to Use
 
 -   Create a dashboard
-    <<<<<<< HEAD
-
--   Create a chart
-
--   Create an alert
-
--   # Create a notification
-
-        ![create_dashboard](https://user-images.githubusercontent.com/104906155/196384670-b6dc2661-55db-4570-87ee-d247ec2803df.gif)
+    ![create_dashboard](https://user-images.githubusercontent.com/104906155/196384670-b6dc2661-55db-4570-87ee-d247ec2803df.gif)
 
 -   Create a chart
     ![create_chart](https://user-images.githubusercontent.com/104906155/196384780-69447bc2-b55a-42ce-9a17-a4b2f6db205c.gif)
