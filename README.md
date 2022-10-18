@@ -26,7 +26,7 @@ Password: Test123
 
 -   [Features](#Features)
 
--   [How to Install](#HowtoInstall)
+-   [How to Install](#How-to-Install)
 
 -   [How to Use](#HowtoUse)
 
