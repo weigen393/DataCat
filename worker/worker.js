@@ -21,6 +21,7 @@ async function checkAlert() {
                 const currentValue = await getAlertData(settings);
                 const checkStatus = await checkTypeMap[settings.checkType](currentValue, settings, alertId, userId);
                 if (checkStatus) {
+                    console.log('send alert');
                     await changeStatus(alertId, checkStatus.changeStatusString);
                     await sendAlert(settings, checkStatus.sendAlertString, userId);
                 }
@@ -36,7 +37,7 @@ async function checkAlert() {
 }
 function delay(n) {
     return new Promise(function (resolve) {
-        console.log('delay');
+        // console.log('delay');
         setTimeout(resolve, n);
     });
 }

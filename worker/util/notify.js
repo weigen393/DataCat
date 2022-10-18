@@ -15,8 +15,8 @@ const sendEmail = async (notify, message) => {
     };
     try {
         // mg.messages().send(data);
-        console.log(email);
-        console.log('send to mail');
+        // console.log(email);
+        // console.log('send to mail');
     } catch (e) {
         console.log(e);
         return e;
@@ -34,8 +34,8 @@ const sendDiscord = async (notify, message) => {
             content: message,
             username: 'datacat',
         });
-        console.log(id, token);
-        console.log('send to discord');
+        // console.log(id, token);
+        // console.log('send to discord');
     } catch (e) {
         console.log(e);
         return e;
