@@ -667,7 +667,7 @@ async function saveAlert() {
         error: (err) => {
             console.log(err);
         },
-        success: (result) => {
+        success: async (result) => {
             if (result.status === 200) {
                 console.log('success');
             }
@@ -677,6 +677,13 @@ async function saveAlert() {
                 schedule: result.schedule,
             };
             setAlert(sendData);
+            await Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Alert has been saved',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             window.location.href = `/alert-list`;
         },
     });
