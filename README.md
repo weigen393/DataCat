@@ -72,7 +72,6 @@ Comming soon
 -   Alert
     ![show_alert](https://user-images.githubusercontent.com/104906155/196385355-6917a8dc-f6fb-4a9e-8fb2-73050ae9588b.gif)
     ![show_ok](https://user-images.githubusercontent.com/104906155/196385453-9fbaa8dc-e53b-42d1-a4aa-aac511ce5f70.gif)
-    > > > > > > > develop
 
 ## Architecture
 
