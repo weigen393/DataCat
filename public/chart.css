@@ -209,8 +209,8 @@ p {
   display: none;
   font-size: 1.8rem;
   height:2rem;
-  /* margin-top: 10px; */
-  margin-bottom: 12.5px;
+  margin-top: 10px;
+  /* margin-bottom: 10px; */
   width:800px;
   /* z-index:2; */
 }

@@ -106,7 +106,7 @@ const getAlertData = async (data) => {
                 query = thresholdMap[data.thresholdType](query);
                 // query = appendThresholdQuery(query, data.thresholdType);
             }
-            console.log(query);
+            // console.log(query);
             const chartData = [];
             queryApi.queryRows(query, {
                 next(row, tableMeta) {
@@ -122,12 +122,12 @@ const getAlertData = async (data) => {
                     reject(error);
                 },
                 complete() {
-                    console.log('c', chartData);
+                    // console.log('c', chartData);
                     if (chartData[0]?._value === undefined) {
-                        console.log('Finished SUCCESS');
+                        // console.log('Finished SUCCESS');
                         resolve(0);
                     } else {
-                        console.log('Finished SUCCESS');
+                        // console.log('Finished SUCCESS');
                         resolve(chartData[0]._value);
                     }
                 },
@@ -148,7 +148,7 @@ async function getSettings(alertId) {
                 alerts: { $elemMatch: { _id: alertId } },
             }
         );
-        console.log(query);
+        // console.log(query);
         return query[0];
     } catch (e) {
         console.log(e);

@@ -11,8 +11,8 @@ const changeStatus = async (alertId, data) => {
                 'alerts.$.status': data,
             }
         );
-        console.log('change status');
-        console.log(query);
+        // console.log('change status');
+        // console.log(query);
         return 'success';
     } catch (e) {
         console.log(e);
@@ -20,7 +20,7 @@ const changeStatus = async (alertId, data) => {
     }
 };
 const createMessage = (data, text) => {
-    console.log('here', data, text);
+    // console.log('here', data, text);
     const messageMap = {
         threshold: `Warning,${data.host[0]} ${data.measurement[0]} ${data.field[0]} is ${data.thresholdType} ${data.threshold}`,
         alive: `Warning,${data.host[0]} ${data.measurement[0]} haven't response for ${data.deadTime} seconds`,
@@ -29,9 +29,9 @@ const createMessage = (data, text) => {
     return messageMap[text];
 };
 const sendAlert = async (data, text, userId) => {
-    console.log('send alert here');
+    // console.log('send alert here');
     const message = createMessage(data, text);
-    console.log('m', message);
+    // console.log('m', message);
     const userNotify = await getNotifyList(userId.toString());
     const alertReceiver = [];
     for (let i = 0; i < userNotify.length; i++) {
@@ -45,8 +45,8 @@ const sendMap = {
     discord: sendDiscord,
 };
 const thresholdCheck = async (currentValue, settings, alertId, userId) => {
-    console.log('c', currentValue, 's', settings);
-    let checkThreshold = currentValue >= +settings;
+    // console.log('c', currentValue, 's', settings);
+    let checkThreshold = currentValue >= +settings.threshold;
     let tmpList = `${settings.thresholdType}-${checkThreshold}-${settings.status}`;
     let thresholdCheckMap = {
         'above-true-off': { changeStatusString: 'on', sendAlertString: 'threshold' },

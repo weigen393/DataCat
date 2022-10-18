@@ -608,14 +608,14 @@ $('#save').on('click', async () => {
         }).then(() => {
             $('.alert-title').focus();
         });
-    } else if (title.includes('<') || title.includes('>')) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: `Alert title includes invalid symbol!`,
-        }).then(() => {
-            $('.alert-title').focus();
-        });
+        // } else if (title.includes('<') || title.includes('>')) {
+        //     Swal.fire({
+        //         icon: 'error',
+        //         title: 'Oops...',
+        //         text: `Alert title includes invalid symbol!`,
+        //     }).then(() => {
+        //         $('.alert-title').focus();
+        //     });
     } else if (description.length > maxText) {
         Swal.fire({
             icon: 'error',
@@ -624,14 +624,14 @@ $('#save').on('click', async () => {
         }).then(() => {
             $('.alert-description').focus();
         });
-    } else if (description.includes('<') || description.includes('>')) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: `Alert description includes invalid symbol!`,
-        }).then(() => {
-            $('.alert-description').focus();
-        });
+        // } else if (description.includes('<') || description.includes('>')) {
+        //     Swal.fire({
+        //         icon: 'error',
+        //         title: 'Oops...',
+        //         text: `Alert description includes invalid symbol!`,
+        //     }).then(() => {
+        //         $('.alert-description').focus();
+        //     });
     } else if (check) {
         saveAlert();
     }
@@ -667,7 +667,7 @@ async function saveAlert() {
         error: (err) => {
             console.log(err);
         },
-        success: (result) => {
+        success: async (result) => {
             if (result.status === 200) {
                 console.log('success');
             }
@@ -677,6 +677,13 @@ async function saveAlert() {
                 schedule: result.schedule,
             };
             setAlert(sendData);
+            await Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Alert has been saved',
+                showConfirmButton: false,
+                timer: 1500,
+            });
             window.location.href = `/alert-list`;
         },
     });
@@ -846,15 +853,15 @@ async function checkText(text, element, name) {
             console.log('hello');
         });
         return 0;
-    } else if (text.includes('<') || text.includes('>')) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: `Dashboard ${name} includes invalid symbol!`,
-        }).then(() => {
-            $(element).focus();
-        });
-        return 0;
+        // } else if (text.includes('<') || text.includes('>')) {
+        // Swal.fire({
+        //     icon: 'error',
+        //     title: 'Oops...',
+        //     text: `Dashboard ${name} includes invalid symbol!`,
+        // }).then(() => {
+        //     $(element).focus();
+        // });
+        // return 1;
     } else {
         return 1;
     }

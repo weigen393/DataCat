@@ -7,9 +7,18 @@ block content
       .container-fluid
         .row.mb-2
           //- .col-sm-6
-          h1.alert-title(contenteditable='true') Notify title
-            
-          h1.alert-description(contenteditable='true') Description
+          .title-1
+            input.title-input
+            h1
+              pre.alert-title Notify title
+            button.btn.btn-tool.edit-title-btn(type="button")
+                img(src='/images/edit.png', style='width:30px;height:30px;')
+          .description
+            input.description-input            
+            h1
+              pre.alert-description Description
+            button.btn.btn-tool.edit-description-btn(type="button")
+                img(src='/images/edit.png', style='width:30px;height:30px;')
           //- a.nav-link(data-widget='pushmenu' href='#' role='button' )  expand 
     .content
       .line-wrap
