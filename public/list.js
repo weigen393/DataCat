@@ -42,7 +42,7 @@
 //     $('.dashboard-title').val(message.data);
 // });
 $('.create-dashboard').on('click', () => {
-    console.log('create');
+    // console.log('create');
     const data = {
         userId: $('.d-block').text(),
         title: 'title',
@@ -57,11 +57,11 @@ $('.create-dashboard').on('click', () => {
         url: '/api/1.0/dashboard-list/add',
         data: JSON.stringify(data),
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: async (result) => {
             if (result.status === 200) {
-                console.log('create dashboard success');
+                // console.log('create dashboard success');
             }
             await Swal.fire({
                 position: 'center',
@@ -87,7 +87,7 @@ jQuery(function ($) {
             confirmButtonText: 'Yes, delete it!',
         }).then(async (result) => {
             if (result.isConfirmed) {
-                console.log($(this).attr('value'));
+                // console.log($(this).attr('value'));
                 const data = {
                     dashboardId: $(this).attr('value'),
                 };
@@ -99,11 +99,11 @@ jQuery(function ($) {
                     url: '/api/1.0/dashboard-list/delete',
                     data: JSON.stringify(data),
                     error: (err) => {
-                        console.log(err);
+                        // console.log(err);
                     },
                     success: async (result) => {
                         if (result.status === 200) {
-                            console.log('delete dashboard success');
+                            // console.log('delete dashboard success');
                         }
                         await Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
                         window.location.href = `/dashboard-list`;

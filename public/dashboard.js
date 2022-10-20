@@ -41,7 +41,7 @@ async function showAll() {
             timeInterval: dashboardData.charts[i].interval,
             aggregate: dashboardData.charts[i].aggregate,
         };
-        console.log(value);
+        // console.log(value);
         chartId.push(i);
         // chartId.push(dashboardData.charts[i]._id);
         interval.push(dashboardData.charts[i].interval);
@@ -53,13 +53,13 @@ async function showAll() {
             url: '/api/1.0/chart/show',
             data: value,
             error: (err) => {
-                console.log(err);
+                // console.log(err);
             },
             success: async (result) => {
                 if (result.status === 200) {
-                    console.log('success');
+                    // console.log('success');
                 }
-                console.log('result', result);
+                // console.log('result', result);
                 if (dashboardData.charts[i].type === 'line') {
                     await showLineChart(result, i);
                 } else if (dashboardData.charts[i].type === 'number') {
@@ -93,13 +93,13 @@ async function realTime(i, interval) {
         url: '/api/1.0/chart/show',
         data: value,
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
-            console.log('result', result);
+            // console.log('result', result);
             if (dashboardData.charts[i].type === 'line') {
                 showLineChart(result, i);
             } else if (dashboardData.charts[i].type === 'number') {
@@ -113,7 +113,7 @@ async function realTime(i, interval) {
     } else if (interval.slice(-1) === 'm') {
         time = +interval.slice(0, -1) * 60;
     }
-    console.log(time);
+    // console.log(time);
     setTimeout(() => {
         realTime(i, interval);
     }, 1000 * time);
@@ -191,28 +191,28 @@ function showLineChart(data, num) {
 }
 function showNumber(data, num) {
     const lastNum = data.pop();
-    console.log(lastNum._value);
+    // console.log(lastNum._value);
     $(`#number-${num}`).text(lastNum._value.toFixed(2)).attr('class', 'card-number');
 }
 $('.create-chart').on('click', () => {
     window.location.href = `/dashboards/${dashboardData._id}/charts/new`;
 });
 $('.edit-title-btn').on('click', () => {
-    console.log('edit');
+    // console.log('edit');
     $('.dashboard-title').css('display', 'none');
     $('.title-input').css('display', 'block');
     $('.title-input').attr('value', $('.dashboard-title').text());
     $('.edit-title-btn').css('visibility', 'hidden');
     $('.title-input').trigger('focus');
     $('.title-input').on('blur', async () => {
-        console.log('change');
+        // console.log('change');
         $('.title-input').css('display', 'none');
         $('.dashboard-title').css('display', 'block');
         const text = {
             title: $('.title-input').val(),
             description: $('.dashboard-description').text(),
         };
-        console.log('text', text);
+        // console.log('text', text);
         const checkTitle = await checkText(text.title, '.title-input', 'title');
         if (checkTitle) {
             await $.ajax({
@@ -223,11 +223,11 @@ $('.edit-title-btn').on('click', () => {
                 url: `/api/1.0/dashboards/${dashboardData._id}/text`,
                 data: JSON.stringify(text),
                 error: (err) => {
-                    console.log(err);
+                    // console.log(err);
                 },
                 success: (result) => {
                     if (result.status === 200) {
-                        console.log('success');
+                        // console.log('success');
                     }
                     // console.log('r', result);
                     $('.edit-title-btn').css('visibility', 'visible');
@@ -239,21 +239,21 @@ $('.edit-title-btn').on('click', () => {
     });
 });
 $('.edit-description-btn').on('click', () => {
-    console.log('edit');
+    // console.log('edit');
     $('.dashboard-description').css('display', 'none');
     $('.description-input').css('display', 'block');
     $('.description-input').attr('value', $('.dashboard-description').text());
     $('.edit-description-btn').css('visibility', 'hidden');
     $('.description-input').trigger('focus');
     $('.description-input').on('blur', async () => {
-        console.log('change');
+        // console.log('change');
         $('.description-input').css('display', 'none');
         $('.dashboard-description').css('display', 'block');
         const text = {
             title: $('.dashboard-title').text(),
             description: $('.description-input').val(),
         };
-        console.log('text', text);
+        // console.log('text', text);
         const checkTitle = await checkText(text.description, '.description-input', 'description');
         if (checkTitle) {
             await $.ajax({
@@ -264,11 +264,11 @@ $('.edit-description-btn').on('click', () => {
                 url: `/api/1.0/dashboards/${dashboardData._id}/text`,
                 data: JSON.stringify(text),
                 error: (err) => {
-                    console.log(err);
+                    // console.log(err);
                 },
                 success: (result) => {
                     if (result.status === 200) {
-                        console.log('success');
+                        // console.log('success');
                     }
                     // console.log('r', result);
                     $('.edit-description-btn').css('visibility', 'visible');
@@ -281,7 +281,7 @@ $('.edit-description-btn').on('click', () => {
 });
 
 async function checkText(text, element, name) {
-    console.log(text);
+    // console.log(text);
     let textLimit;
     if (name === 'title') {
         textLimit = maxTitleText;
@@ -298,7 +298,7 @@ async function checkText(text, element, name) {
             $(`.dashboard-${name}`).css('display', 'none');
             $(element).css('display', 'block');
             $(element).trigger('focus');
-            console.log('hello');
+            // console.log('hello');
         });
         return 0;
     } else if (text.includes('<') || text.includes('>')) {
@@ -316,8 +316,8 @@ async function checkText(text, element, name) {
 }
 jQuery(function ($) {
     $('.btn').on('click', function () {
-        console.log($(this).attr('value'));
-        console.log($(this).attr('name'));
+        // console.log($(this).attr('value'));
+        // console.log($(this).attr('name'));
         const method = $(this).attr('name');
         const chartId = $(this).attr('value');
         if (method === 'edit') {
@@ -350,13 +350,13 @@ async function delChart(chartId) {
                 url: '/api/1.0/chart/delete',
                 data: JSON.stringify(sendData),
                 error: (err) => {
-                    console.log(err);
+                    // console.log(err);
                 },
                 success: async (result) => {
                     if (result.status === 200) {
-                        console.log('success');
+                        // console.log('success');
                     }
-                    console.log('result', result);
+                    // console.log('result', result);
                     await Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
                     window.location.href = `/dashboards/${dashboardData._id}`;
                 },
@@ -377,5 +377,5 @@ sse.onmessage = function (e) {
     } else {
         Swal.fire(`${msg.split(',')[0]}`);
     }
-    console.log(e.data);
+    // console.log(e.data);
 };

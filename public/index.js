@@ -12,7 +12,7 @@ $('.sign-in').on('click', () => {
 });
 
 $('.signUp').on('click', async () => {
-    console.log('sign up');
+    // console.log('sign up');
     const data = {
         name: $('.signUpName').val(),
         email: $('.signUpEmail').val(),
@@ -21,7 +21,7 @@ $('.signUp').on('click', async () => {
     const check = await validation(data);
 
     if (check) {
-        console.log(data);
+        // console.log(data);
         await $.ajax({
             method: 'post',
             headers: {
@@ -38,7 +38,7 @@ $('.signUp').on('click', async () => {
             },
             success: (result) => {
                 if (result.status === 200) {
-                    console.log('success');
+                    // console.log('success');
                 }
                 window.location.href = `/dashboard-list`;
             },
@@ -46,14 +46,14 @@ $('.signUp').on('click', async () => {
     }
 });
 $('.signIn').on('click', async () => {
-    console.log('sign in');
+    // console.log('sign in');
     const data = {
         email: $('.signInEmail').val(),
         password: $('.signInPwd').val(),
     };
     const check = await validation(data);
     if (check) {
-        console.log(data);
+        // console.log(data);
         await $.ajax({
             method: 'post',
             headers: {
@@ -70,7 +70,7 @@ $('.signIn').on('click', async () => {
             },
             success: (result) => {
                 if (result.status === 200) {
-                    console.log('success');
+                    // console.log('success');
                 }
                 window.location.href = `/dashboard-list`;
             },
@@ -154,7 +154,7 @@ const pictureMap = [
 ];
 let picturePointer = 0;
 $('.set-picture-left').on('click', () => {
-    console.log($('.set-picture-left').val());
+    // console.log($('.set-picture-left').val());
     picturePointer -= 1;
     if (picturePointer < 0) {
         picturePointer = pictureMap.length - 1;
@@ -162,7 +162,7 @@ $('.set-picture-left').on('click', () => {
     $('.dataCat').attr('src', pictureMap[picturePointer]);
 });
 $('.set-picture-right').on('click', () => {
-    console.log($('.set-picture-right').val());
+    // console.log($('.set-picture-right').val());
     picturePointer += 1;
     if (picturePointer > pictureMap.length - 1) {
         picturePointer = 0;

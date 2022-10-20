@@ -30,14 +30,14 @@ let thresholdValue;
 const maxText = 30;
 const maxTitleText = 30;
 if (alertData.alertId !== undefined) {
-    console.log('it is not new');
+    // console.log('it is not new');
     resetAlert(alertData.alertId);
 }
 async function resetAlert(alertId) {
     const sendData = {
         alertId: alertId,
     };
-    console.log(sendData);
+    // console.log(sendData);
     let setData;
     await $.ajax({
         method: 'get',
@@ -47,15 +47,15 @@ async function resetAlert(alertId) {
         url: '/api/1.0/alerts/edit',
         data: sendData,
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: async (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
-            console.log('result', result);
+            // console.log('result', result);
             setData = result;
-            console.log(result.host);
+            // console.log(result.host);
             const layer = setData.layer;
             const measurement = setData.measurement;
             await resetHost(layer);
@@ -110,14 +110,14 @@ async function resetAlert(alertId) {
                                 <input id='threshold' placeholder='value'>`);
                     $(`select option[value=${setData.thresholdType}]`).attr('selected', true);
                     $('#threshold').on('input', async () => {
-                        console.log('threshold change');
+                        // console.log('threshold change');
                         thresholdValue = $('#threshold').val();
                         await showPreview();
                     });
                     $('#threshold').attr('value', setData.threshold);
                 }
 
-                console.log(setData.host[0]);
+                // console.log(setData.host[0]);
                 await showPreview();
             });
         },
@@ -168,11 +168,11 @@ async function resetHost(layer) {
         url: '/api/1.0/chart/host',
         data: layer,
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
             host = result;
             const num = host.length;
@@ -191,7 +191,7 @@ async function resetHost(layer) {
                     </li>`
                 );
             }
-            console.log('reset host');
+            // console.log('reset host');
             Swal.fire({
                 title: 'Loading ...',
                 timer: 10,
@@ -208,7 +208,7 @@ async function hostCheck(num) {
             hostList.push($(`.form-check-input.host${i}`).data('value'));
         }
     }
-    console.log(hostList);
+    // console.log(hostList);
     hostValue = hostList;
     const hostHint = hostList.map((item) => item.split('.')[0]);
 
@@ -226,7 +226,7 @@ async function hostCheck(num) {
 async function resetContainer(host) {
     containerValue = [];
     let container = [];
-    console.log('reset container');
+    // console.log('reset container');
     Swal.fire({
         title: 'Loading ...',
         width: 600,
@@ -249,14 +249,14 @@ async function resetContainer(host) {
         url: '/api/1.0/chart/container',
         data: { host: host[0] },
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
             container = result;
-            console.log('result', result);
+            // console.log('result', result);
             containerValue = container;
             const num = container.length;
             $('.button-container').html(``);
@@ -295,7 +295,7 @@ function containerCheck(num) {
             containerList.push($(`.form-check-input.container${i}`).data('value'));
         }
     }
-    console.log(containerList);
+    // console.log(containerList);
     containerValue = containerList;
     $('.select-container').show();
     $('.select-container').text(`container: ${containerList}`);
@@ -303,7 +303,7 @@ function containerCheck(num) {
 
 function resetMeasurement(measurement, layer) {
     $('.measurement').html(``);
-    console.log(measurement);
+    // console.log(measurement);
     const num = measurement.length;
     for (let i = 0; i < num; i++) {
         $('.measurement').append(
@@ -319,7 +319,7 @@ function resetMeasurement(measurement, layer) {
             </li>`
         );
     }
-    console.log('reset measurement');
+    // console.log('reset measurement');
 }
 function measurementCheck(num, layer) {
     const measurementList = [];
@@ -328,7 +328,7 @@ function measurementCheck(num, layer) {
             measurementList.push($(`.form-check-input.measurement${i}`).data('value'));
         }
     }
-    console.log(measurementList);
+    // console.log(measurementList);
     measurementValue = measurementList;
     $('.select-measurement').text(`measurement: ${measurementList}`);
     resetField(measurementList, layer);
@@ -355,13 +355,13 @@ async function resetField(measurement, layer) {
                 url: '/api/1.0/chart/appField',
                 data: setData,
                 error: (err) => {
-                    console.log(err);
+                    // console.log(err);
                 },
                 success: (result) => {
                     if (result.status === 200) {
-                        console.log('success');
+                        // console.log('success');
                     }
-                    console.log('result', result);
+                    // console.log('result', result);
                     field = result;
                     // if ($('#type').val() === 'line') {
                     //     showLineChart(result);
@@ -372,7 +372,7 @@ async function resetField(measurement, layer) {
             });
         }
     }
-    console.log(field);
+    // console.log(field);
     $('.field').html(``);
     const num = field?.length;
     for (let i = 0; i < num; i++) {
@@ -388,7 +388,7 @@ async function resetField(measurement, layer) {
             </li>`
         );
     }
-    console.log('reset field');
+    // console.log('reset field');
 }
 function resetInfo() {
     let info;
@@ -433,7 +433,7 @@ function infoCheck(num) {
         }
     }
     infoValue = infoList;
-    console.log(infoList);
+    // console.log(infoList);
     $('.select-info').show();
     $('.select-info').text(`info: ${infoList}`);
 }
@@ -446,12 +446,12 @@ function fieldCheck(num) {
         }
     }
     fieldValue = fieldList;
-    console.log(fieldList);
+    // console.log(fieldList);
     $('.select-field').text(`field: ${fieldList}`);
 }
 
 $('#preview').on('click', async () => {
-    console.log('preview');
+    // console.log('preview');
     const check = await checkSelect();
     if (check) {
         showPreview();
@@ -471,7 +471,7 @@ async function showPreview() {
         timeInterval: $('#interval').val(),
         aggregate: $('#aggregate').val(),
     };
-    console.log(setData);
+    // console.log(setData);
     await $.ajax({
         method: 'get',
         headers: {
@@ -480,13 +480,13 @@ async function showPreview() {
         url: '/api/1.0/chart/show',
         data: setData,
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
-            console.log('result', result);
+            // console.log('result', result);
 
             // $('.card-number').html('');
             // $('.card-number').css('height', '0px');
@@ -584,7 +584,7 @@ $('#check').on('change', () => {
                     </select>
                     <input id='threshold' placeholder='value'>`);
         $('#threshold').on('input', () => {
-            console.log('threshold change');
+            // console.log('threshold change');
             thresholdValue = $('#threshold').val();
             showPreview();
         });
@@ -656,7 +656,7 @@ async function saveAlert() {
         threshold: $('#threshold').val(),
         deadTime: $('#deadTime').val(),
     };
-    console.log(data);
+    // console.log(data);
     await $.ajax({
         method: 'post',
         headers: {
@@ -665,13 +665,13 @@ async function saveAlert() {
         url: '/api/1.0/alerts/save',
         data: JSON.stringify(data),
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: async (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
-            console.log('result', result);
+            // console.log('result', result);
             const sendData = {
                 alertId: result.alertId,
                 schedule: result.schedule,
@@ -737,7 +737,7 @@ async function checkSelect(type) {
         dropdownData = [hostValue, measurementValue, fieldValue, infoValue];
     }
     const checkDrop = dropdownData.map((item) => item.length);
-    console.log('check', checkDrop);
+    // console.log('check', checkDrop);
     if (selectData.includes('0')) {
         Swal.fire({
             icon: 'error',
@@ -757,7 +757,7 @@ async function checkSelect(type) {
     }
 }
 async function setAlert(sendData) {
-    console.log(sendData);
+    // console.log(sendData);
     await $.ajax({
         method: 'post',
         headers: {
@@ -766,13 +766,13 @@ async function setAlert(sendData) {
         url: '/api/1.0/alerts/set',
         data: JSON.stringify(sendData),
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
-            console.log('result', result);
+            // console.log('result', result);
         },
     });
 }
@@ -786,21 +786,21 @@ $('.sidebar-alert').css('background-color', 'rgba(255, 255, 255, 0.1)');
 $('.sidebar-alert').css('color', '#fff');
 
 $('.edit-title-btn').on('click', () => {
-    console.log('edit');
+    // console.log('edit');
     $('.alert-title').css('display', 'none');
     $('.title-input').css('display', 'block');
     $('.title-input').attr('value', $('.alert-title').text());
     $('.edit-title-btn').css('visibility', 'hidden');
     $('.title-input').trigger('focus');
     $('.title-input').on('blur', async () => {
-        console.log('change');
+        // console.log('change');
         $('.title-input').css('display', 'none');
         $('.alert-title').css('display', 'block');
         const text = {
             title: $('.title-input').val(),
             description: $('.alert-description').text(),
         };
-        console.log('text', text);
+        // console.log('text', text);
         const checkTitle = await checkText(text.title, '.title-input', 'title');
         if (checkTitle) {
             $('.edit-title-btn').css('visibility', 'visible');
@@ -809,21 +809,21 @@ $('.edit-title-btn').on('click', () => {
     });
 });
 $('.edit-description-btn').on('click', () => {
-    console.log('edit');
+    // console.log('edit');
     $('.alert-description').css('display', 'none');
     $('.description-input').css('display', 'block');
     $('.description-input').attr('value', $('.alert-description').text());
     $('.edit-description-btn').css('visibility', 'hidden');
     $('.description-input').trigger('focus');
     $('.description-input').on('blur', async () => {
-        console.log('change');
+        // console.log('change');
         $('.description-input').css('display', 'none');
         $('.alert-description').css('display', 'block');
         const text = {
             title: $('.alert-title').text(),
             description: $('.description-input').val(),
         };
-        console.log('text', text);
+        // console.log('text', text);
         const checkTitle = await checkText(text.description, '.description-input', 'description');
         if (checkTitle) {
             $('.edit-description-btn').css('visibility', 'visible');
@@ -833,7 +833,7 @@ $('.edit-description-btn').on('click', () => {
 });
 
 async function checkText(text, element, name) {
-    console.log(text);
+    // console.log(text);
     let textLimit;
     if (name === 'title') {
         textLimit = maxTitleText;
@@ -850,7 +850,7 @@ async function checkText(text, element, name) {
             $(`.alert-${name}`).css('display', 'none');
             $(element).css('display', 'block');
             $(element).trigger('focus');
-            console.log('hello');
+            // console.log('hello');
         });
         return 0;
         // } else if (text.includes('<') || text.includes('>')) {

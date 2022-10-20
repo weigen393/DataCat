@@ -14,7 +14,7 @@ $('.sidebar-logout').on('click', async function () {
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
             window.location.href = `/`;
         },

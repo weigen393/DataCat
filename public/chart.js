@@ -28,14 +28,14 @@ let fieldValue = [];
 let infoValue = [];
 const maxText = 30;
 if (dashboardData.chartId !== undefined) {
-    console.log('it is not new');
+    // console.log('it is not new');
     setChart(dashboardData.dashboardId, dashboardData.chartId);
 }
 async function setChart(dashboardId, chartId) {
     const sendData = {
         chartId: chartId,
     };
-    console.log(sendData);
+    // console.log(sendData);
     let setData;
     await $.ajax({
         method: 'get',
@@ -45,15 +45,15 @@ async function setChart(dashboardId, chartId) {
         url: '/api/1.0/chart/edit',
         data: sendData,
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: async (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
-            console.log('result', result);
+            // console.log('result', result);
             setData = result;
-            console.log(result[0].host);
+            // console.log(result[0].host);
             const layer = setData[0].layer;
             const measurement = setData[0].measurement;
             await resetHost(layer);
@@ -80,7 +80,7 @@ async function setChart(dashboardId, chartId) {
             $(`select option[value=${setData[0].interval}]`).attr('selected', true);
             $(`select option[value=${setData[0].aggregate}]`).attr('selected', true);
             await resetField(measurement, layer).then(async () => {
-                console.log(setData[0].host[0]);
+                // console.log(setData[0].host[0]);
                 $(`input[data-value="${setData[0].host[0]}"]`).attr('checked', true);
                 $(`input[data-value="${setData[0].field[0]}"]`).attr('checked', true);
                 $(`input[data-value="${setData[0].measurement[0]}"]`).attr('checked', true);
@@ -144,11 +144,11 @@ async function resetHost(layer) {
         url: '/api/1.0/chart/host',
         data: layer,
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
             host = result;
             const num = host.length;
@@ -167,7 +167,7 @@ async function resetHost(layer) {
                     </li>`
                 );
             }
-            console.log('reset host');
+            // console.log('reset host');
             Swal.fire({
                 title: 'Loading ...',
                 timer: 10,
@@ -184,7 +184,7 @@ async function hostCheck(num) {
             hostList.push($(`.form-check-input.host${i}`).data('value'));
         }
     }
-    console.log(hostList);
+    // console.log(hostList);
     hostValue = hostList;
     const hostHint = hostList.map((item) => item.split('.')[0]);
 
@@ -202,7 +202,7 @@ async function hostCheck(num) {
 async function resetContainer(host) {
     containerValue = [];
     let container = [];
-    console.log('reset container');
+    // console.log('reset container');
     Swal.fire({
         title: 'Loading ...',
         width: 600,
@@ -225,14 +225,14 @@ async function resetContainer(host) {
         url: '/api/1.0/chart/container',
         data: { host: host[0] },
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
             container = result;
-            console.log('result', result);
+            // console.log('result', result);
             containerValue = container;
             const num = container.length;
             $('.button-container').html(``);
@@ -271,7 +271,7 @@ function containerCheck(num) {
             containerList.push($(`.form-check-input.container${i}`).data('value'));
         }
     }
-    console.log(containerList);
+    // console.log(containerList);
     containerValue = containerList;
     $('.select-container').show();
     $('.select-container').text(`container: ${containerList}`);
@@ -279,7 +279,7 @@ function containerCheck(num) {
 
 async function resetMeasurement(measurement, layer) {
     $('.measurement').html(``);
-    console.log(measurement);
+    // console.log(measurement);
     const num = measurement.length;
     for (let i = 0; i < num; i++) {
         $('.measurement').append(
@@ -295,7 +295,7 @@ async function resetMeasurement(measurement, layer) {
             </li>`
         );
     }
-    console.log('reset measurement');
+    // console.log('reset measurement');
 }
 function measurementCheck(num, layer) {
     const measurementList = [];
@@ -304,7 +304,7 @@ function measurementCheck(num, layer) {
             measurementList.push($(`.form-check-input.measurement${i}`).data('value'));
         }
     }
-    console.log(measurementList);
+    // console.log(measurementList);
     measurementValue = measurementList;
     $('.select-measurement').text(`measurement: ${measurementList}`);
     resetField(measurementList, layer);
@@ -331,13 +331,13 @@ async function resetField(measurement, layer) {
                 url: '/api/1.0/chart/appField',
                 data: setData,
                 error: (err) => {
-                    console.log(err);
+                    // console.log(err);
                 },
                 success: (result) => {
                     if (result.status === 200) {
-                        console.log('success');
+                        // console.log('success');
                     }
-                    console.log('result', result);
+                    // console.log('result', result);
                     field = result;
                     // if ($('#type').val() === 'line') {
                     //     showLineChart(result);
@@ -348,7 +348,7 @@ async function resetField(measurement, layer) {
             });
         }
     }
-    console.log(field);
+    // console.log(field);
     $('.field').html(``);
     const num = field?.length;
     for (let i = 0; i < num; i++) {
@@ -364,7 +364,7 @@ async function resetField(measurement, layer) {
             </li>`
         );
     }
-    console.log('reset field');
+    // console.log('reset field');
 }
 function resetInfo() {
     let info;
@@ -409,7 +409,7 @@ function infoCheck(num) {
         }
     }
     infoValue = infoList;
-    console.log(infoList);
+    // console.log(infoList);
     $('.select-info').show();
     $('.select-info').text(`info: ${infoList}`);
 }
@@ -422,12 +422,12 @@ function fieldCheck(num) {
         }
     }
     fieldValue = fieldList;
-    console.log(fieldList);
+    // console.log(fieldList);
     $('.select-field').text(`field: ${fieldList}`);
 }
 
 $('#preview').on('click', async () => {
-    console.log('preview');
+    // console.log('preview');
     const check = await checkSelect();
     if (check) {
         showPreview();
@@ -460,7 +460,7 @@ async function showPreview() {
         showConfirmButton: false,
         allowOutsideClick: false,
     });
-    console.log(setData);
+    // console.log(setData);
     await $.ajax({
         method: 'get',
         headers: {
@@ -469,13 +469,13 @@ async function showPreview() {
         url: '/api/1.0/chart/show',
         data: setData,
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: async (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
-            console.log('result', result);
+            // console.log('result', result);
             if ($('#type').val() === 'line') {
                 $('.card-number').html('');
                 $('.card-number').css('height', '0px');
@@ -569,11 +569,11 @@ async function showLineChart(data) {
 }
 async function showNumber(data) {
     const lastNum = data.pop();
-    console.log(lastNum._value);
+    // console.log(lastNum._value);
     $('.card-number').text(lastNum._value.toFixed(2)).attr('class', 'card-number');
 }
 $('#save').on('click', async () => {
-    console.log('save');
+    // console.log('save');
     $('#save').prop('disabled', true);
     const check = await checkSelect();
     const title = $('.chart-title').text();
@@ -613,7 +613,7 @@ async function saveChart() {
         interval: $('#interval').val(),
         aggregate: $('#aggregate').val(),
     };
-    console.log(data);
+    // console.log(data);
     await $.ajax({
         method: 'post',
         headers: {
@@ -622,13 +622,13 @@ async function saveChart() {
         url: '/api/1.0/chart/save',
         data: JSON.stringify(data),
         error: (err) => {
-            console.log(err);
+            // console.log(err);
         },
         success: async (result) => {
             if (result.status === 200) {
-                console.log('success');
+                // console.log('success');
             }
-            console.log('result', result);
+            // console.log('result', result);
             await Swal.fire({
                 position: 'center',
                 icon: 'success',
@@ -657,7 +657,7 @@ async function checkSelect() {
         dropdownData = [hostValue, measurementValue, fieldValue, infoValue];
     }
     const checkDrop = dropdownData.map((item) => item.length);
-    console.log('check', checkDrop);
+    // console.log('check', checkDrop);
     if (selectData.includes('0')) {
         Swal.fire({
             icon: 'error',
@@ -680,14 +680,14 @@ $('.sidebar-dashboard').css('background-color', 'rgba(255, 255, 255, 0.1)');
 $('.sidebar-dashboard').css('color', '#fff');
 
 $('.edit-title-btn').on('click', () => {
-    console.log('edit');
+    // console.log('edit');
     $('.chart-title').css('display', 'none');
     $('.title-input').css('display', 'block');
     $('.title-input').attr('value', $('.chart-title').text());
     $('.edit-title-btn').css('visibility', 'hidden');
     $('.title-input').trigger('focus');
     $('.title-input').on('blur', async () => {
-        console.log('change');
+        // console.log('change');
         const checkTitle = await checkText($('.title-input').val(), '.title-input');
         if (checkTitle) {
             $('.title-input').css('display', 'none');
@@ -699,7 +699,7 @@ $('.edit-title-btn').on('click', () => {
     });
 });
 async function checkText(text, element) {
-    console.log(text);
+    // console.log(text);
     if (text.length > maxText) {
         Swal.fire({
             icon: 'error',
@@ -709,7 +709,7 @@ async function checkText(text, element) {
             $(`.chart-title`).css('display', 'none');
             $(element).css('display', 'block');
             $(element).trigger('focus');
-            console.log('hello');
+            // console.log('hello');
         });
         return 0;
     } else if (text.includes('<') || text.includes('>')) {
