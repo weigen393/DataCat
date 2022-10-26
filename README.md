@@ -50,7 +50,31 @@ Password: Test123
 
 ## How to Install
 
-Comming soon
+### Prerequisites
+
+You need to install these first (in server):
+
+-   [InfluxDB v2.4](https://www.influxdata.com/)
+-   [Redis v7.0.4](https://redis.io/)
+-   [MongoDB](https://www.mongodb.com/) or [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register?utm_content=rlsapostreg&utm_source=google&utm_campaign=search_gs_pl_evergreen_atlas_general_retarget-brand-postreg_gic-null_apac-all_ps-all_desktop_eng_lead&utm_term=&utm_medium=cpc_paid_search&utm_ad=&utm_ad_campaign_id=14412646494&adgroup=131761134692&gclid=Cj0KCQjwteOaBhDuARIsADBqRegHeM6_L_56gJD_Ik1F8x2JMdsWjz2N4lzd0Ki0WYc-AKcZOJ_VTIYaAroiEALw_wcB)
+
+You can install these where you want to collect data from:
+
+-   [Telegraf](https://docs.influxdata.com/telegraf/v1.21/introduction/installation/?t=RedHat+%26amp%3B+CentOS)
+-   [DataCatPaw](https://www.npmjs.com/package/@weigen393/datacatpaw) (for application monitor)
+
+### Installing
+
+-   Clone the repo
+-   Install NPM packages
+-   Edit .env file
+-   Run the project
+
+          npm run app.js
+
+-   Run the worker
+
+          npm run worker.js
 
 ## How to Use
 
