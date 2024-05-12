@@ -12,7 +12,7 @@ make it easier for users to maintain their system and to analyze their services 
 
 _Datacat do more than cat._
 
-Datacat demo website: [https://datacat.cloud](https://datacat.cloud/)
+Datacat demo website: [https://datacat.cloud](https://datacat.cloud/) (The website is offline now)
 
 ## Test Accounts
 
